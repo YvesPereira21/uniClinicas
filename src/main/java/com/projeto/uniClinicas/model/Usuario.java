@@ -22,11 +22,11 @@ public class Usuario {
     private String sexo;
     @Column(name = "email")
     private String email;
-    @Column(name = "user_name", unique = true,  nullable = false)
+    @Column(name = "user_name", unique = true)
     private String username;
-    @Column(name = "password",  nullable = false)
+    @Column(name = "password")
     private String password;
-    @OneToOne()
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
     @OneToMany(mappedBy = "usuario")

@@ -14,11 +14,8 @@ public class Avaliacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "avaliacao_id")
     private Long avaliacaoId;
-    @NotBlank
     @Column(name = "comentario")
     private String comentario;
-    @Min(0)
-    @Max(5)
     @Column(name = "nota")
     private double nota;
     @Column(name = "horario_comentario")

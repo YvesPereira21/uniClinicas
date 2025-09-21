@@ -1,12 +1,17 @@
 package com.projeto.uniClinicas.model;
 
+import com.projeto.uniClinicas.enums.UserRole;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(name = "tb_usuario")
-public class Usuario {
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +31,8 @@ public class Usuario {
     private String username;
     @Column(name = "password")
     private String password;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
@@ -33,6 +40,12 @@ public class Usuario {
     private List<Avaliacao> avaliacoesUsuario;
 
     public Usuario() {}
+
+    public Usuario(String username, String password, UserRole role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
 
     public Long getusuarioId() {
         return usuarioId;
@@ -94,6 +107,14 @@ public class Usuario {
         this.password = password;
     }
 
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
     public Endereco getEndereco() {
         return this.endereco;
     }
@@ -109,5 +130,35 @@ public class Usuario {
     public void setAvaliacoesUsuario(List<Avaliacao> avaliacoesUsuario) {
         this.avaliacoesUsuario = avaliacoesUsuario;
     }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return switch (this.role) {
+            case ADMIN -> List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+            case CLINICA -> List.of(new SimpleGrantedAuthority("ROLE_CLINICA"));
+            default -> List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        };
+    }
+
 }
 

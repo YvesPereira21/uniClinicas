@@ -1,7 +1,20 @@
 package com.projeto.uniClinicas.repository;
 
 import com.projeto.uniClinicas.model.Clinica;
+import com.projeto.uniClinicas.model.Endereco;
+import com.projeto.uniClinicas.model.Medico;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.time.LocalTime;
+import java.util.List;
 
 public interface ClinicaRepository extends JpaRepository<Clinica, Long> {
+    List<Clinica> findByNomeClinicaContaining(String nome);
+    List<Clinica> findByHorarioFuncionamento(LocalTime hora);
+    Clinica findClinicaByEndereco(@Param("endereco") Endereco endereco);
+    @Query("SELECT m FROM Medico m JOIN m.agendaClinicas a JOIN a.clinica c WHERE c.clinicaId = :clinicaId")
+    List<Medico> findMedicosByClinicaId(@Param("clinicaId") Long clinicaId);
+    List<Clinica> findClinicaByEndereco_Municipio_Cep(String enderecoMunicipioCep);
 }

@@ -13,10 +13,6 @@ public class UniClinicasApplication {
 		return new ModelMapper();
 	}
 
-	@Bean
-	public BCryptPasswordEncoder bCryptPasswordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
 	public static void main(String[] args) {
 		SpringApplication.run(UniClinicasApplication.class, args);
 	}

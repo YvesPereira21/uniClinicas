@@ -1,6 +1,7 @@
 package com.projeto.uniClinicas.mapper;
 
-import com.projeto.uniClinicas.dto.AvaliacaoDTO;
+import com.projeto.uniClinicas.dto.AvaliacaoRequestDTO;
+import com.projeto.uniClinicas.dto.AvaliacaoResponseDTO;
 import com.projeto.uniClinicas.model.Avaliacao;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -14,11 +15,16 @@ public class AvaliacaoMapper {
         this.modelMapper = modelMapper;
     }
 
-    public AvaliacaoDTO convertToDTO(Avaliacao avaliacao) {
-        return modelMapper.map(avaliacao, AvaliacaoDTO.class);
-    }
+    public AvaliacaoResponseDTO convertToDTO(Avaliacao avaliacao) {
+        AvaliacaoResponseDTO dto = modelMapper.map(avaliacao, AvaliacaoResponseDTO.class);
 
-    public Avaliacao convertToEntity(AvaliacaoDTO dto) {
+        if (avaliacao.getUsuario() != null) {
+            dto.setNomeUsuario(avaliacao.getUsuario().getNomeusuario());
+        }
+
+        return dto;
+    }
+    public Avaliacao convertToEntity(AvaliacaoRequestDTO dto) {
         return modelMapper.map(dto, Avaliacao.class);
     }
 }

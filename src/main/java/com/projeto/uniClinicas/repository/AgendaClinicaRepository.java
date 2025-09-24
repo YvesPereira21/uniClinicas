@@ -11,7 +11,7 @@ import java.util.List;
 public interface AgendaClinicaRepository extends JpaRepository<AgendaClinica, Long> {
     @Query("SELECT a FROM AgendaClinica a JOIN a.medico med " +
             "JOIN a.clinica c WHERE med.medicoId = :medicoId AND c.clinicaId = :clinicaId")
-    List<AgendaClinica> findAgendaClinicaByMedicoAndClinicaId(Long medicoId, Long clinicaId);
+    List<AgendaClinica> findAgendaClinicaByMedicoIdAndClinicaId(Long medicoId, Long clinicaId);
     @Query("SELECT a FROM AgendaClinica a JOIN a.clinica c WHERE c.clinicaId = :clinicaId")
     List<Clinica> findAllAgendaClinicaByClinicaId(Long clinicaId);
     List<AgendaClinica> findAgendaClinicaByDiaSemana(DiaDaSemana diaSemana);

@@ -22,7 +22,7 @@ public class Clinica {
     private LocalTime horarioFuncionamento;
     @Column(name = "horario_fechamento")
     private LocalTime horarioFechamento;
-    @OneToOne()
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
     @OneToMany(mappedBy = "clinica")

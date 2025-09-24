@@ -6,6 +6,7 @@ public class MedicoDTO {
 
     @NotBlank
     private String nomeMedico;
+    @NotBlank
     private String crmMedico;
     @NotBlank
     private String especialidade;

@@ -31,7 +31,7 @@ public class UsuarioService {
     public Usuario adicionaUsuario(Usuario novoUsuario){
         boolean cpfUsuario = usuarioRepository.existsByCpf(novoUsuario.getCpf());
         if(cpfUsuario){
-            throw new CPFDuplicadoException("Por favor, informe o seu CPF real!");
+            throw new CPFDuplicadoException("CPF inválido!");
         }
         novoUsuario.setPassword(bCryptPasswordEncoder.encode(novoUsuario.getPassword()));
         return usuarioRepository.save(novoUsuario);
@@ -51,9 +51,7 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    public Avaliacao criaAvaliacaoDoUsuarioAClinica(String username, Avaliacao avaliacao, Long clinicaId) {
-        Usuario usuario = usuarioRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+    public Avaliacao criaAvaliacaoDoUsuarioAClinica(Usuario usuario, Avaliacao avaliacao, Long clinicaId) {
         Clinica clinica = clinicaRepository.findById(clinicaId)
                 .orElseThrow(() -> new RuntimeException("Não há uma clínica com esse id"));
         Avaliacao novaAvaliacao = new Avaliacao();

@@ -36,7 +36,7 @@ public class Usuario implements UserDetails {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Avaliacao> avaliacoesUsuario;
 
     public Usuario() {}

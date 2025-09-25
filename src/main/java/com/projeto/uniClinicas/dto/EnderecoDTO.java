@@ -12,6 +12,7 @@ public class EnderecoDTO {
     private String complemento;
     @NotBlank
     private String bairro;
+    private MunicipioDTO municipio;
 
     public EnderecoDTO() {
     }

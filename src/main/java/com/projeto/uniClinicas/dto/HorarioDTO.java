@@ -15,6 +15,9 @@ public class HorarioDTO {
     @NotNull
     private LocalTime horarioSaida;
 
+    public HorarioDTO() {
+    }
+
     public HorarioDTO(DiaDaSemana diaSemana, LocalTime horarioAtendimentoMedico, LocalTime horarioSaida) {
         this.diaSemana = diaSemana;
         this.horarioAtendimentoMedico = horarioAtendimentoMedico;

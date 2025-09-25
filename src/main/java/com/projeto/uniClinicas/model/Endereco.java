@@ -1,9 +1,13 @@
 package com.projeto.uniClinicas.model;
 
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 @Table(name = "tb_endereco")
+@ToString
+@EqualsAndHashCode
 public class Endereco {
 
     @Id

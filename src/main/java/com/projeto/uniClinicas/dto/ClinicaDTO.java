@@ -8,6 +8,8 @@ import java.time.LocalTime;
 
 public class ClinicaDTO {
 
+    @NotNull
+    private Long cpnj_clinica;
     @NotBlank
     private String nomeClinica;
     @NotNull
@@ -23,12 +25,21 @@ public class ClinicaDTO {
     public ClinicaDTO() {
     }
 
-    public ClinicaDTO(String nomeClinica, int telefone, LocalTime horarioFuncionamento, LocalTime horarioFechamento, EnderecoDTO endereco) {
+    public ClinicaDTO(Long cpnj_clinica, String nomeClinica, int telefone, LocalTime horarioFuncionamento, LocalTime horarioFechamento, EnderecoDTO endereco) {
+        this.cpnj_clinica = cpnj_clinica;
         this.nomeClinica = nomeClinica;
         this.telefone = telefone;
         this.horarioFuncionamento = horarioFuncionamento;
         this.horarioFechamento = horarioFechamento;
         this.endereco = endereco;
+    }
+
+    public Long getCpnj_clinica() {
+        return cpnj_clinica;
+    }
+
+    public void setCpnj_clinica(Long cpnj_clinica) {
+        this.cpnj_clinica = cpnj_clinica;
     }
 
     public String getNomeClinica() {

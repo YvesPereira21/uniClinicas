@@ -2,16 +2,20 @@ package com.projeto.uniClinicas.model;
 
 import com.projeto.uniClinicas.enums.DiaDaSemana;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.time.LocalTime;
 @Entity
 @Table(name = "tb_agenda_clinica")
+@ToString
+@EqualsAndHashCode
 public class AgendaClinica {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "atendimento_id")
-    private Long atendimentoId;
+    @Column(name = "agenda_id")
+    private Long agendaId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "dia_semana")
@@ -34,8 +38,8 @@ public class AgendaClinica {
     public AgendaClinica() {
     }
 
-    public Long getAtendimentoId() {
-        return atendimentoId;
+    public Long getAgendaId() {
+        return agendaId;
     }
 
     public DiaDaSemana getDiaSemana() {

@@ -1,10 +1,15 @@
 package com.projeto.uniClinicas.model;
 
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import java.util.List;
 
 @Entity
 @Table(name = "tb_municipio")
+@ToString
+@EqualsAndHashCode
 public class Municipio {
 
     @Id

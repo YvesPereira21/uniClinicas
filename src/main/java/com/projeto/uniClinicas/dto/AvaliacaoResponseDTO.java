@@ -1,5 +1,6 @@
 package com.projeto.uniClinicas.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +13,7 @@ public class AvaliacaoResponseDTO {
     @NotNull
     @Min(0) @Max(5)
     private Integer nota;
+    @JsonFormat(pattern="dd-MM HH:mm")
     private LocalDateTime horarioComentario;
     private String nomeUsuario;
 

@@ -1,11 +1,16 @@
 package com.projeto.uniClinicas.model;
 
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import java.time.LocalTime;
 import java.util.List;
 
 @Entity
 @Table(name = "tb_clinica")
+@ToString
+@EqualsAndHashCode
 public class Clinica {
 
     @Id

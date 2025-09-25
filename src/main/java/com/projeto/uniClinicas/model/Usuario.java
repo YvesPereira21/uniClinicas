@@ -2,6 +2,8 @@ package com.projeto.uniClinicas.model;
 
 import com.projeto.uniClinicas.enums.UserRole;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +13,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "tb_usuario")
+@ToString
+@EqualsAndHashCode
 public class Usuario implements UserDetails {
 
     @Id

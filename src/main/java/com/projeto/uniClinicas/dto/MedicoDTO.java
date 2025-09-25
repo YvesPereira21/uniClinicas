@@ -11,6 +11,9 @@ public class MedicoDTO {
     @NotBlank
     private String especialidade;
 
+    public MedicoDTO() {
+    }
+
     public MedicoDTO(String nomeMedico, String crmMedico, String especialidade) {
         this.nomeMedico = nomeMedico;
         this.crmMedico = crmMedico;

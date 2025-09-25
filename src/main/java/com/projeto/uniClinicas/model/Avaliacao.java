@@ -4,11 +4,15 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tb_avaliacao")
+@ToString
+@EqualsAndHashCode
 public class Avaliacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +57,10 @@ public class Avaliacao {
 
     public LocalDateTime getHorarioComentario() {
         return horarioComentario;
+    }
+
+    public void setHorarioComentario(LocalDateTime horarioComentario) {
+        this.horarioComentario = horarioComentario;
     }
 
     public Usuario getUsuario() {

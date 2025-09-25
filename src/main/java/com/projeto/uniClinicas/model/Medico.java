@@ -1,11 +1,15 @@
 package com.projeto.uniClinicas.model;
 
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.List;
 
 @Entity
 @Table(name = "tb_medico")
+@ToString
+@EqualsAndHashCode
 public class Medico {
 
     @Id
@@ -31,6 +35,10 @@ public class Medico {
         return crmMedico;
     }
 
+    public void setCrmMedico(String crmMedico) {
+        this.crmMedico = crmMedico;
+    }
+
     public String getNomeMedico() {
         return nomeMedico;
     }
@@ -43,13 +51,16 @@ public class Medico {
         return especialidade;
     }
 
-    public List<AgendaClinica> getDiasAtendimentoMedicos() {
+    public void setEspecialidade(String especialidade) {
+        this.especialidade = especialidade;
+    }
+
+    public List<AgendaClinica> getAgendaClinicas() {
         return agendaClinicas;
     }
 
-    public void setDiasAtendimentoMedicos(List<AgendaClinica> agendaClinicas) {
+    public void setAgendaClinicas(List<AgendaClinica> agendaClinicas) {
         this.agendaClinicas = agendaClinicas;
     }
-
 }
 

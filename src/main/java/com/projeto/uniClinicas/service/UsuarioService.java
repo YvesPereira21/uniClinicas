@@ -8,6 +8,7 @@ import com.projeto.uniClinicas.model.Endereco;
 import com.projeto.uniClinicas.model.Usuario;
 import com.projeto.uniClinicas.repository.AvaliacaoRepository;
 import com.projeto.uniClinicas.repository.UsuarioRepository;
+import com.projeto.uniClinicas.validation.ObjetoNaoEncontradoException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -53,7 +54,7 @@ public class UsuarioService {
 
     public Avaliacao criaAvaliacaoDoUsuarioAClinica(Usuario usuario, Avaliacao avaliacao, Long clinicaId) {
         Clinica clinica = clinicaRepository.findById(clinicaId)
-                .orElseThrow(() -> new RuntimeException("Não há uma clínica com esse id"));
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Não há uma clínica com esse id"));
         Avaliacao novaAvaliacao = new Avaliacao();
         novaAvaliacao.setComentario(avaliacao.getComentario());
         novaAvaliacao.setNota(avaliacao.getNota());

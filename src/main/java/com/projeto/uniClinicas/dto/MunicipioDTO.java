@@ -1,35 +1,27 @@
 package com.projeto.uniClinicas.dto;
 
+import com.projeto.uniClinicas.enums.CidadesParaiba;
+import com.projeto.uniClinicas.validation.CidadeParaiba;
 import jakarta.validation.constraints.NotBlank;
 
 public class MunicipioDTO {
 
     @NotBlank
-    private String cep;
-    @NotBlank
-    private String nomeMunicipio;
+    @CidadeParaiba
+    private CidadesParaiba nomeMunicipio;
 
     public MunicipioDTO() {
     }
 
-    public MunicipioDTO(String cep, String nomeMunicipio) {
-        this.cep = cep;
+    public MunicipioDTO(String cep, CidadesParaiba nomeMunicipio) {
         this.nomeMunicipio = nomeMunicipio;
     }
 
-    public String getCep() {
-        return cep;
-    }
-
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
-
-    public String getNomeMunicipio() {
+    public CidadesParaiba getNomeMunicipio() {
         return nomeMunicipio;
     }
 
-    public void setNomeMunicipio(String nomeMunicipio) {
+    public void setNomeMunicipio(CidadesParaiba nomeMunicipio) {
         this.nomeMunicipio = nomeMunicipio;
     }
 }

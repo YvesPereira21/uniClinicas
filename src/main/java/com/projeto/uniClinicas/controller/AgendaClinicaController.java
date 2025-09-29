@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
-@Tag(name = "agendamento", description = "Controller para gerenciamento de agendamentos")
+@Tag(name = "agenda clínica", description = "Controller para gerenciamento de agendas")
 @SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class AgendaClinicaController {
 
@@ -32,19 +32,19 @@ public class AgendaClinicaController {
     }
 
     @PreAuthorize("hasRole('CLINICA')")
-    @PostMapping(path = "/agendamentos/medicos/{medicoId}/clinicas/{clinicaId}")
-    @Operation(summary = "Adiciona um novo agendamento", description = "Cria um novo agendamento para um médico em uma clínica")
+    @PostMapping(path = "/medicos/{medicoId}/clinicas/{clinicaId}/agendas")
+    @Operation(summary = "Adiciona uma nova agenda", description = "Cria uma nova agenda para um médico, e seus horários de atendimento, em uma clínica")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Agendamento criado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida")
     })
-    public List<AgendaClinicaDTO> adicionarAgendamento(@PathVariable Long medicoId, @PathVariable Long clinicaId, @RequestBody List<HorarioDTO> horarios) {
-        List<AgendaClinica> agendaClinica = agendaClinicaService.adicionaAgendamento(medicoId, clinicaId, horarios);
+    public List<AgendaClinicaDTO> adicionarAgenda(@PathVariable Long medicoId, @PathVariable Long clinicaId, @RequestBody List<HorarioDTO> horarios) {
+        List<AgendaClinica> agendaClinica = agendaClinicaService.adicionaAgenda(medicoId, clinicaId, horarios);
         return agendaClinica.stream().map(agendaClinicaMapper::convertToDTO).collect(Collectors.toList());
     }
 
     @PreAuthorize("hasAnyRole('CLINICA', 'ADMIN', 'USER')")
-    @GetMapping(path = "/agendamentos/medico/{medicoId}/clinica/{clinicaId}")
+    @GetMapping(path = "/medico/{medicoId}/clinica/{clinicaId}/agendas")
     @Operation(summary = "Lista os agendamentos de um médico em uma clínica", description = "Retorna uma lista de agendamentos para um médico específico em uma clínica")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Agendamentos encontrados"),
@@ -56,18 +56,18 @@ public class AgendaClinicaController {
     }
 
     @PreAuthorize("hasRole('CLINICA')")
-    @DeleteMapping(path = "/agendamentos/{agendamentoId}")
-    @Operation(summary = "Remove um agendamento", description = "Deleta um agendamento existente pelo ID")
+    @DeleteMapping(path = "/agendas/{agendaId}")
+    @Operation(summary = "Remove uma agenda clínica", description = "Deleta um agendamento existente pelo ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Agendamento removido com sucesso"),
             @ApiResponse(responseCode = "404", description = "Agendamento não encontrado")
     })
-    public void removerAgendamento(@PathVariable Long agendamentoId){
-        agendaClinicaService.removeAgendamento(agendamentoId);
+    public void removerAgenda(@PathVariable Long agendaId){
+        agendaClinicaService.removeAgenda(agendaId);
     }
 
     @PreAuthorize("hasRole('CLINICA')")
-    @PutMapping(path = "/agendamentos/clinica/{clinicaId}/medico_antigo/{medicoAntigoId}/medico_contratado/{medicoContratadoId}")
+    @PutMapping(path = "/clinica/{clinicaId}/medico_antigo/{medicoAntigoId}/medico_contratado/{medicoContratadoId}/agendas")
     @Operation(summary = "Atualiza o médico de uma clínica", description = "Substitui um médico antigo por um novo em uma clínica, atualizando os agendamentos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Médico atualizado com sucesso"),

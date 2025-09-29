@@ -1,13 +1,17 @@
 package com.projeto.uniClinicas.dto;
 
 import com.projeto.uniClinicas.enums.DiaDaSemana;
+import com.projeto.uniClinicas.validation.DiaSemana;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalTime;
 
 public class AgendaClinicaDTO {
-
+    @DiaSemana
     private DiaDaSemana diaSemana;
+    @Min(0)
     private LocalTime horarioAtendimentoMedico;
+    @Min(0)
     private LocalTime horarioSaida;
 
     @NotNull

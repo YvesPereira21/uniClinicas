@@ -12,9 +12,9 @@ import java.util.List;
 @Service
 public class AvaliacaoService {
 
-    private AvaliacaoRepository avaliacaoRepository;
-    private UsuarioRepository usuarioRepository;
-    private ClinicaRepository clinicaRepository;
+    private final AvaliacaoRepository avaliacaoRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final ClinicaRepository clinicaRepository;
 
     public AvaliacaoService(AvaliacaoRepository avaliacaoRepository, UsuarioRepository usuarioRepository, ClinicaRepository clinicaRepository) {
         this.avaliacaoRepository = avaliacaoRepository;

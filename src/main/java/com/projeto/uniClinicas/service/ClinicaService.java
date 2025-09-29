@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class ClinicaService {
 
-    private ClinicaRepository clinicaRepository;
+    private final ClinicaRepository clinicaRepository;
 
     public ClinicaService(ClinicaRepository clinicaRepository) {
         this.clinicaRepository = clinicaRepository;
@@ -51,10 +51,6 @@ public class ClinicaService {
         Clinica clinica = clinicaRepository.findById(clinicaId)
                 .orElseThrow(() -> new RuntimeException("Clínica não encontrada"));
         clinicaRepository.deleteById(clinicaId);
-    }
-
-    public List<Clinica> mostraTodasClinicasDaCidade(String cep) {
-        return clinicaRepository.findClinicaByEndereco_Municipio_Cep(cep);
     }
 
     public List<Clinica> mostraClinicasComCertoNome(String nome) {

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MedicoService {
 
-    private MedicoRepository medicoRepository;
+    private final MedicoRepository medicoRepository;
 
     public MedicoService(MedicoRepository medicoRepository) {
         this.medicoRepository = medicoRepository;

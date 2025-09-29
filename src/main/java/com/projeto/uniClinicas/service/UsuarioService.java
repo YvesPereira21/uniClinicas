@@ -18,9 +18,9 @@ public class UsuarioService {
 
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private UsuarioRepository usuarioRepository;
-    private AvaliacaoRepository avaliacaoRepository;
-    private ClinicaRepository clinicaRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final AvaliacaoRepository avaliacaoRepository;
+    private final ClinicaRepository clinicaRepository;
 
     public UsuarioService(UsuarioRepository usuarioRepository, AvaliacaoRepository avaliacaoRepository, ClinicaRepository clinicaRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.usuarioRepository = usuarioRepository;
@@ -30,6 +30,10 @@ public class UsuarioService {
     }
 
     public Usuario adicionaUsuario(Usuario novoUsuario){
+        if(usuarioRepository.findByUsername(novoUsuario.getUsername()).isPresent()){
+            throw new RuntimeException("Usuário já existente!");
+        }
+
         boolean cpfUsuario = usuarioRepository.existsByCpf(novoUsuario.getCpf());
         if(cpfUsuario){
             throw new CPFDuplicadoException("CPF inválido!");

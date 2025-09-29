@@ -16,5 +16,4 @@ public interface ClinicaRepository extends JpaRepository<Clinica, Long> {
     Clinica findClinicaByEndereco(@Param("endereco") Endereco endereco);
     @Query("SELECT m FROM Medico m JOIN m.agendaClinicas a JOIN a.clinica c WHERE c.clinicaId = :clinicaId")
     List<Medico> findMedicosByClinicaId(@Param("clinicaId") Long clinicaId);
-    List<Clinica> findClinicaByEndereco_Municipio_Cep(String enderecoMunicipioCep);
 }

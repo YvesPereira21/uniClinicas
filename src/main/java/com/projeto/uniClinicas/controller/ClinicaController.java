@@ -91,18 +91,6 @@ public class ClinicaController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @GetMapping(value = "/clinicas", params = "cep")
-    @Operation(summary = "Lista clínicas por cidade", description = "Retorna uma lista de clínicas com base no CEP da cidade")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Operação bem-sucedida")
-    })
-    public List<ClinicaDTO> listaClinicasDaCidade(@RequestParam String cep) {
-        return clinicaService.mostraTodasClinicasDaCidade(cep).stream()
-                .map(clinicaMapper::convertToDTO)
-                .collect(Collectors.toList());
-    }
-
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping(value = "/clinicas", params = "nomeClinica")
     @Operation(summary = "Lista clínicas por nome", description = "Busca e retorna clínicas que contenham o nome fornecido")
     @ApiResponses(value = {

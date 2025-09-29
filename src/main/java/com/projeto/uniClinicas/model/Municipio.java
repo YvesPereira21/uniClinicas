@@ -1,5 +1,6 @@
 package com.projeto.uniClinicas.model;
 
+import com.projeto.uniClinicas.enums.CidadesParaiba;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -13,28 +14,27 @@ import java.util.List;
 public class Municipio {
 
     @Id
-    @Column(name = "municipio_cep", unique = true)
-    private String cep;
-    @Column(name = "nome_municipio")
-    private String nomeMunicipio;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long municipioId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "nome_municipio", unique = true)
+    private CidadesParaiba nomeMunicipio;
+
     @OneToMany(mappedBy = "municipio")
     private List<Endereco> enderecos;
 
     public Municipio(){}
 
-    public String getCep() {
-        return cep;
+    public Long getMunicipioId() {
+        return municipioId;
     }
 
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
-
-    public String getNomeMunicipio() {
+    public CidadesParaiba getNomeMunicipio() {
         return nomeMunicipio;
     }
 
-    public void setNomeMunicipio(String nomeMunicipio) {
+    public void setNomeMunicipio(CidadesParaiba nomeMunicipio) {
         this.nomeMunicipio = nomeMunicipio;
     }
 

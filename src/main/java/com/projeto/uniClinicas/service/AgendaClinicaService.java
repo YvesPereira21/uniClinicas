@@ -25,7 +25,7 @@ public class AgendaClinicaService {
         this.clinicaRepository = clinicaRepository;
     }
 
-    public List<AgendaClinica> adicionaAgendamento(Long medicoId, Long clinicaId, List<HorarioDTO> horarios) {
+    public List<AgendaClinica> adicionaAgenda(Long medicoId, Long clinicaId, List<HorarioDTO> horarios) {
         Medico medico = medicoRepository.findById(medicoId)
                 .orElseThrow(() -> new RuntimeException("Não há um médico com essas informações"));
         Clinica clinica = clinicaRepository.findById(clinicaId)
@@ -49,7 +49,7 @@ public class AgendaClinicaService {
         return agendaClinicaRepository.findAgendaClinicaByMedicoIdAndClinicaId(medicoId, clinicaId);
     }
 
-    public void removeAgendamento(Long agendamentoId){
+    public void removeAgenda(Long agendamentoId){
         agendaClinicaRepository.deleteById(agendamentoId);
     }
 
@@ -61,7 +61,7 @@ public class AgendaClinicaService {
             agendaClinicaRepository.deleteAll(atualizaAtendimento);
         }
 
-        List<AgendaClinica> novaAgenda = adicionaAgendamento(medicoContratadoId, clinicaId, horarioDTOs);
+        List<AgendaClinica> novaAgenda = adicionaAgenda(medicoContratadoId, clinicaId, horarioDTOs);
         agendaClinicaRepository.saveAll(novaAgenda);
     }
 

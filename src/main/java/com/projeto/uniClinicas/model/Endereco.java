@@ -23,7 +23,7 @@ public class Endereco {
     @Column(name = "bairro")
     private String bairro;
     @ManyToOne()
-    @JoinColumn(name = "municipio_cep")
+    @JoinColumn(name = "municipioId")
     private Municipio municipio;
     @OneToOne()
     private Clinica clinica;

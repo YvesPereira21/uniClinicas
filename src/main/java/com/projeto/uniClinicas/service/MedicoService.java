@@ -1,9 +1,9 @@
 package com.projeto.uniClinicas.service;
 
+import com.projeto.uniClinicas.exception.ObjetoJaAdicionado;
 import com.projeto.uniClinicas.model.Medico;
 import com.projeto.uniClinicas.repository.MedicoRepository;
-import com.projeto.uniClinicas.validation.MedicoJaCadastrado;
-import com.projeto.uniClinicas.validation.ObjetoNaoEncontradoException;
+import com.projeto.uniClinicas.exception.ObjetoNaoEncontradoException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,7 +18,7 @@ public class MedicoService {
     public Medico adicionaMedico(Medico medico){
         boolean medicoExistente = medicoRepository.existsMedicoByCrmMedico(medico.getCrmMedico());
         if(medicoExistente){
-            throw new MedicoJaCadastrado("Esse médico já foi cadastrado!");
+            throw new ObjetoJaAdicionado("Esse médico já foi adicionado!");
         }
         return medicoRepository.save(medico);
     }

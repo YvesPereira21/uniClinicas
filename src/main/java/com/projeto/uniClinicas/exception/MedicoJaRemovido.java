@@ -1,4 +1,4 @@
-package com.projeto.uniClinicas.validation;
+package com.projeto.uniClinicas.exception;
 
 public class MedicoJaRemovido extends RuntimeException {
     public MedicoJaRemovido(String message) {

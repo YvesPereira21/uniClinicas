@@ -7,8 +7,8 @@ import com.projeto.uniClinicas.model.Medico;
 import com.projeto.uniClinicas.repository.AgendaClinicaRepository;
 import com.projeto.uniClinicas.repository.ClinicaRepository;
 import com.projeto.uniClinicas.repository.MedicoRepository;
-import com.projeto.uniClinicas.validation.MedicoJaRemovido;
-import com.projeto.uniClinicas.validation.ObjetoNaoEncontradoException;
+import com.projeto.uniClinicas.exception.MedicoJaRemovido;
+import com.projeto.uniClinicas.exception.ObjetoNaoEncontradoException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

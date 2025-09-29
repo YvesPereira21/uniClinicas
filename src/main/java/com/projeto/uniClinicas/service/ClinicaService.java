@@ -4,7 +4,7 @@ import com.projeto.uniClinicas.model.Clinica;
 import com.projeto.uniClinicas.model.Endereco;
 import com.projeto.uniClinicas.model.Medico;
 import com.projeto.uniClinicas.repository.ClinicaRepository;
-import com.projeto.uniClinicas.validation.ObjetoNaoEncontradoException;
+import com.projeto.uniClinicas.exception.ObjetoNaoEncontradoException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
@@ -51,7 +51,6 @@ public class ClinicaService {
     public Clinica atualizaEndereco(Long clinicaId, Endereco endereco) {
         Clinica clinica = clinicaRepository.findById(clinicaId)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Clínica não encontrada"));
-        ;
         clinica.setEndereco(endereco);
         return clinicaRepository.save(clinica);
     }
@@ -72,5 +71,9 @@ public class ClinicaService {
         Clinica clinica = clinicaRepository.findById(clinicaId)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Clínica não encontrada"));
         return clinicaRepository.findMedicosByClinicaId(clinicaId);
+    }
+
+    public void notaClinica(){
+
     }
 }

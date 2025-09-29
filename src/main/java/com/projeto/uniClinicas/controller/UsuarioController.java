@@ -2,7 +2,8 @@ package com.projeto.uniClinicas.controller;
 
 import com.projeto.uniClinicas.dto.AvaliacaoRequestDTO;
 import com.projeto.uniClinicas.dto.AvaliacaoResponseDTO;
-import com.projeto.uniClinicas.dto.UsuarioDTO;
+import com.projeto.uniClinicas.dto.UsuarioRequestDTO;
+import com.projeto.uniClinicas.dto.UsuarioResponseDTO;
 import com.projeto.uniClinicas.mapper.AvaliacaoMapper;
 import com.projeto.uniClinicas.mapper.UsuarioMapper;
 import com.projeto.uniClinicas.model.Avaliacao;
@@ -35,26 +36,26 @@ public class UsuarioController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/usuarios")
-    @Operation(summary = "Salva dados do usuário", description = "Método para salvar dados do usuário")
+    @Operation(summary = "Cadastra usuário", description = "Método para cadastrar dados do usuário")
     @ApiResponse(responseCode = "201", description = "Usuário salvado com sucesso!")
     @ApiResponse(responseCode = "400", description = "Erro ao tentar salvar o usuário.")
-    public UsuarioDTO salvaUsuario(@RequestBody UsuarioDTO usuarioDTO){
-        Usuario usuario = usuarioMapper.convertToEntity(usuarioDTO);
+    public UsuarioResponseDTO cadastraUsuario(@RequestBody UsuarioRequestDTO usuarioRequestDTO){
+        Usuario usuario = usuarioMapper.convertToEntity(usuarioRequestDTO);
         Usuario novoUsuario = usuarioService.adicionaUsuario(usuario);
         return usuarioMapper.convertToDTO(novoUsuario);
     }
 
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/usuarios")
-    public UsuarioDTO atualizaUsuario(@RequestBody UsuarioDTO usuarioDTO){
-        Usuario usuario = usuarioMapper.convertToEntity(usuarioDTO);
+    public UsuarioResponseDTO atualizaUsuario(@RequestBody UsuarioRequestDTO usuarioRequestDTO){
+        Usuario usuario = usuarioMapper.convertToEntity(usuarioRequestDTO);
         Usuario novoUsuario = usuarioService.atualizaUsuario(usuario);
         return usuarioMapper.convertToDTO(novoUsuario);
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @DeleteMapping("/usuarios/{usuarioId}")
-    public void deletaUsuario(@RequestBody Long usuarioId){
+    public void deletaUsuario(@PathVariable Long usuarioId){
         usuarioService.deletaUsuario(usuarioId);
     }
 

@@ -90,6 +90,18 @@ public class ClinicaController {
         clinicaService.deletaClinica(clinicaId);
     }
 
+    @PreAuthorize("hasRole('CLINICA')")
+    @PutMapping("/clinicas/{clinicaId}/endereco")
+    @Operation(summary = "Atualiza endereço da clínica", description = "Atualiza apenas o endereço da clínica")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operação bem-sucedida")
+    })
+    public ClinicaDTO atualizarEndereco(@PathVariable Long clinicaId, @RequestBody EnderecoDTO endereco) {
+        Endereco endereco1 = enderecoMapper.convertToEntity(endereco);
+        Clinica enderecoAtualizado = clinicaService.atualizaEndereco(clinicaId, endereco1);
+        return clinicaMapper.convertToDTO(enderecoAtualizado);
+    }
+
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping(value = "/clinicas", params = "nomeClinica")
     @Operation(summary = "Lista clínicas por nome", description = "Busca e retorna clínicas que contenham o nome fornecido")

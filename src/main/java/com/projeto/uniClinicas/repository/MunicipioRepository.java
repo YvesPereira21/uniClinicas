@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface MunicipioRepository extends JpaRepository<Municipio, Long> {
     boolean existsMunicipioByNomeMunicipio(CidadesParaiba nomeMunicipio);
+    Municipio findMunicipioByNomeMunicipio(CidadesParaiba nomeMunicipio);
     @Query("SELECT c FROM Clinica c JOIN c.endereco e " +
             "JOIN e.municipio m WHERE m.nomeMunicipio = :nomeMunicipio")
     List<Clinica> todasClinicasCidade(@Param("nomeMunicipio") String nomeMunicipio);

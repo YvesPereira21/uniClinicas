@@ -1,45 +1,40 @@
 package com.projeto.uniClinicas.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.br.CPF;
 
-public class UsuarioDTO {
+public class UsuarioResponseDTO {
 
     @NotBlank
     private String nomeUsuario;
     @NotBlank
     @CPF
     private String cpf;
-    @NotNull
+    @Max(125)
     private int idadeUsuario;
     @NotBlank
     private String sexo;
     @NotBlank
     @Email
     private String email;
-    @NotBlank
-    private String username;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotBlank
-    private String password;
     @NotNull
     @Valid
     private EnderecoDTO endereco;
 
-    public UsuarioDTO() {
+    public UsuarioResponseDTO() {
     }
 
-    public UsuarioDTO(String nomeUsuario, String cpf, int idadeUsuario, String sexo, String email, EnderecoDTO endereco) {
+    public UsuarioResponseDTO(String nomeUsuario, String cpf, int idadeUsuario, String sexo, EnderecoDTO endereco, String email) {
         this.nomeUsuario = nomeUsuario;
         this.cpf = cpf;
         this.idadeUsuario = idadeUsuario;
         this.sexo = sexo;
-        this.email = email;
         this.endereco = endereco;
+        this.email = email;
     }
 
     public String getNomeUsuario() {
@@ -90,4 +85,3 @@ public class UsuarioDTO {
         this.endereco = endereco;
     }
 }
-

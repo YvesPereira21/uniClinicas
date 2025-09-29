@@ -5,7 +5,7 @@ import com.projeto.uniClinicas.model.Usuario;
 import com.projeto.uniClinicas.repository.AvaliacaoRepository;
 import com.projeto.uniClinicas.repository.ClinicaRepository;
 import com.projeto.uniClinicas.repository.UsuarioRepository;
-import com.projeto.uniClinicas.validation.ObjetoNaoEncontradoException;
+import com.projeto.uniClinicas.exception.ObjetoNaoEncontradoException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,7 +44,7 @@ public class AvaliacaoService {
 
     public List<Avaliacao> avaliacoesUsuario(Long usuarioId){
         Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new RuntimeException("Esse usuário não existe"));
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Esse usuário não foi encontrado"));
         return avaliacaoRepository.findAllAvaliacaoByUsuarioId(usuario.getusuarioId());
     }
 

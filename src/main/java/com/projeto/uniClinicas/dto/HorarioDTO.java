@@ -1,6 +1,7 @@
 package com.projeto.uniClinicas.dto;
 
 import com.projeto.uniClinicas.enums.DiaDaSemana;
+import com.projeto.uniClinicas.validation.DiaSemana;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalTime;
@@ -8,7 +9,7 @@ import java.time.LocalTime;
 public class HorarioDTO {
 
     @NotNull
-    //@DiaSemana
+    @DiaSemana
     private DiaDaSemana diaSemana;
     @NotNull
     private LocalTime horarioAtendimentoMedico;

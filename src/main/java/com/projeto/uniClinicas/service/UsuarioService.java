@@ -1,15 +1,15 @@
 package com.projeto.uniClinicas.service;
 
+import com.projeto.uniClinicas.exception.ObjetoJaAdicionado;
 import com.projeto.uniClinicas.repository.ClinicaRepository;
-import com.projeto.uniClinicas.validation.CPFDuplicadoException;
+import com.projeto.uniClinicas.exception.CPFDuplicadoException;
 import com.projeto.uniClinicas.model.Avaliacao;
 import com.projeto.uniClinicas.model.Clinica;
 import com.projeto.uniClinicas.model.Endereco;
 import com.projeto.uniClinicas.model.Usuario;
 import com.projeto.uniClinicas.repository.AvaliacaoRepository;
 import com.projeto.uniClinicas.repository.UsuarioRepository;
-import com.projeto.uniClinicas.validation.ObjetoNaoEncontradoException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import com.projeto.uniClinicas.exception.ObjetoNaoEncontradoException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,10 +31,10 @@ public class UsuarioService {
 
     public Usuario adicionaUsuario(Usuario novoUsuario){
         if(usuarioRepository.findByUsername(novoUsuario.getUsername()).isPresent()){
-            throw new RuntimeException("Usuário já existente!");
+            throw new ObjetoJaAdicionado("Usuário já existente!");
         }
         boolean cpfUsuario = usuarioRepository.existsByCpf(novoUsuario.getCpf());
-        if(!cpfUsuario){
+        if(cpfUsuario){
             throw new CPFDuplicadoException("Conta já cadastrada com esse CPF!");
         }
         novoUsuario.setPassword(bCryptPasswordEncoder.encode(novoUsuario.getPassword()));

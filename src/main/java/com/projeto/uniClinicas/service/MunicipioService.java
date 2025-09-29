@@ -1,9 +1,11 @@
 package com.projeto.uniClinicas.service;
 
+import com.projeto.uniClinicas.enums.CidadesParaiba;
+import com.projeto.uniClinicas.exception.ObjetoJaAdicionado;
+import com.projeto.uniClinicas.exception.ObjetoNaoEncontradoException;
 import com.projeto.uniClinicas.model.Clinica;
 import com.projeto.uniClinicas.model.Municipio;
 import com.projeto.uniClinicas.repository.MunicipioRepository;
-import com.projeto.uniClinicas.validation.MunicipioJaAdicionadoException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,9 +22,17 @@ public class MunicipioService {
     public Municipio adicionaMunicipio(Municipio municipio) {
         boolean municipioExistente = municipioRepository.existsMunicipioByNomeMunicipio(municipio.getNomeMunicipio());
         if(municipioExistente){
-            throw new MunicipioJaAdicionadoException("Município já foi adicionado");
+            throw new ObjetoJaAdicionado("Município já foi adicionado");
         }
         return municipioRepository.save(municipio);
+    }
+
+    public void deletaMunicipio(CidadesParaiba nomeMunicipio) {
+        Municipio municipio = municipioRepository.findMunicipioByNomeMunicipio(nomeMunicipio);
+        if(municipio == null){
+            throw new ObjetoNaoEncontradoException("Município não encontrado!");
+        }
+        municipioRepository.findMunicipioByNomeMunicipio(nomeMunicipio);
     }
 
     public List<Clinica> clinicasCidade(String nomeMunicipio) {

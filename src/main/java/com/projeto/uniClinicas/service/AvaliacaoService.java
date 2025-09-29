@@ -5,6 +5,7 @@ import com.projeto.uniClinicas.model.Usuario;
 import com.projeto.uniClinicas.repository.AvaliacaoRepository;
 import com.projeto.uniClinicas.repository.ClinicaRepository;
 import com.projeto.uniClinicas.repository.UsuarioRepository;
+import com.projeto.uniClinicas.validation.ObjetoNaoEncontradoException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,12 +29,12 @@ public class AvaliacaoService {
 
     public Avaliacao pegaAvaliacaoUnica(Long avaliacaoId) {
         return avaliacaoRepository.findById(avaliacaoId)
-                .orElseThrow(() -> new RuntimeException("Essa avaliação não existe"));
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Essa avaliação não existe"));
     }
 
     public void deletaAvaliacao(Long avaliacaoId) {
         Avaliacao avaliacao = avaliacaoRepository.findById(avaliacaoId)
-                .orElseThrow(() -> new RuntimeException("Essa avaliação não existe"));
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Essa avaliação não existe"));
         avaliacaoRepository.delete(avaliacao);
     }
 

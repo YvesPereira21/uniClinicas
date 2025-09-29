@@ -72,7 +72,7 @@ public class MedicoController {
             @ApiResponse(responseCode = "200", description = "Médico encontrado"),
             @ApiResponse(responseCode = "404", description = "Médico não encontrado")
     })
-    public MedicoDTO getMedico(@PathVariable Long medicoId){
+    public MedicoDTO retornaMedicoUnico(@PathVariable Long medicoId){
         Medico pegaMedico = medicoService.medicoUnico(medicoId);
         return medicoMapper.convertToDTO(pegaMedico);
     }

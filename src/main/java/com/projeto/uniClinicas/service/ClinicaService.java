@@ -4,6 +4,7 @@ import com.projeto.uniClinicas.model.Clinica;
 import com.projeto.uniClinicas.model.Endereco;
 import com.projeto.uniClinicas.model.Medico;
 import com.projeto.uniClinicas.repository.ClinicaRepository;
+import com.projeto.uniClinicas.validation.ObjetoNaoEncontradoException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
@@ -22,6 +23,17 @@ public class ClinicaService {
         return clinicaRepository.save(clinica);
     }
 
+    public void deletaClinica(Long clinicaId) {
+        Clinica clinica = clinicaRepository.findById(clinicaId)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Clínica não encontrada"));
+        clinicaRepository.deleteById(clinicaId);
+    }
+
+    public Clinica pegaClinica(Long clinicaId) {
+        return clinicaRepository.findById(clinicaId)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Clínica não encontrada"));
+    }
+
     public Clinica atualizaClinica(Clinica clinicaAtualizar, Long clinicaId) {
         Clinica clinicaNova = clinicaRepository.findById(clinicaId)
                 .orElseThrow(() -> new RuntimeException("Clínica não encontrada"));
@@ -37,20 +49,11 @@ public class ClinicaService {
     }
 
     public Clinica atualizaEndereco(Long clinicaId, Endereco endereco) {
-        Clinica clinica = clinicaRepository.findById(clinicaId).orElseThrow();
+        Clinica clinica = clinicaRepository.findById(clinicaId)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Clínica não encontrada"));
+        ;
         clinica.setEndereco(endereco);
         return clinicaRepository.save(clinica);
-    }
-
-    public Clinica pegaClinica(Long clinicaId) {
-        return clinicaRepository.findById(clinicaId)
-                .orElseThrow(() -> new RuntimeException("Clínica não encontrada"));
-    }
-
-    public void deletaClinica(Long clinicaId) {
-        Clinica clinica = clinicaRepository.findById(clinicaId)
-                .orElseThrow(() -> new RuntimeException("Clínica não encontrada"));
-        clinicaRepository.deleteById(clinicaId);
     }
 
     public List<Clinica> mostraClinicasComCertoNome(String nome) {
@@ -67,7 +70,7 @@ public class ClinicaService {
 
     public List<Medico> todosMedicosClinica(Long clinicaId) {
         Clinica clinica = clinicaRepository.findById(clinicaId)
-                .orElseThrow(() -> new RuntimeException("Clínica não encontrada"));
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Clínica não encontrada"));
         return clinicaRepository.findMedicosByClinicaId(clinicaId);
     }
 }

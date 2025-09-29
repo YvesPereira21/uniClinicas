@@ -21,6 +21,9 @@ public class Municipio {
     @Column(name = "nome_municipio", unique = true)
     private CidadesParaiba nomeMunicipio;
 
+    @Column(name = "estado")
+    private String estado;
+
     @OneToMany(mappedBy = "municipio")
     private List<Endereco> enderecos;
 

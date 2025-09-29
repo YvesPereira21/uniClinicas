@@ -9,9 +9,9 @@ import java.time.LocalTime;
 public class AgendaClinicaDTO {
     @DiaSemana
     private DiaDaSemana diaSemana;
-    @Min(0)
+    @NotNull
     private LocalTime horarioAtendimentoMedico;
-    @Min(0)
+    @NotNull
     private LocalTime horarioSaida;
 
     @NotNull

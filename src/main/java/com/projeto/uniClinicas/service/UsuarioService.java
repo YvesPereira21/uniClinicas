@@ -33,17 +33,18 @@ public class UsuarioService {
         if(usuarioRepository.findByUsername(novoUsuario.getUsername()).isPresent()){
             throw new RuntimeException("Usuário já existente!");
         }
-
         boolean cpfUsuario = usuarioRepository.existsByCpf(novoUsuario.getCpf());
-        if(cpfUsuario){
-            throw new CPFDuplicadoException("CPF inválido!");
+        if(!cpfUsuario){
+            throw new CPFDuplicadoException("Conta já cadastrada com esse CPF!");
         }
         novoUsuario.setPassword(bCryptPasswordEncoder.encode(novoUsuario.getPassword()));
         return usuarioRepository.save(novoUsuario);
     }
 
-    public void deletaUsuario(Usuario novoUsuario){
-        usuarioRepository.delete(novoUsuario);
+    public void deletaUsuario(Long usuarioId){
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Usuário não existe!"));
+        usuarioRepository.deleteById(usuarioId);
     }
 
     public Usuario atualizaUsuario(Usuario novoUsuario){
@@ -51,7 +52,8 @@ public class UsuarioService {
     }
 
     public Usuario atualizaEndereco(Long usuarioId, Endereco endereco){
-        Usuario usuario = usuarioRepository.findById(usuarioId).orElseThrow();
+        Usuario usuario = usuarioRepository.findById(usuarioId).
+                orElseThrow(() -> new ObjetoNaoEncontradoException("Usuário não encontrado!"));
         usuario.setEndereco(endereco);
         return usuarioRepository.save(usuario);
     }

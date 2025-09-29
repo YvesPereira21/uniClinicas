@@ -7,6 +7,8 @@ import com.projeto.uniClinicas.model.Medico;
 import com.projeto.uniClinicas.repository.AgendaClinicaRepository;
 import com.projeto.uniClinicas.repository.ClinicaRepository;
 import com.projeto.uniClinicas.repository.MedicoRepository;
+import com.projeto.uniClinicas.validation.MedicoJaRemovido;
+import com.projeto.uniClinicas.validation.ObjetoNaoEncontradoException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,9 +29,9 @@ public class AgendaClinicaService {
 
     public List<AgendaClinica> adicionaAgenda(Long medicoId, Long clinicaId, List<HorarioDTO> horarios) {
         Medico medico = medicoRepository.findById(medicoId)
-                .orElseThrow(() -> new RuntimeException("Não há um médico com essas informações"));
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Não há um médico com essas informações"));
         Clinica clinica = clinicaRepository.findById(clinicaId)
-                .orElseThrow(() -> new RuntimeException("Não há uma clínica com essas informações"));
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Não há uma clínica com essas informações"));
 
         List<AgendaClinica> novaAgenda = new ArrayList<>();
         for(HorarioDTO horario : horarios){
@@ -45,24 +47,26 @@ public class AgendaClinicaService {
         return agendaClinicaRepository.saveAll(novaAgenda);
     }
 
-    public List<AgendaClinica> medicoTrabalhoClinica(Long medicoId, Long clinicaId) {
-        return agendaClinicaRepository.findAgendaClinicaByMedicoIdAndClinicaId(medicoId, clinicaId);
-    }
-
-    public void removeAgenda(Long agendamentoId){
-        agendaClinicaRepository.deleteById(agendamentoId);
+    public void removeAgenda(Long agendaId){
+        AgendaClinica agendaClinica = agendaClinicaRepository.findById(agendaId)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Agenda não encontrada!"));
+        agendaClinicaRepository.deleteById(agendaId);
     }
 
     public void atualizaMedicoDaClinica(Long medicoAntigoId, Long medicoContratadoId, Long clinicaId, List<HorarioDTO> horarioDTOs) {;
         List<AgendaClinica> atualizaAtendimento = agendaClinicaRepository.findAgendaClinicaByMedicoIdAndClinicaId(medicoAntigoId, clinicaId);
         if (atualizaAtendimento.isEmpty()){
-            throw new RuntimeException("O médico antigo já foi substituído nessa clínica!");
+            throw new MedicoJaRemovido("O médico antigo já foi substituído nessa clínica!");
         } else{
             agendaClinicaRepository.deleteAll(atualizaAtendimento);
         }
 
         List<AgendaClinica> novaAgenda = adicionaAgenda(medicoContratadoId, clinicaId, horarioDTOs);
         agendaClinicaRepository.saveAll(novaAgenda);
+    }
+
+    public List<AgendaClinica> medicoTrabalhoClinica(Long medicoId, Long clinicaId) {
+        return agendaClinicaRepository.findAgendaClinicaByMedicoIdAndClinicaId(medicoId, clinicaId);
     }
 
 }

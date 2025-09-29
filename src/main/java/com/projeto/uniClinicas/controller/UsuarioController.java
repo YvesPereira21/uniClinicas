@@ -53,10 +53,9 @@ public class UsuarioController {
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    @DeleteMapping("/usuarios")
-    public void deletaUsuario(@RequestBody UsuarioDTO usuarioDTO){
-        Usuario usuario =  usuarioMapper.convertToEntity(usuarioDTO);
-        usuarioService.deletaUsuario(usuario);
+    @DeleteMapping("/usuarios/{usuarioId}")
+    public void deletaUsuario(@RequestBody Long usuarioId){
+        usuarioService.deletaUsuario(usuarioId);
     }
 
     @PreAuthorize("hasRole('USER')")

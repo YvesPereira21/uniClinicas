@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -42,15 +43,15 @@ public class MedicoController {
     }
 
     @PreAuthorize("hasRole('CLINICA')")
-    @PutMapping("/medicos")
+    @PutMapping("/medicos/{medicoId}")
     @Operation(summary = "Atualiza um médico existente", description = "Atualiza os dados de um médico")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Médico atualizado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Médico não encontrado")
     })
-    public MedicoDTO atualizaMedico(@RequestBody MedicoDTO medicoDTO) {
+    public MedicoDTO atualizaMedico(@RequestBody MedicoDTO medicoDTO, @PathVariable Long medicoId) {
         Medico medico = medicoMapper.convertToEntity(medicoDTO);
-        Medico atualizaMedico =  medicoService.atualizaMedico(medico);
+        Medico atualizaMedico =  medicoService.atualizaMedico(medico, medicoId);
         return medicoMapper.convertToDTO(atualizaMedico);
     }
 

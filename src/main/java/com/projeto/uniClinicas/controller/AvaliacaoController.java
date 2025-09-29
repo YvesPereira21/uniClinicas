@@ -42,7 +42,7 @@ public class AvaliacaoController {
         return avaliacaoMapper.convertToDTO(a);
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @DeleteMapping("/avaliacoes/{avaliacaoId}")
     @Operation(summary = "Deleta uma avaliação", description = "Remove uma avaliação existente pelo ID")
     @ApiResponses(value = {
@@ -53,11 +53,12 @@ public class AvaliacaoController {
         avaliacaoService.deletaAvaliacao(avaliacaoId);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/avaliacoes")
     @Operation(summary = "Lista todas as avaliações", description = "Retorna uma lista com todas as avaliações cadastradas")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Operação bem-sucedida")
+            @ApiResponse(responseCode = "200", description = "Operação bem-sucedida"),
+            @ApiResponse(responseCode = "404", description = "Avaliações não encontradas")
     })
     public List<AvaliacaoResponseDTO> pegaTodasAvaliacoes(){
         return avaliacaoService.todasAvaliacoes().stream()
@@ -65,8 +66,8 @@ public class AvaliacaoController {
                 .collect(Collectors.toList());
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("usuarios/{usuarioId}/avaliacoes")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/usuarios/{usuarioId}/avaliacoes")
     @Operation(summary = "Lista todas as avaliações de um usuário", description = "Retorna todas as avaliações feitas por um usuário específico")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Avaliações encontradas"),
@@ -78,7 +79,20 @@ public class AvaliacaoController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/clinicas/{clinicaId}/avaliacao-media")
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/clinica/{clinicaId}/avaliacoes")
+    @Operation(summary = "Lista avaliações para uma clínica", description = "Lista todas as avaliações feitas para uma clínica")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista carregado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Não há avaliações para essa clínica")
+    })
+    public List<AvaliacaoResponseDTO> pegaTodasAvaliacoesDaClinica(@PathVariable Long clinicaId){
+        return avaliacaoService.avaliacoesClinica(clinicaId).stream()
+                .map(avaliacaoMapper::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/clinicas/{clinicaId}/avaliacao")
     @Operation(summary = "Calcula a avaliação média de uma clínica", description = "Retorna a média de todas as avaliações para uma clínica específica")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Média calculada com sucesso"),

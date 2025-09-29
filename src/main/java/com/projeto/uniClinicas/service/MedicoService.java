@@ -23,8 +23,14 @@ public class MedicoService {
         return medicoRepository.save(medico);
     }
 
-    public Medico atualizaMedico(Medico medico){
-        return medicoRepository.save(medico);
+    public Medico atualizaMedico(Medico dadosAtualizados, Long medicoId){
+        Medico medicoExistente = medicoRepository.findById(medicoId)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Médico não encontrado!"));
+
+        medicoExistente.setNomeMedico(dadosAtualizados.getNomeMedico());
+        medicoExistente.setEspecialidade(dadosAtualizados.getEspecialidade());
+
+        return medicoRepository.save(medicoExistente);
     }
 
     public void deletaMedico(Long medicoId){

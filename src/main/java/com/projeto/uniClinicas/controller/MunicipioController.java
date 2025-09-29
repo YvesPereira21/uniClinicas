@@ -2,7 +2,6 @@ package com.projeto.uniClinicas.controller;
 
 import com.projeto.uniClinicas.dto.ClinicaDTO;
 import com.projeto.uniClinicas.dto.MunicipioDTO;
-import com.projeto.uniClinicas.enums.CidadesParaiba;
 import com.projeto.uniClinicas.mapper.ClinicaMapper;
 import com.projeto.uniClinicas.mapper.MunicipioMapper;
 import com.projeto.uniClinicas.model.Municipio;
@@ -40,7 +39,7 @@ public class MunicipioController {
     @Operation(summary = "Adiciona um novo município", description = "Cria um novo município no sistema")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Município criado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida")
+            @ApiResponse(responseCode = "400", description = "Erro ao tentar adicionar um município")
     })
     public MunicipioDTO adicionaMunicipio(@RequestBody MunicipioDTO municipioDTO) {
         Municipio municipio = municipioMapper.convertToEntity(municipioDTO);
@@ -52,8 +51,8 @@ public class MunicipioController {
     @DeleteMapping("/municipio")
     @Operation(summary = "Deleta município", description = "Deleta município pelo nome dele")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Município criado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida")
+            @ApiResponse(responseCode = "201", description = "Município deletado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Erro ao deletar município")
     })
     public void deletaMunicipio(@RequestParam CidadesParaiba nomeMunicipio) {
         municipioService.deletaMunicipio(nomeMunicipio);
@@ -64,7 +63,7 @@ public class MunicipioController {
     @Operation(summary = "Listar clínicas de um município específico", description = "Lista as clínicas presentes em um munícipio pelo nome dele")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Clínicas listadas com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida")
+            @ApiResponse(responseCode = "400", description = "Erro ao listar as clínicas do município")
     })
     public List<ClinicaDTO> listaClinicasMunicipio(@RequestParam String nomeMunicipio){
         return municipioService.clinicasCidade(nomeMunicipio).stream()

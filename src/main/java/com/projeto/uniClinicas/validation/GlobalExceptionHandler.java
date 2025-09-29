@@ -1,9 +1,7 @@
 package com.projeto.uniClinicas.validation;
 
 import com.projeto.uniClinicas.dto.ApiError;
-import com.projeto.uniClinicas.exception.CPFDuplicadoException;
-import com.projeto.uniClinicas.exception.ObjetoJaAdicionado;
-import com.projeto.uniClinicas.exception.ObjetoNaoEncontradoException;
+import com.projeto.uniClinicas.exception.*;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,9 +74,45 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({CPFDuplicadoException.class, ObjetoJaAdicionado.class})
+    @ExceptionHandler(AvaliacoesInexistentesException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<ApiError> handleAvaliacoesInexistentesException(AvaliacoesInexistentesException ex) {
+        ApiError error = ApiError.builder()
+                .timestamp(LocalDateTime.now())
+                .code(HttpStatus.NOT_FOUND.value())
+                .status(HttpStatus.NOT_FOUND.name())
+                .errors(List.of(ex.getMessage()))
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({CPFDuplicadoException.class, ObjetoJaAdicionado.class, MedicoJaRemovido.class})
     @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseEntity<ApiError> handleResourceConflictException(RuntimeException ex) {
+        ApiError error = ApiError.builder()
+                .timestamp(LocalDateTime.now())
+                .code(HttpStatus.CONFLICT.value())
+                .status(HttpStatus.CONFLICT.name())
+                .errors(List.of(ex.getMessage()))
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(ObjetoJaAdicionado.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<ApiError> handleObjetoJaAdicionado(ObjetoJaAdicionado ex) {
+        ApiError error = ApiError.builder()
+                .timestamp(LocalDateTime.now())
+                .code(HttpStatus.CONFLICT.value())
+                .status(HttpStatus.CONFLICT.name())
+                .errors(List.of(ex.getMessage()))
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(MedicoJaRemovido.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<ApiError> handleMedicoJaRemovido(MedicoJaRemovido ex) {
         ApiError error = ApiError.builder()
                 .timestamp(LocalDateTime.now())
                 .code(HttpStatus.CONFLICT.value())

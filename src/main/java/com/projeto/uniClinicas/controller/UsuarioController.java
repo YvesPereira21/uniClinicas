@@ -46,10 +46,13 @@ public class UsuarioController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PutMapping("/usuarios")
-    public UsuarioResponseDTO atualizaUsuario(@RequestBody UsuarioRequestDTO usuarioRequestDTO){
+    @PutMapping("/usuarios/{usuarioId}")
+    @Operation(summary = "Atualiza dados do usuário", description = "Método para atualizar dados do usuário")
+    @ApiResponse(responseCode = "201", description = "Usuário atualizado com sucesso!")
+    @ApiResponse(responseCode = "400", description = "Erro ao tentar atualizar o usuário.")
+    public UsuarioResponseDTO atualizaUsuario(@PathVariable Long usuarioId, @RequestBody UsuarioRequestDTO usuarioRequestDTO){
         Usuario usuario = usuarioMapper.convertToEntity(usuarioRequestDTO);
-        Usuario novoUsuario = usuarioService.atualizaUsuario(usuario);
+        Usuario novoUsuario = usuarioService.atualizaUsuario(usuarioId, usuario);
         return usuarioMapper.convertToDTO(novoUsuario);
     }
 
@@ -61,7 +64,10 @@ public class UsuarioController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping("avaliacao/{clinicaId}/clinica")
-    public AvaliacaoResponseDTO avaliacao(Authentication autentication, @RequestBody AvaliacaoRequestDTO avaliacaoRequestDTO, @PathVariable("clinicaId") Long clinicaId){
+    @Operation(summary = "Usuário cria avaliação", description = "Método que permite um usuário criar uma avaliação")
+    @ApiResponse(responseCode = "201", description = "Usuário criou avaliação com sucesso!")
+    @ApiResponse(responseCode = "400", description = "Erro ao tentar criar avaliação.")
+    public AvaliacaoResponseDTO criaAvaliacao(Authentication autentication, @RequestBody AvaliacaoRequestDTO avaliacaoRequestDTO, @PathVariable("clinicaId") Long clinicaId){
         Usuario usuarioAutenticado = (Usuario) autentication.getPrincipal();
         Avaliacao avaliacao = avaliacaoMapper.convertToEntity(avaliacaoRequestDTO);
         Avaliacao novaAvaliacao = usuarioService.criaAvaliacaoDoUsuarioAClinica(usuarioAutenticado, avaliacao, clinicaId);

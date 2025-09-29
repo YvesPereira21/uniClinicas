@@ -47,15 +47,17 @@ public class UsuarioService {
         usuarioRepository.deleteById(usuarioId);
     }
 
-    public Usuario atualizaUsuario(Usuario novoUsuario){
-        return usuarioRepository.save(novoUsuario);
-    }
+    public Usuario atualizaUsuario(Long usuarioId, Usuario dadosAtualizados) {
+        Usuario usuarioExistente = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Usuário não encontrado!"));
 
-    public Usuario atualizaEndereco(Long usuarioId, Endereco endereco){
-        Usuario usuario = usuarioRepository.findById(usuarioId).
-                orElseThrow(() -> new ObjetoNaoEncontradoException("Usuário não encontrado!"));
-        usuario.setEndereco(endereco);
-        return usuarioRepository.save(usuario);
+        usuarioExistente.setNomeusuario(dadosAtualizados.getNomeusuario());
+        usuarioExistente.setIdadeUsuario(dadosAtualizados.getIdadeUsuario());
+        usuarioExistente.setSexo(dadosAtualizados.getSexo());
+        usuarioExistente.setEmail(dadosAtualizados.getEmail());
+        usuarioExistente.setEndereco(dadosAtualizados.getEndereco());
+
+        return usuarioRepository.save(usuarioExistente);
     }
 
     public Avaliacao criaAvaliacaoDoUsuarioAClinica(Usuario usuario, Avaliacao avaliacao, Long clinicaId) {

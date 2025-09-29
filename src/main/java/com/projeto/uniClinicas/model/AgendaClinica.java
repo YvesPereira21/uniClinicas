@@ -1,6 +1,5 @@
 package com.projeto.uniClinicas.model;
 
-import com.projeto.uniClinicas.enums.DiaDaSemana;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -17,9 +16,8 @@ public class AgendaClinica {
     @Column(name = "agenda_id")
     private Long agendaId;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "dia_semana")
-    private DiaDaSemana diaSemana;
+    private String diaSemana;
 
     @Column(name = "horario_atendimento_medico")
     private LocalTime horarioAtendimentoMedico;
@@ -42,11 +40,11 @@ public class AgendaClinica {
         return agendaId;
     }
 
-    public DiaDaSemana getDiaSemana() {
+    public String getDiaSemana() {
         return diaSemana;
     }
 
-    public void setDiaSemana(DiaDaSemana diaSemana) {
+    public void setDiaSemana(String diaSemana) {
         this.diaSemana = diaSemana;
     }
 

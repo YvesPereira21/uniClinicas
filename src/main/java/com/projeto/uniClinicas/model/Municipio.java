@@ -1,6 +1,5 @@
 package com.projeto.uniClinicas.model;
 
-import com.projeto.uniClinicas.enums.CidadesParaiba;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -17,9 +16,8 @@ public class Municipio {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long municipioId;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "nome_municipio", unique = true)
-    private CidadesParaiba nomeMunicipio;
+    private String nomeMunicipio;
 
     @Column(name = "estado")
     private String estado;
@@ -33,12 +31,20 @@ public class Municipio {
         return municipioId;
     }
 
-    public CidadesParaiba getNomeMunicipio() {
+    public String getNomeMunicipio() {
         return nomeMunicipio;
     }
 
-    public void setNomeMunicipio(CidadesParaiba nomeMunicipio) {
+    public void setNomeMunicipio(String nomeMunicipio) {
         this.nomeMunicipio = nomeMunicipio;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public List<Endereco> getEnderecos() {

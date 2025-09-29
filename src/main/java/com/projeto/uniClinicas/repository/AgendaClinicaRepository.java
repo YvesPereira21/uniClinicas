@@ -1,6 +1,5 @@
 package com.projeto.uniClinicas.repository;
 
-import com.projeto.uniClinicas.enums.DiaDaSemana;
 import com.projeto.uniClinicas.model.AgendaClinica;
 import com.projeto.uniClinicas.model.Clinica;
 import org.springframework.data.jpa.repository.JpaRepository;

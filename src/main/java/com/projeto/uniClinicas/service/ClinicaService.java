@@ -36,7 +36,7 @@ public class ClinicaService {
 
     public Clinica atualizaClinica(Clinica clinicaAtualizar, Long clinicaId) {
         Clinica clinicaNova = clinicaRepository.findById(clinicaId)
-                .orElseThrow(() -> new RuntimeException("Clínica não encontrada"));
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Clínica não encontrada"));
 
         clinicaNova.setNomeClinica(clinicaAtualizar.getNomeClinica());
         clinicaNova.setCpnj_clinica(clinicaAtualizar.getCpnj_clinica());

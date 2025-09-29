@@ -1,6 +1,8 @@
 package com.projeto.uniClinicas.service;
 
+import com.projeto.uniClinicas.exception.AvaliacoesInexistentesException;
 import com.projeto.uniClinicas.model.Avaliacao;
+import com.projeto.uniClinicas.model.Clinica;
 import com.projeto.uniClinicas.model.Usuario;
 import com.projeto.uniClinicas.repository.AvaliacaoRepository;
 import com.projeto.uniClinicas.repository.ClinicaRepository;
@@ -21,10 +23,6 @@ public class AvaliacaoService {
         this.avaliacaoRepository = avaliacaoRepository;
         this.usuarioRepository = usuarioRepository;
         this.clinicaRepository = clinicaRepository;
-    }
-
-    public Avaliacao adicionaAvaliacao(Avaliacao avaliacao) {
-        return avaliacaoRepository.save(avaliacao);
     }
 
     public Avaliacao pegaAvaliacaoUnica(Long avaliacaoId) {
@@ -48,8 +46,17 @@ public class AvaliacaoService {
         return avaliacaoRepository.findAllAvaliacaoByUsuarioId(usuario.getusuarioId());
     }
 
+    public List<Avaliacao> avaliacoesClinica(Long clinicaId){
+        Clinica clinica = clinicaRepository.findById(clinicaId)
+                .orElseThrow();
+        return avaliacaoRepository.findAllAvaliacaoByClinicaId(clinicaId);
+    }
+
     public double calculaAvaliacaoMedia(Long clinicaId){
         List<Avaliacao> avaliacoes = avaliacaoRepository.findAllAvaliacaoByClinicaId(clinicaId);
+        if (avaliacoes.isEmpty()){
+            throw new AvaliacoesInexistentesException("Não há avaliações para essa clínica");
+        }
         double soma = avaliacoes.stream()
                 .map(Avaliacao::getNota)
                 .reduce(0.0, Double::sum);

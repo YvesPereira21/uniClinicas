@@ -44,7 +44,7 @@ public class UsuarioService {
 
     public void deletaUsuario(Long usuarioId){
         Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new ObjetoNaoEncontradoException("Usuário não existe!"));
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Usuário ou senha inválidos!"));
         usuarioRepository.deleteById(usuarioId);
     }
 
@@ -59,6 +59,12 @@ public class UsuarioService {
         usuarioExistente.setEndereco(dadosAtualizados.getEndereco());
 
         return usuarioRepository.save(usuarioExistente);
+    }
+
+    public void mudarSenha(String username, String newPassword){
+        Usuario usuario = usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Usuário ou senha inválidos!"));
+        usuario.setPassword(bCryptPasswordEncoder.encode(newPassword));
     }
 
     public Avaliacao criaAvaliacaoDoUsuarioAClinica(Usuario usuario, Avaliacao avaliacao, Long clinicaId) {

@@ -2,14 +2,11 @@ package com.projeto.uniClinicas.controller;
 
 import com.projeto.uniClinicas.authentication.AutenticacaoDTO;
 import com.projeto.uniClinicas.authentication.LoginResponseDTO;
-import com.projeto.uniClinicas.authentication.RegistroDTO;
+import com.projeto.uniClinicas.authentication.ChangePasswordDTO;
 import com.projeto.uniClinicas.dto.UsuarioRequestDTO;
 import com.projeto.uniClinicas.dto.UsuarioResponseDTO;
-import com.projeto.uniClinicas.enums.UserRole;
-import com.projeto.uniClinicas.exception.ObjetoJaAdicionado;
 import com.projeto.uniClinicas.mapper.UsuarioMapper;
 import com.projeto.uniClinicas.model.Usuario;
-import com.projeto.uniClinicas.repository.UsuarioRepository;
 import com.projeto.uniClinicas.service.UsuarioService;
 import com.projeto.uniClinicas.security.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,10 +16,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,14 +32,12 @@ public class AutenticacaoController {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
     private final UsuarioService usuarioService;
-    private final UsuarioRepository usuarioRepository;
     private final UsuarioMapper usuarioMapper;
 
-    public AutenticacaoController(AuthenticationManager authenticationManager, TokenService tokenService, UsuarioService usuarioService, UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper) {
+    public AutenticacaoController(AuthenticationManager authenticationManager, TokenService tokenService, UsuarioService usuarioService, UsuarioMapper usuarioMapper) {
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
         this.usuarioService = usuarioService;
-        this.usuarioRepository = usuarioRepository;
         this.usuarioMapper = usuarioMapper;
     }
 
@@ -72,4 +66,14 @@ public class AutenticacaoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioMapper.convertToDTO(novoUsuario));
     }
 
+    @PostMapping("/change-password")
+    @Operation(summary = "Registra um novo usuário (USER)", description = "Cria uma nova conta de usuário com a role 'USER'.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso!"),
+            @ApiResponse(responseCode = "400", description = "Erro ao tentar salvar o usuário.")
+    })
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO){
+        usuarioService.mudarSenha(changePasswordDTO.getUsername(), changePasswordDTO.getNewPassword());
+        return ResponseEntity.ok("Senha alterada com sucesso");
+    }
 }

@@ -38,7 +38,6 @@ public class UsuarioController {
         this.avaliacaoMapper = avaliacaoMapper;
     }
 
-    @PreAuthorize("hasRole('USER')")
     @PostMapping("/usuarios")
     @Operation(summary = "Cadastra usuário", description = "Método para cadastrar dados do usuário")
     @ApiResponse(responseCode = "201", description = "Usuário salvado com sucesso!")

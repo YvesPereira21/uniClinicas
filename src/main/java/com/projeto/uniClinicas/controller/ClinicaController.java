@@ -1,5 +1,6 @@
 package com.projeto.uniClinicas.controller;
 
+import com.projeto.uniClinicas.authentication.ClinicaRegistroDTO;
 import com.projeto.uniClinicas.dto.ClinicaDTO;
 import com.projeto.uniClinicas.dto.EnderecoDTO;
 import com.projeto.uniClinicas.dto.MedicoDTO;
@@ -51,9 +52,8 @@ public class ClinicaController {
             @ApiResponse(responseCode = "201", description = "Clínica criada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida")
     })
-    public ClinicaDTO adicionaClinica(@Valid @RequestBody ClinicaDTO clinicaDTO) {
-        Clinica clinica = clinicaMapper.convertToEntity(clinicaDTO);
-        Clinica novaClinica = clinicaService.adicionaClinica(clinica);
+    public ClinicaDTO adicionaClinica(@Valid @RequestBody ClinicaRegistroDTO clinicaDTO) {
+        Clinica novaClinica = clinicaService.adicionaClinica(clinicaDTO);
         return clinicaMapper.convertToDTO(novaClinica);
     }
 

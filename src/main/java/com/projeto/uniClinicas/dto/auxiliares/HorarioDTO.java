@@ -1,4 +1,4 @@
-package com.projeto.uniClinicas.dto;
+package com.projeto.uniClinicas.dto.auxiliares;
 
 import com.projeto.uniClinicas.validation.DiaSemana;
 import jakarta.validation.constraints.NotNull;

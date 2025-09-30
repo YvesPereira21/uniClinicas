@@ -62,7 +62,7 @@ public class UsuarioController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PostMapping("avaliacao/{clinicaId}/clinica")
+    @PostMapping("/clinicas/{clinicaId}/avaliacoes")
     @Operation(summary = "Usuário cria avaliação", description = "Método que permite um usuário criar uma avaliação")
     @ApiResponse(responseCode = "201", description = "Usuário criou avaliação com sucesso!")
     @ApiResponse(responseCode = "400", description = "Erro ao tentar criar avaliação.")

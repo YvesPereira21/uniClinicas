@@ -90,7 +90,7 @@ public class ClinicaController {
     }
 
     @PreAuthorize("hasRole('CLINICA')")
-    @PutMapping("/clinicas/{clinicaId}/endereco")
+    @PutMapping("/clinicas/{clinicaId}/enderecos")
     @Operation(summary = "Atualiza endereço da clínica", description = "Atualiza apenas o endereço da clínica")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operação bem-sucedida")

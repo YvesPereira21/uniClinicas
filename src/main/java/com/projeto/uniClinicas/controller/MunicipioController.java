@@ -39,7 +39,7 @@ public class MunicipioController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/municipio")
+    @PostMapping("/municipios")
     @Operation(summary = "Adiciona um novo município", description = "Cria um novo município no sistema")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Município criado com sucesso"),
@@ -52,7 +52,7 @@ public class MunicipioController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/municipio")
+    @DeleteMapping("/municipios")
     @Operation(summary = "Deleta município", description = "Deleta município pelo nome dele")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Município deletado com sucesso"),
@@ -63,13 +63,13 @@ public class MunicipioController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @GetMapping(value = "/clinicas", params = "nomeMunicipio")
+    @GetMapping(value = "/municipios/{nomeMunicipio}/clinicas")
     @Operation(summary = "Listar clínicas de um município específico", description = "Lista as clínicas presentes em um munícipio pelo nome dele")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Clínicas listadas com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro ao listar as clínicas do município")
     })
-    public List<ClinicaDTO> listaClinicasMunicipio(@NotBlank @RequestParam String nomeMunicipio){
+    public List<ClinicaDTO> listaClinicasMunicipio(@NotBlank @PathVariable String nomeMunicipio){
         return municipioService.clinicasCidade(nomeMunicipio).stream()
                 .map(clinicaMapper::convertToDTO)
                 .collect(Collectors.toList());

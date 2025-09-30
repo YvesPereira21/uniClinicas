@@ -2,7 +2,6 @@ package com.projeto.uniClinicas.controller;
 
 import com.projeto.uniClinicas.dto.AvaliacaoResponseDTO;
 import com.projeto.uniClinicas.mapper.AvaliacaoMapper;
-import com.projeto.uniClinicas.model.Avaliacao;
 import com.projeto.uniClinicas.security.SecurityConfigurations;
 import com.projeto.uniClinicas.service.AvaliacaoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,18 +32,6 @@ public class AvaliacaoController {
         this.avaliacaoMapper = avaliacaoMapper;
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/avaliacoes/{avaliacaoId}")
-    @Operation(summary = "Retorna uma avaliação única", description = "Busca e retorna uma avaliação específica pelo ID")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Avaliação encontrada"),
-            @ApiResponse(responseCode = "404", description = "Avaliação não encontrada")
-    })
-    public AvaliacaoResponseDTO retornaAvaliacaoUnica(@Min(1) @PathVariable Long avaliacaoId) {
-        Avaliacao a = avaliacaoService.pegaAvaliacaoUnica(avaliacaoId);
-        return avaliacaoMapper.convertToDTO(a);
-    }
-
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @DeleteMapping("/avaliacoes/{avaliacaoId}")
     @Operation(summary = "Deleta uma avaliação", description = "Remove uma avaliação existente pelo ID")
@@ -54,19 +41,6 @@ public class AvaliacaoController {
     })
     public void deletaAvaliacao(@Min(1) @PathVariable Long avaliacaoId) {
         avaliacaoService.deletaAvaliacao(avaliacaoId);
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/avaliacoes")
-    @Operation(summary = "Lista todas as avaliações", description = "Retorna uma lista com todas as avaliações cadastradas")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Operação bem-sucedida"),
-            @ApiResponse(responseCode = "404", description = "Avaliações não encontradas")
-    })
-    public List<AvaliacaoResponseDTO> pegaTodasAvaliacoes(){
-        return avaliacaoService.todasAvaliacoes().stream()
-                .map(avaliacaoMapper::convertToDTO)
-                .collect(Collectors.toList());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -83,7 +57,7 @@ public class AvaliacaoController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @GetMapping("/clinica/{clinicaId}/avaliacoes")
+    @GetMapping("/clinicas/{clinicaId}/avaliacoes")
     @Operation(summary = "Lista avaliações para uma clínica", description = "Lista todas as avaliações feitas para uma clínica")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista carregado com sucesso"),
@@ -96,7 +70,7 @@ public class AvaliacaoController {
     }
 
     @PreAuthorize("hasAnyRole('USER', 'CLINICA')")
-    @GetMapping("/clinicas/{clinicaId}/avaliacao")
+    @GetMapping("/clinicas/{clinicaId}/avaliacoes-media")
     @Operation(summary = "Calcula a avaliação média de uma clínica", description = "Retorna a média de todas as avaliações para uma clínica específica")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Média calculada com sucesso"),

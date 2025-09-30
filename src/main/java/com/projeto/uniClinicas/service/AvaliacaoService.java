@@ -25,19 +25,10 @@ public class AvaliacaoService {
         this.clinicaRepository = clinicaRepository;
     }
 
-    public Avaliacao pegaAvaliacaoUnica(Long avaliacaoId) {
-        return avaliacaoRepository.findById(avaliacaoId)
-                .orElseThrow(() -> new ObjetoNaoEncontradoException("Essa avaliação não existe"));
-    }
-
     public void deletaAvaliacao(Long avaliacaoId) {
         Avaliacao avaliacao = avaliacaoRepository.findById(avaliacaoId)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Essa avaliação não existe"));
         avaliacaoRepository.delete(avaliacao);
-    }
-
-    public List<Avaliacao> todasAvaliacoes(){
-        return avaliacaoRepository.findAll();
     }
 
     public List<Avaliacao> avaliacoesUsuario(Long usuarioId){

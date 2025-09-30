@@ -1,6 +1,7 @@
 package com.projeto.uniClinicas.service;
 
-import com.projeto.uniClinicas.dto.HorarioDTO;
+import com.projeto.uniClinicas.dto.auxiliares.HorarioDTO;
+import com.projeto.uniClinicas.dto.auxiliares.AtualizacaoAgendaDTO;
 import com.projeto.uniClinicas.model.AgendaClinica;
 import com.projeto.uniClinicas.model.Clinica;
 import com.projeto.uniClinicas.model.Medico;
@@ -27,7 +28,7 @@ public class AgendaClinicaService {
         this.clinicaRepository = clinicaRepository;
     }
 
-    public List<AgendaClinica> adicionaAgenda(Long medicoId, Long clinicaId, List<HorarioDTO> horarios) {
+    public List<AgendaClinica> adicionaAgenda(Long clinicaId, Long medicoId, List<HorarioDTO> horarios) {
         Medico medico = medicoRepository.findById(medicoId)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Não há um médico com essas informações"));
         Clinica clinica = clinicaRepository.findById(clinicaId)
@@ -57,15 +58,16 @@ public class AgendaClinicaService {
         return agendaClinicaRepository.findAllAgendaClinicaByClinicaId(clinicaId);
     }
 
-    public void atualizaMedicoDaClinica(Long clinicaId, Long medicoAntigoId, Long medicoContratadoId, List<HorarioDTO> horarioDTOs) {;
-        List<AgendaClinica> atualizaAtendimento = agendaClinicaRepository.findAgendaClinicaByMedicoIdAndClinicaId(medicoAntigoId, clinicaId);
+    public void atualizaAgendaClinica(Long clinicaId, AtualizacaoAgendaDTO atualizaAgenda) {
+
+        List<AgendaClinica> atualizaAtendimento = agendaClinicaRepository.findAgendaClinicaByMedicoIdAndClinicaId(atualizaAgenda.getMedicoAntigoId(), clinicaId);
         if (atualizaAtendimento.isEmpty()){
             throw new MedicoJaRemovido("O médico antigo já foi substituído nessa clínica!");
         } else{
             agendaClinicaRepository.deleteAll(atualizaAtendimento);
         }
 
-        List<AgendaClinica> novaAgenda = adicionaAgenda(medicoContratadoId, clinicaId, horarioDTOs);
+        List<AgendaClinica> novaAgenda = adicionaAgenda(atualizaAgenda.getMedicoContratadoId(), clinicaId, atualizaAgenda.getHorarios());
         agendaClinicaRepository.saveAll(novaAgenda);
     }
 

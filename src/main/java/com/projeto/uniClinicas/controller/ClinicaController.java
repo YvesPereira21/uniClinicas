@@ -40,7 +40,7 @@ public class ClinicaController {
         this.enderecoMapper = enderecoMapper;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('CLINICA')")
     @PostMapping("/clinicas")
     @Operation(summary = "Adiciona uma nova clínica", description = "Cria uma nova clínica no sistema")
     @ApiResponses(value = {

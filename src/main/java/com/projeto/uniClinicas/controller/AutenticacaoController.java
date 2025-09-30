@@ -2,6 +2,7 @@ package com.projeto.uniClinicas.controller;
 
 import com.projeto.uniClinicas.authentication.AutenticacaoDTO;
 import com.projeto.uniClinicas.authentication.LoginResponseDTO;
+import com.projeto.uniClinicas.authentication.RegistroDTO;
 import com.projeto.uniClinicas.dto.UsuarioRequestDTO;
 import com.projeto.uniClinicas.dto.UsuarioResponseDTO;
 import com.projeto.uniClinicas.enums.UserRole;
@@ -37,16 +38,13 @@ public class AutenticacaoController {
     private final UsuarioService usuarioService;
     private final UsuarioRepository usuarioRepository;
     private final UsuarioMapper usuarioMapper;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
-    public AutenticacaoController(AuthenticationManager authenticationManager, TokenService tokenService, UsuarioService usuarioService, UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public AutenticacaoController(AuthenticationManager authenticationManager, TokenService tokenService, UsuarioService usuarioService, UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper) {
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
         this.usuarioService = usuarioService;
         this.usuarioRepository = usuarioRepository;
         this.usuarioMapper = usuarioMapper;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @PostMapping("/login")
@@ -74,20 +72,4 @@ public class AutenticacaoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioMapper.convertToDTO(novoUsuario));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/register-clinica")
-    @Operation(summary = "Registra um novo usuário (CLINICA)", description = "Cria uma nova conta de usuário com a role 'CLINICA'.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Usuário de clínica criado com sucesso!"),
-            @ApiResponse(responseCode = "400", description = "Este nome de usuário já existe.")
-    })
-    public ResponseEntity<Void> cadastraUsuarioClinica(@Valid @RequestBody AutenticacaoDTO data){
-        if(usuarioRepository.findByUsername(data.getUsername()).isPresent()){
-            throw new ObjetoJaAdicionado("Este nome de usuário já existe.");
-        }
-        Usuario novoUsuario = new Usuario(data.getUsername(), bCryptPasswordEncoder.encode(data.getPassword()), UserRole.CLINICA);
-        usuarioRepository.save(novoUsuario);
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
 }

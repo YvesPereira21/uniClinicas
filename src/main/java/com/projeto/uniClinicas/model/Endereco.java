@@ -31,7 +31,6 @@ public class Endereco {
     @OneToOne(mappedBy = "endereco")
     private Usuario usuario;
 
-
     public Endereco() {}
 
     public Long getEnderecoId() {
@@ -86,20 +85,5 @@ public class Endereco {
         this.estado = estado;
     }
 
-    public Clinica getClinica() {
-        return this.clinica;
-    }
-
-    public void setClinica(Clinica clinica) {
-        this.clinica = clinica;
-    }
-
-    public Usuario getUsuario() {
-        return this.usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
 }
 

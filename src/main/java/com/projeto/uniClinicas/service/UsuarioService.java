@@ -39,9 +39,6 @@ public class UsuarioService {
         }
         novoUsuario.setPassword(bCryptPasswordEncoder.encode(novoUsuario.getPassword()));
         novoUsuario.setRole(UserRole.USER);
-        if (novoUsuario.getEndereco() != null) {
-            novoUsuario.getEndereco().setUsuario(novoUsuario);
-        }
         return usuarioRepository.save(novoUsuario);
     }
 

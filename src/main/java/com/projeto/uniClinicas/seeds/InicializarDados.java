@@ -33,7 +33,17 @@ public class InicializarDados implements CommandLineRunner {
         if (usuarioRepository.findByUsername("clinica_unip").isEmpty()) {
             Usuario clinicaUser = new Usuario(
                     "clinica_unip",
-                    passwordEncoder.encode("clinica123"), // Senha para a clínica
+                    passwordEncoder.encode("clinica123"),
+                    UserRole.CLINICA
+            );
+            usuarioRepository.save(clinicaUser);
+            System.out.println(">>> Usuário para CLÍNICA criado com sucesso!");
+        }
+
+        if (usuarioRepository.findByUsername("SouDoto").isEmpty()) {
+            Usuario clinicaUser = new Usuario(
+                    "SouDoto",
+                    passwordEncoder.encode("soudoto123"),
                     UserRole.CLINICA
             );
             usuarioRepository.save(clinicaUser);

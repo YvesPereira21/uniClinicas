@@ -24,9 +24,9 @@ public class ClinicaService {
     }
 
     public Clinica adicionaClinica(Clinica clinica) {
-        if (clinica.getEndereco() != null) {
-            clinica.getEndereco().setClinica(clinica);
-        }
+        //if (clinica.getEndereco() != null) {
+        //    clinica.getEndereco().setClinica(clinica);
+        //}
         return clinicaRepository.save(clinica);
     }
 

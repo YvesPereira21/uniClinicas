@@ -12,7 +12,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +23,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/api")
+@Validated
 @Tag(name = "municipio", description = "Controller para gerenciamento de municípios")
 @SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class MunicipioController {
@@ -41,7 +45,7 @@ public class MunicipioController {
             @ApiResponse(responseCode = "201", description = "Município criado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro ao tentar adicionar um município")
     })
-    public MunicipioDTO adicionaMunicipio(@RequestBody MunicipioDTO municipioDTO) {
+    public MunicipioDTO adicionaMunicipio(@Valid @RequestBody MunicipioDTO municipioDTO) {
         Municipio municipio = municipioMapper.convertToEntity(municipioDTO);
         Municipio novoMunicipio = municipioService.adicionaMunicipio(municipio);
         return municipioMapper.convertToDTO(novoMunicipio);
@@ -54,7 +58,7 @@ public class MunicipioController {
             @ApiResponse(responseCode = "201", description = "Município deletado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro ao deletar município")
     })
-    public void deletaMunicipio(@RequestParam String nomeMunicipio) {
+    public void deletaMunicipio(@NotBlank @RequestParam String nomeMunicipio) {
         municipioService.deletaMunicipio(nomeMunicipio);
     }
 
@@ -65,7 +69,7 @@ public class MunicipioController {
             @ApiResponse(responseCode = "201", description = "Clínicas listadas com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro ao listar as clínicas do município")
     })
-    public List<ClinicaDTO> listaClinicasMunicipio(@RequestParam String nomeMunicipio){
+    public List<ClinicaDTO> listaClinicasMunicipio(@NotBlank @RequestParam String nomeMunicipio){
         return municipioService.clinicasCidade(nomeMunicipio).stream()
                 .map(clinicaMapper::convertToDTO)
                 .collect(Collectors.toList());

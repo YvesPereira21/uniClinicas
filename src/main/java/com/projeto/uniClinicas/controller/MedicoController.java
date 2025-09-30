@@ -10,13 +10,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping(path = "/api")
+@Validated
 @Tag(name = "medico", description = "Controller para gerenciamento de médicos")
 @SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class MedicoController {
@@ -36,7 +40,7 @@ public class MedicoController {
             @ApiResponse(responseCode = "201", description = "Médico criado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida")
     })
-    public MedicoDTO adicionaMedico(@RequestBody MedicoDTO medicoDTO) {
+    public MedicoDTO adicionaMedico(@Valid @RequestBody MedicoDTO medicoDTO) {
         Medico medico = medicoMapper.convertToEntity(medicoDTO);
         Medico novoMedico = medicoService.adicionaMedico(medico);
         return medicoMapper.convertToDTO(novoMedico);
@@ -49,7 +53,7 @@ public class MedicoController {
             @ApiResponse(responseCode = "200", description = "Médico atualizado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Médico não encontrado")
     })
-    public MedicoDTO atualizaMedico(@RequestBody MedicoDTO medicoDTO, @PathVariable Long medicoId) {
+    public MedicoDTO atualizaMedico(@Valid @RequestBody MedicoDTO medicoDTO, @Min(1) @PathVariable Long medicoId) {
         Medico medico = medicoMapper.convertToEntity(medicoDTO);
         Medico atualizaMedico =  medicoService.atualizaMedico(medico, medicoId);
         return medicoMapper.convertToDTO(atualizaMedico);
@@ -62,7 +66,7 @@ public class MedicoController {
             @ApiResponse(responseCode = "204", description = "Médico deletado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Médico não encontrado")
     })
-    public void deletaMedico(@PathVariable("medicoId") Long medicoId){
+    public void deletaMedico(@Min(1) @PathVariable Long medicoId){
         medicoService.deletaMedico(medicoId);
     }
 
@@ -73,7 +77,7 @@ public class MedicoController {
             @ApiResponse(responseCode = "200", description = "Médico encontrado"),
             @ApiResponse(responseCode = "404", description = "Médico não encontrado")
     })
-    public MedicoDTO retornaMedicoUnico(@PathVariable Long medicoId){
+    public MedicoDTO retornaMedicoUnico(@Min(1) @PathVariable Long medicoId){
         Medico pegaMedico = medicoService.medicoUnico(medicoId);
         return medicoMapper.convertToDTO(pegaMedico);
     }

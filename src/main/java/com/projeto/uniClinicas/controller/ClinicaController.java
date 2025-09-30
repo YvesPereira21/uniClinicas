@@ -17,7 +17,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
+@Validated
 @Tag(name = "clinica", description = "Controller para gerenciamento de clínicas")
 @SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class ClinicaController {
@@ -61,7 +64,7 @@ public class ClinicaController {
             @ApiResponse(responseCode = "200", description = "Clínica atualizada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Clínica não encontrada")
     })
-    public ClinicaDTO atualizaClinica(@Valid @RequestBody ClinicaDTO clinicaDTO, @PathVariable Long clinicaId) {
+    public ClinicaDTO atualizaClinica(@Valid @RequestBody ClinicaDTO clinicaDTO, @Min(1) @PathVariable Long clinicaId) {
         Clinica clinica = clinicaMapper.convertToEntity(clinicaDTO);
         Clinica clinicaAtualizada =  clinicaService.atualizaClinica(clinica, clinicaId);
         return clinicaMapper.convertToDTO(clinicaAtualizada);
@@ -74,7 +77,7 @@ public class ClinicaController {
             @ApiResponse(responseCode = "200", description = "Clínica encontrada"),
             @ApiResponse(responseCode = "404", description = "Clínica não encontrada")
     })
-    public ClinicaDTO retornaClinica(@PathVariable Long clinicaId) {
+    public ClinicaDTO retornaClinica(@Min(1) @PathVariable Long clinicaId) {
         Clinica clinica = clinicaService.pegaClinica(clinicaId);
         return clinicaMapper.convertToDTO(clinica);
     }
@@ -86,7 +89,7 @@ public class ClinicaController {
             @ApiResponse(responseCode = "204", description = "Clínica removida com sucesso"),
             @ApiResponse(responseCode = "404", description = "Clínica não encontrada")
     })
-    public void removeClinica(@PathVariable Long clinicaId) {
+    public void removeClinica(@Min(1) @PathVariable Long clinicaId) {
         clinicaService.deletaClinica(clinicaId);
     }
 
@@ -96,7 +99,7 @@ public class ClinicaController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operação bem-sucedida")
     })
-    public ClinicaDTO atualizarEndereco(@PathVariable Long clinicaId, @RequestBody EnderecoDTO endereco) {
+    public ClinicaDTO atualizarEndereco(@Min(1) @PathVariable Long clinicaId, @Valid @RequestBody EnderecoDTO endereco) {
         Endereco endereco1 = enderecoMapper.convertToEntity(endereco);
         Clinica enderecoAtualizado = clinicaService.atualizaEndereco(clinicaId, endereco1);
         return clinicaMapper.convertToDTO(enderecoAtualizado);
@@ -108,7 +111,7 @@ public class ClinicaController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operação bem-sucedida")
     })
-    public List<ClinicaDTO> listaClinicasComCertoNome(@RequestParam String nomeClinica) {
+    public List<ClinicaDTO> listaClinicasComCertoNome(@NotBlank @RequestParam  String nomeClinica) {
         return clinicaService.mostraClinicasComCertoNome(nomeClinica).stream()
                 .map(clinicaMapper::convertToDTO)
                 .collect(Collectors.toList());
@@ -134,7 +137,7 @@ public class ClinicaController {
             @ApiResponse(responseCode = "200", description = "Médicos encontrados"),
             @ApiResponse(responseCode = "404", description = "Clínica não encontrada")
     })
-    public List<MedicoDTO> medicosDaClinica(@PathVariable Long clinicaId) {
+    public List<MedicoDTO> medicosDaClinica(@Min(1) @PathVariable Long clinicaId) {
         return clinicaService.todosMedicosClinica(clinicaId).stream()
                 .map(medicoMapper::convertToDTO)
                 .collect(Collectors.toList());

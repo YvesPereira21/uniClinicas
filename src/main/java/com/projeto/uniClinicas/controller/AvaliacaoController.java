@@ -10,7 +10,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Min;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/api")
+@Validated
 @Tag(name = "avaliacao", description = "Controller para gerenciamento de avaliações")
 @SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class AvaliacaoController {
@@ -37,7 +40,7 @@ public class AvaliacaoController {
             @ApiResponse(responseCode = "200", description = "Avaliação encontrada"),
             @ApiResponse(responseCode = "404", description = "Avaliação não encontrada")
     })
-    public AvaliacaoResponseDTO retornaAvaliacaoUnica(@PathVariable Long avaliacaoId) {
+    public AvaliacaoResponseDTO retornaAvaliacaoUnica(@Min(1) @PathVariable Long avaliacaoId) {
         Avaliacao a = avaliacaoService.pegaAvaliacaoUnica(avaliacaoId);
         return avaliacaoMapper.convertToDTO(a);
     }
@@ -49,7 +52,7 @@ public class AvaliacaoController {
             @ApiResponse(responseCode = "204", description = "Avaliação deletada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Avaliação não encontrada")
     })
-    public void deletaAvaliacao(@PathVariable Long avaliacaoId) {
+    public void deletaAvaliacao(@Min(1) @PathVariable Long avaliacaoId) {
         avaliacaoService.deletaAvaliacao(avaliacaoId);
     }
 
@@ -73,7 +76,7 @@ public class AvaliacaoController {
             @ApiResponse(responseCode = "200", description = "Avaliações encontradas"),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     })
-    public List<AvaliacaoResponseDTO> pegaTodasAvaliacoesDoUsuario(@PathVariable Long usuarioId){
+    public List<AvaliacaoResponseDTO> pegaTodasAvaliacoesDoUsuario(@Min(1) @PathVariable Long usuarioId){
         return avaliacaoService.avaliacoesUsuario(usuarioId).stream()
                 .map(avaliacaoMapper::convertToDTO)
                 .collect(Collectors.toList());
@@ -86,7 +89,7 @@ public class AvaliacaoController {
             @ApiResponse(responseCode = "200", description = "Lista carregado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Não há avaliações para essa clínica")
     })
-    public List<AvaliacaoResponseDTO> pegaTodasAvaliacoesDaClinica(@PathVariable Long clinicaId){
+    public List<AvaliacaoResponseDTO> pegaTodasAvaliacoesDaClinica(@Min(1) @PathVariable Long clinicaId){
         return avaliacaoService.avaliacoesClinica(clinicaId).stream()
                 .map(avaliacaoMapper::convertToDTO)
                 .collect(Collectors.toList());
@@ -98,7 +101,7 @@ public class AvaliacaoController {
             @ApiResponse(responseCode = "200", description = "Média calculada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Clínica não encontrada")
     })
-    public Double avaliacaoMediaClinica(@PathVariable Long clinicaId){
+    public Double avaliacaoMediaClinica(@Min(1) @PathVariable Long clinicaId){
         return avaliacaoService.calculaAvaliacaoMedia(clinicaId);
     }
 }

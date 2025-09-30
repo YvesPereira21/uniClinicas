@@ -26,6 +26,15 @@ public class MunicipioService {
         return municipioRepository.save(municipio);
     }
 
+    public Municipio alteraMunicipio(Municipio municipio, Long municipioId) {
+        Municipio muni = municipioRepository.findById(municipioId)
+                        .orElseThrow(() -> new ObjetoNaoEncontradoException("Município não encontrado"));
+
+        muni.setNomeMunicipio(municipio.getNomeMunicipio());
+        muni.setEstado(municipio.getEstado());
+        return municipioRepository.save(muni);
+    }
+
     public void deletaMunicipio(String nomeMunicipio) {
         Municipio municipio = municipioRepository.findMunicipioByNomeMunicipio(nomeMunicipio);
         if(municipio == null){

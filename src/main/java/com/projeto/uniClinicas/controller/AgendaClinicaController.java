@@ -11,7 +11,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
+@Validated
 @Tag(name = "agenda clínica", description = "Controller para gerenciamento de agendas")
 @SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class AgendaClinicaController {
@@ -38,7 +42,7 @@ public class AgendaClinicaController {
             @ApiResponse(responseCode = "200", description = "Agendamento criado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida")
     })
-    public List<AgendaClinicaDTO> adicionarAgenda(@PathVariable Long medicoId, @PathVariable Long clinicaId, @RequestBody List<HorarioDTO> horarios) {
+    public List<AgendaClinicaDTO> adicionarAgenda(@Min(1) @PathVariable  Long medicoId, @PathVariable @Min(1) Long clinicaId, @Valid @RequestBody List<HorarioDTO> horarios) {
         List<AgendaClinica> agendaClinica = agendaClinicaService.adicionaAgenda(medicoId, clinicaId, horarios);
         return agendaClinica.stream().map(agendaClinicaMapper::convertToDTO).collect(Collectors.toList());
     }
@@ -50,13 +54,13 @@ public class AgendaClinicaController {
             @ApiResponse(responseCode = "204", description = "Agendamento removido com sucesso"),
             @ApiResponse(responseCode = "404", description = "Agendamento não encontrado")
     })
-    public void removerAgenda(@PathVariable Long agendaId){
+    public void removerAgenda(@Min(1) @PathVariable Long agendaId){
         agendaClinicaService.removeAgenda(agendaId);
     }
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/agendas")
-    public List<AgendaClinicaDTO> listaAgendaDaClinica(@RequestParam Long clinicaId) {
+    public List<AgendaClinicaDTO> listaAgendaDaClinica(@Min(1) @RequestParam Long clinicaId) {
         return agendaClinicaService.agendaDaClinica(clinicaId).stream()
                 .map(agendaClinicaMapper::convertToDTO)
                 .collect(Collectors.toList());
@@ -69,7 +73,7 @@ public class AgendaClinicaController {
             @ApiResponse(responseCode = "200", description = "Médico atualizado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida")
     })
-    public void atualizaMedicoDaClinica(@PathVariable Long clinicaId,@PathVariable Long medicoAntigoId,@PathVariable Long medicoContratadoId, @RequestBody List<HorarioDTO> horarioDTOs){
+    public void atualizaMedicoDaClinica(@Min(1) @PathVariable Long clinicaId, @Min(1) @PathVariable Long medicoAntigoId, @PathVariable @Min(1) Long medicoContratadoId, @Valid @RequestBody List<HorarioDTO> horarioDTOs){
         agendaClinicaService.atualizaMedicoDaClinica(clinicaId, medicoAntigoId, medicoContratadoId, horarioDTOs);
     }
 
@@ -80,7 +84,7 @@ public class AgendaClinicaController {
             @ApiResponse(responseCode = "200", description = "Agendamentos encontrados"),
             @ApiResponse(responseCode = "404", description = "Agendamentos não encontrados")
     })
-    public List<AgendaClinicaDTO> medicosTrabalhoClinica(@PathVariable Long medicoId, @PathVariable Long clinicaId) {
+    public List<AgendaClinicaDTO> medicosTrabalhoClinica(@Min(1) @PathVariable Long medicoId, @Min(1) @PathVariable Long clinicaId) {
         List<AgendaClinica> agendaClinicas = agendaClinicaService.medicoTrabalhoClinica(medicoId, clinicaId);
         return agendaClinicas.stream().map(agendaClinicaMapper::convertToDTO).collect(Collectors.toList());
     }

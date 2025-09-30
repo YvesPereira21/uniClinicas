@@ -12,6 +12,5 @@ public interface AgendaClinicaRepository extends JpaRepository<AgendaClinica, Lo
             "JOIN a.clinica c WHERE med.medicoId = :medicoId AND c.clinicaId = :clinicaId")
     List<AgendaClinica> findAgendaClinicaByMedicoIdAndClinicaId(Long medicoId, Long clinicaId);
     @Query("SELECT a FROM AgendaClinica a JOIN a.clinica c WHERE c.clinicaId = :clinicaId")
-    List<Clinica> findAllAgendaClinicaByClinicaId(Long clinicaId);
-    List<AgendaClinica> findAgendaClinicaByDiaSemana(DiaDaSemana diaSemana);
+    List<AgendaClinica> findAllAgendaClinicaByClinicaId(Long clinicaId);
 }

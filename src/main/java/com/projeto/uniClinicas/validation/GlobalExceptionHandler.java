@@ -98,27 +98,4 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(ObjetoJaAdicionado.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<ApiError> handleObjetoJaAdicionado(ObjetoJaAdicionado ex) {
-        ApiError error = ApiError.builder()
-                .timestamp(LocalDateTime.now())
-                .code(HttpStatus.CONFLICT.value())
-                .status(HttpStatus.CONFLICT.name())
-                .errors(List.of(ex.getMessage()))
-                .build();
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
-    }
-
-    @ExceptionHandler(MedicoJaRemovido.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<ApiError> handleMedicoJaRemovido(MedicoJaRemovido ex) {
-        ApiError error = ApiError.builder()
-                .timestamp(LocalDateTime.now())
-                .code(HttpStatus.CONFLICT.value())
-                .status(HttpStatus.CONFLICT.name())
-                .errors(List.of(ex.getMessage()))
-                .build();
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
-    }
 }

@@ -54,7 +54,7 @@ public class MunicipioController {
             @ApiResponse(responseCode = "201", description = "Município deletado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro ao deletar município")
     })
-    public void deletaMunicipio(@RequestParam CidadesParaiba nomeMunicipio) {
+    public void deletaMunicipio(@RequestParam String nomeMunicipio) {
         municipioService.deletaMunicipio(nomeMunicipio);
     }
 

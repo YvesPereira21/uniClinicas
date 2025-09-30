@@ -53,7 +53,11 @@ public class AgendaClinicaService {
         agendaClinicaRepository.deleteById(agendaId);
     }
 
-    public void atualizaMedicoDaClinica(Long medicoAntigoId, Long medicoContratadoId, Long clinicaId, List<HorarioDTO> horarioDTOs) {;
+    public List<AgendaClinica> agendaDaClinica(Long clinicaId) {
+        return agendaClinicaRepository.findAllAgendaClinicaByClinicaId(clinicaId);
+    }
+
+    public void atualizaMedicoDaClinica(Long clinicaId, Long medicoAntigoId, Long medicoContratadoId, List<HorarioDTO> horarioDTOs) {;
         List<AgendaClinica> atualizaAtendimento = agendaClinicaRepository.findAgendaClinicaByMedicoIdAndClinicaId(medicoAntigoId, clinicaId);
         if (atualizaAtendimento.isEmpty()){
             throw new MedicoJaRemovido("O médico antigo já foi substituído nessa clínica!");
@@ -68,5 +72,4 @@ public class AgendaClinicaService {
     public List<AgendaClinica> medicoTrabalhoClinica(Long medicoId, Long clinicaId) {
         return agendaClinicaRepository.findAgendaClinicaByMedicoIdAndClinicaId(medicoId, clinicaId);
     }
-
 }

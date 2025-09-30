@@ -43,18 +43,6 @@ public class AgendaClinicaController {
         return agendaClinica.stream().map(agendaClinicaMapper::convertToDTO).collect(Collectors.toList());
     }
 
-    @PreAuthorize("hasAnyRole('CLINICA', 'ADMIN', 'USER')")
-    @GetMapping(path = "/medico/{medicoId}/clinica/{clinicaId}/agendas")
-    @Operation(summary = "Lista os agendamentos de um médico em uma clínica", description = "Retorna uma lista de agendamentos para um médico específico em uma clínica")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Agendamentos encontrados"),
-            @ApiResponse(responseCode = "404", description = "Agendamentos não encontrados")
-    })
-    public List<AgendaClinicaDTO> medicosTrabalhoClinica(@PathVariable Long medicoId, @PathVariable Long clinicaId) {
-        List<AgendaClinica> agendaClinicas = agendaClinicaService.medicoTrabalhoClinica(medicoId, clinicaId);
-        return agendaClinicas.stream().map(agendaClinicaMapper::convertToDTO).collect(Collectors.toList());
-    }
-
     @PreAuthorize("hasRole('CLINICA')")
     @DeleteMapping(path = "/agendas/{agendaId}")
     @Operation(summary = "Remove uma agenda clínica", description = "Deleta um agendamento existente pelo ID")
@@ -66,6 +54,14 @@ public class AgendaClinicaController {
         agendaClinicaService.removeAgenda(agendaId);
     }
 
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/agendas")
+    public List<AgendaClinicaDTO> listaAgendaDaClinica(@RequestParam Long clinicaId) {
+        return agendaClinicaService.agendaDaClinica(clinicaId).stream()
+                .map(agendaClinicaMapper::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
     @PreAuthorize("hasRole('CLINICA')")
     @PutMapping(path = "/clinica/{clinicaId}/medico_antigo/{medicoAntigoId}/medico_contratado/{medicoContratadoId}/agendas")
     @Operation(summary = "Atualiza o médico de uma clínica", description = "Substitui um médico antigo por um novo em uma clínica, atualizando os agendamentos")
@@ -75,5 +71,17 @@ public class AgendaClinicaController {
     })
     public void atualizaMedicoDaClinica(@PathVariable Long clinicaId,@PathVariable Long medicoAntigoId,@PathVariable Long medicoContratadoId, @RequestBody List<HorarioDTO> horarioDTOs){
         agendaClinicaService.atualizaMedicoDaClinica(clinicaId, medicoAntigoId, medicoContratadoId, horarioDTOs);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @GetMapping(path = "/medico/{medicoId}/clinica/{clinicaId}/agendas")
+    @Operation(summary = "Lista a agenda de um médico em uma clínica", description = "Retorna uma lista de agenda para um médico específico em uma clínica")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Agendamentos encontrados"),
+            @ApiResponse(responseCode = "404", description = "Agendamentos não encontrados")
+    })
+    public List<AgendaClinicaDTO> medicosTrabalhoClinica(@PathVariable Long medicoId, @PathVariable Long clinicaId) {
+        List<AgendaClinica> agendaClinicas = agendaClinicaService.medicoTrabalhoClinica(medicoId, clinicaId);
+        return agendaClinicas.stream().map(agendaClinicaMapper::convertToDTO).collect(Collectors.toList());
     }
 }

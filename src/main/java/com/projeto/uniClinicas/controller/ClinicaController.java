@@ -115,19 +115,7 @@ public class ClinicaController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @GetMapping(value = "/clinicas", params = "{hora, minuto}")
-    @Operation(summary = "Lista clínicas por horário de funcionamento", description = "Retorna clínicas que abrem em um determinado horário")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Operação bem-sucedida")
-    })
-    public List<ClinicaDTO> listaClinicasPeloHorarioFuncionamento(@Min(0) @RequestParam int hora, @Min(0) @RequestParam int minuto) {
-        return clinicaService.mostraPeloHorarioFuncionamento(hora, minuto).stream()
-                .map(clinicaMapper::convertToDTO)
-                .collect(Collectors.toList());
-    }
-
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @GetMapping("/clinicas/enderecos")
+    @PostMapping("/enderecos")
     @Operation(summary = "Encontra clínica pelo endereço", description = "Busca uma clínica com base nos dados de endereço fornecidos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Clínica encontrada"),

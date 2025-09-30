@@ -59,10 +59,6 @@ public class ClinicaService {
         return clinicaRepository.findByNomeClinicaContaining(nome);
     }
 
-    public List<Clinica> mostraPeloHorarioFuncionamento(int hora, int minuto) {
-        return clinicaRepository.findByHorarioFuncionamento(LocalTime.of(hora, minuto));
-    }
-
     public Clinica encontraClinicaPeloEndereco(Endereco endereco) {
         return clinicaRepository.findClinicaByEndereco(endereco);
     }

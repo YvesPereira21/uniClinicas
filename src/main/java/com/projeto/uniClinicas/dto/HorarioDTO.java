@@ -9,7 +9,7 @@ public class HorarioDTO {
 
     @NotNull
     @DiaSemana
-    private DiaDaSemana diaSemana;
+    private String diaSemana;
     @NotNull
     private LocalTime horarioAtendimentoMedico;
     @NotNull
@@ -18,17 +18,17 @@ public class HorarioDTO {
     public HorarioDTO() {
     }
 
-    public HorarioDTO(DiaDaSemana diaSemana, LocalTime horarioAtendimentoMedico, LocalTime horarioSaida) {
+    public HorarioDTO(String diaSemana, LocalTime horarioAtendimentoMedico, LocalTime horarioSaida) {
         this.diaSemana = diaSemana;
         this.horarioAtendimentoMedico = horarioAtendimentoMedico;
         this.horarioSaida = horarioSaida;
     }
 
-    public DiaDaSemana getDiaSemana() {
+    public String getDiaSemana() {
         return diaSemana;
     }
 
-    public void setDiaSemana(DiaDaSemana diaSemana) {
+    public void setDiaSemana(String diaSemana) {
         this.diaSemana = diaSemana;
     }
 

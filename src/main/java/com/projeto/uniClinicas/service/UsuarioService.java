@@ -1,5 +1,6 @@
 package com.projeto.uniClinicas.service;
 
+import com.projeto.uniClinicas.enums.UserRole;
 import com.projeto.uniClinicas.exception.ObjetoJaAdicionado;
 import com.projeto.uniClinicas.repository.ClinicaRepository;
 import com.projeto.uniClinicas.exception.CPFDuplicadoException;
@@ -38,6 +39,7 @@ public class UsuarioService {
             throw new CPFDuplicadoException("Conta já cadastrada com esse CPF!");
         }
         novoUsuario.setPassword(bCryptPasswordEncoder.encode(novoUsuario.getPassword()));
+        novoUsuario.setRole(UserRole.USER);
         return usuarioRepository.save(novoUsuario);
     }
 

@@ -22,12 +22,13 @@ public class Endereco {
     private String complemento;
     @Column(name = "bairro")
     private String bairro;
-    @ManyToOne()
-    @JoinColumn(name = "municipioId")
-    private Municipio municipio;
-    @OneToOne()
+    @Column(name = "nome_municipio")
+    private String nomeMunicipio;
+    @Column(name = "estado")
+    private String estado;
+    @OneToOne(mappedBy = "endereco")
     private Clinica clinica;
-    @OneToOne()
+    @OneToOne(mappedBy = "endereco")
     private Usuario usuario;
 
 
@@ -67,6 +68,38 @@ public class Endereco {
 
     public void setBairro(String bairro) {
         this.bairro = bairro;
+    }
+
+    public String getNomeMunicipio() {
+        return nomeMunicipio;
+    }
+
+    public void setNomeMunicipio(String nomeMunicipio) {
+        this.nomeMunicipio = nomeMunicipio;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public Clinica getClinica() {
+        return this.clinica;
+    }
+
+    public void setClinica(Clinica clinica) {
+        this.clinica = clinica;
+    }
+
+    public Usuario getUsuario() {
+        return this.usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }
 

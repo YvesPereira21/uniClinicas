@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class UsuarioService {
 
-
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UsuarioRepository usuarioRepository;
     private final AvaliacaoRepository avaliacaoRepository;
@@ -40,6 +39,9 @@ public class UsuarioService {
         }
         novoUsuario.setPassword(bCryptPasswordEncoder.encode(novoUsuario.getPassword()));
         novoUsuario.setRole(UserRole.USER);
+        if (novoUsuario.getEndereco() != null) {
+            novoUsuario.getEndereco().setUsuario(novoUsuario);
+        }
         return usuarioRepository.save(novoUsuario);
     }
 

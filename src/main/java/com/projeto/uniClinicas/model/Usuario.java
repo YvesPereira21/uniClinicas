@@ -40,7 +40,7 @@ public class Usuario implements UserDetails {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usuario")
     private List<Avaliacao> avaliacoesUsuario;
 
     public Usuario() {}

@@ -18,7 +18,7 @@ public class Clinica {
     @Column(name = "clinica_id")
     private Long clinicaId;
     @Column(name = "cnpj_clinica", unique = true)
-    private Long cpnj_clinica;
+    private Long cpnjClinica;
     @Column(name = "nome_clinica")
     private String nomeClinica;
     @Column(name = "telefone", length = 12)
@@ -43,12 +43,12 @@ public class Clinica {
         return this.clinicaId;
     }
 
-    public Long getCpnj_clinica() {
-        return this.cpnj_clinica;
+    public Long getCpnjClinica() {
+        return cpnjClinica;
     }
 
-    public void setCpnj_clinica(Long cpnj_clinica) {
-        this.cpnj_clinica = cpnj_clinica;
+    public void setCpnjClinica(Long cpnjClinica) {
+        this.cpnjClinica = cpnjClinica;
     }
 
     public String getNomeClinica() {

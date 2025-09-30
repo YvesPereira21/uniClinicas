@@ -67,7 +67,8 @@ public class AgendaClinicaService {
             agendaClinicaRepository.deleteAll(atualizaAtendimento);
         }
 
-        List<AgendaClinica> novaAgenda = adicionaAgenda(atualizaAgenda.getMedicoContratadoId(), clinicaId, atualizaAgenda.getHorarios());
+        List<AgendaClinica> novaAgenda = adicionaAgenda(clinicaId, atualizaAgenda.getMedicoContratadoId(), atualizaAgenda.getHorarios());
+
         agendaClinicaRepository.saveAll(novaAgenda);
     }
 

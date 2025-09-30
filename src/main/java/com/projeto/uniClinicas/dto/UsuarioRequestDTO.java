@@ -83,8 +83,24 @@ public class UsuarioRequestDTO {
         this.email = email;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public EnderecoDTO getEndereco() {
-        return this.endereco;
+        return endereco;
     }
 
     public void setEndereco(EnderecoDTO endereco) {

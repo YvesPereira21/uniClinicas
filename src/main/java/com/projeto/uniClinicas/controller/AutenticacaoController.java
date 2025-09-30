@@ -4,8 +4,11 @@ import com.projeto.uniClinicas.authentication.AutenticacaoDTO;
 import com.projeto.uniClinicas.authentication.LoginResponseDTO;
 import com.projeto.uniClinicas.dto.UsuarioRequestDTO;
 import com.projeto.uniClinicas.dto.UsuarioResponseDTO;
+import com.projeto.uniClinicas.enums.UserRole;
+import com.projeto.uniClinicas.exception.ObjetoJaAdicionado;
 import com.projeto.uniClinicas.mapper.UsuarioMapper;
 import com.projeto.uniClinicas.model.Usuario;
+import com.projeto.uniClinicas.repository.UsuarioRepository;
 import com.projeto.uniClinicas.service.UsuarioService;
 import com.projeto.uniClinicas.security.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,8 +18,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,13 +35,18 @@ public class AutenticacaoController {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
     private final UsuarioService usuarioService;
+    private final UsuarioRepository usuarioRepository;
     private final UsuarioMapper usuarioMapper;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public AutenticacaoController(AuthenticationManager authenticationManager, TokenService tokenService, UsuarioService usuarioService, UsuarioMapper usuarioMapper) {
+
+    public AutenticacaoController(AuthenticationManager authenticationManager, TokenService tokenService, UsuarioService usuarioService, UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
         this.usuarioService = usuarioService;
+        this.usuarioRepository = usuarioRepository;
         this.usuarioMapper = usuarioMapper;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @PostMapping("/login")
@@ -62,5 +72,22 @@ public class AutenticacaoController {
         Usuario usuario = usuarioMapper.convertToEntity(usuarioRequestDTO);
         Usuario novoUsuario = usuarioService.adicionaUsuario(usuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioMapper.convertToDTO(novoUsuario));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/register-clinica")
+    @Operation(summary = "Registra um novo usuário (CLINICA)", description = "Cria uma nova conta de usuário com a role 'CLINICA'.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Usuário de clínica criado com sucesso!"),
+            @ApiResponse(responseCode = "400", description = "Este nome de usuário já existe.")
+    })
+    public ResponseEntity<Void> cadastraUsuarioClinica(@Valid @RequestBody AutenticacaoDTO data){
+        if(usuarioRepository.findByUsername(data.getUsername()).isPresent()){
+            throw new ObjetoJaAdicionado("Este nome de usuário já existe.");
+        }
+        Usuario novoUsuario = new Usuario(data.getUsername(), bCryptPasswordEncoder.encode(data.getPassword()), UserRole.CLINICA);
+        usuarioRepository.save(novoUsuario);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

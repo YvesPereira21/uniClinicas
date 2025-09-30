@@ -1,6 +1,5 @@
 package com.projeto.uniClinicas.service;
 
-import com.projeto.uniClinicas.authentication.ClinicaRegistroDTO;
 import com.projeto.uniClinicas.enums.UserRole;
 import com.projeto.uniClinicas.exception.ObjetoJaAdicionado;
 import com.projeto.uniClinicas.mapper.ClinicaMapper;
@@ -19,25 +18,16 @@ import java.util.List;
 public class ClinicaService {
 
     private final ClinicaRepository clinicaRepository;
-    private final ClinicaMapper clinicaMapper;
-    private final UsuarioRepository usuarioRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public ClinicaService(ClinicaRepository clinicaRepository, ClinicaMapper clinicaMapper, UsuarioRepository usuarioRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public ClinicaService(ClinicaRepository clinicaRepository) {
         this.clinicaRepository = clinicaRepository;
-        this.clinicaMapper = clinicaMapper;
-        this.usuarioRepository = usuarioRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public Clinica adicionaClinica(ClinicaRegistroDTO dto) {
-        if (usuarioRepository.findByUsername(dto.getUsername()).isPresent()) {
-            throw new ObjetoJaAdicionado("Este nome de usuário já existe.");
+    public Clinica adicionaClinica(Clinica clinica) {
+        if (clinica.getEndereco() != null) {
+            clinica.getEndereco().setClinica(clinica);
         }
-        Usuario novoUsuario = new Usuario(dto.getUsername(), bCryptPasswordEncoder.encode(dto.getPassword()), UserRole.CLINICA);
-        usuarioRepository.save(novoUsuario);
-        Clinica novaClinica = clinicaMapper.convertToEntity(dto.getClinica());
-        return clinicaRepository.save(novaClinica);
+        return clinicaRepository.save(clinica);
     }
 
     public void deletaClinica(Long clinicaId){
@@ -54,7 +44,7 @@ public class ClinicaService {
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Clínica não encontrada"));
 
         clinicaNova.setNomeClinica(clinicaAtualizar.getNomeClinica());
-        clinicaNova.setCpnj_clinica(clinicaAtualizar.getCpnj_clinica());
+        clinicaNova.setCpnjClinica(clinicaAtualizar.getCpnjClinica());
         clinicaNova.setEndereco(clinicaAtualizar.getEndereco());
         clinicaNova.setTelefone(clinicaAtualizar.getTelefone());
         clinicaNova.setHorarioFuncionamento(clinicaAtualizar.getHorarioFuncionamento());

@@ -13,6 +13,4 @@ import java.util.List;
 public interface ClinicaRepository extends JpaRepository<Clinica, Long> {
     List<Clinica> findByNomeClinicaContaining(@Param("nome") String nome);
     Clinica findClinicaByEndereco(@Param("endereco") Endereco endereco);
-    @Query("SELECT m FROM Medico m JOIN m.agendaClinicas a JOIN a.clinica c WHERE c.clinicaId = :clinicaId")
-    List<Medico> findMedicosByClinicaId(@Param("clinicaId") Long clinicaId);
 }

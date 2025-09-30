@@ -3,10 +3,8 @@ package com.projeto.uniClinicas.controller;
 import com.projeto.uniClinicas.authentication.ClinicaRegistroDTO;
 import com.projeto.uniClinicas.dto.ClinicaDTO;
 import com.projeto.uniClinicas.dto.EnderecoDTO;
-import com.projeto.uniClinicas.dto.MedicoDTO;
 import com.projeto.uniClinicas.mapper.ClinicaMapper;
 import com.projeto.uniClinicas.mapper.EnderecoMapper;
-import com.projeto.uniClinicas.mapper.MedicoMapper;
 import com.projeto.uniClinicas.model.Clinica;
 import com.projeto.uniClinicas.model.Endereco;
 import com.projeto.uniClinicas.security.SecurityConfigurations;
@@ -35,13 +33,11 @@ public class ClinicaController {
 
     private final ClinicaService clinicaService;
     private final ClinicaMapper clinicaMapper;
-    private final MedicoMapper medicoMapper;
     private final EnderecoMapper enderecoMapper;
 
-    public ClinicaController(ClinicaService clinicaService, ClinicaMapper clinicaMapper, MedicoMapper medicoMapper, EnderecoMapper enderecoMapper) {
+    public ClinicaController(ClinicaService clinicaService, ClinicaMapper clinicaMapper, EnderecoMapper enderecoMapper) {
         this.clinicaService = clinicaService;
         this.clinicaMapper = clinicaMapper;
-        this.medicoMapper = medicoMapper;
         this.enderecoMapper = enderecoMapper;
     }
 
@@ -128,19 +124,6 @@ public class ClinicaController {
         Endereco end = enderecoMapper.convertToEntity(endereco);
         Clinica clinica = clinicaService.encontraClinicaPeloEndereco(end);
         return clinicaMapper.convertToDTO(clinica);
-    }
-
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @GetMapping("/clinica/{clinicaId}/medicos")
-    @Operation(summary = "Lista os médicos de uma clínica", description = "Retorna todos os médicos associados a uma clínica específica")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Médicos encontrados"),
-            @ApiResponse(responseCode = "404", description = "Clínica não encontrada")
-    })
-    public List<MedicoDTO> medicosDaClinica(@Min(1) @PathVariable Long clinicaId) {
-        return clinicaService.todosMedicosClinica(clinicaId).stream()
-                .map(medicoMapper::convertToDTO)
-                .collect(Collectors.toList());
     }
 
 }

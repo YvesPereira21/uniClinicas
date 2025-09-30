@@ -1,6 +1,8 @@
 package com.projeto.uniClinicas.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class EnderecoDTO {
 
@@ -12,6 +14,8 @@ public class EnderecoDTO {
     private String complemento;
     @NotBlank
     private String bairro;
+    @NotNull
+    @Valid
     private MunicipioDTO municipio;
 
     public EnderecoDTO() {

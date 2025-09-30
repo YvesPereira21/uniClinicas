@@ -6,7 +6,6 @@ import com.projeto.uniClinicas.exception.ObjetoJaAdicionado;
 import com.projeto.uniClinicas.mapper.ClinicaMapper;
 import com.projeto.uniClinicas.model.Clinica;
 import com.projeto.uniClinicas.model.Endereco;
-import com.projeto.uniClinicas.model.Medico;
 import com.projeto.uniClinicas.model.Usuario;
 import com.projeto.uniClinicas.repository.ClinicaRepository;
 import com.projeto.uniClinicas.exception.ObjetoNaoEncontradoException;
@@ -77,11 +76,5 @@ public class ClinicaService {
 
     public Clinica encontraClinicaPeloEndereco(Endereco endereco) {
         return clinicaRepository.findClinicaByEndereco(endereco);
-    }
-
-    public List<Medico> todosMedicosClinica(Long clinicaId) {
-        Clinica clinica = clinicaRepository.findById(clinicaId)
-                .orElseThrow(() -> new ObjetoNaoEncontradoException("Clínica não encontrada"));
-        return clinicaRepository.findMedicosByClinicaId(clinicaId);
     }
 }

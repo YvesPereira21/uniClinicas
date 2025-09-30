@@ -48,7 +48,7 @@ public class AvaliacaoService {
 
     public List<Avaliacao> avaliacoesClinica(Long clinicaId){
         Clinica clinica = clinicaRepository.findById(clinicaId)
-                .orElseThrow();
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Clínica não encontrada"));
         return avaliacaoRepository.findAllAvaliacaoByClinicaId(clinicaId);
     }
 

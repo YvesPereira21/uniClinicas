@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 public class AvaliacaoResponseDTO {
 
     private String comentario;
-    @NotNull
-    @Min(0) @Max(5)
     private Integer nota;
     @JsonFormat(pattern="dd-MM HH:mm")
     private LocalDateTime horarioComentario;

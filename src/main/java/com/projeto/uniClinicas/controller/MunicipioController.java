@@ -55,8 +55,8 @@ public class MunicipioController {
     @DeleteMapping("/municipio")
     @Operation(summary = "Deleta município", description = "Deleta município pelo nome dele")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Município deletado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Erro ao deletar município")
+            @ApiResponse(responseCode = "204", description = "Município deletado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Erro ao deletar município. Município não encontrado")
     })
     public void deletaMunicipio(@NotBlank @RequestParam String nomeMunicipio) {
         municipioService.deletaMunicipio(nomeMunicipio);
@@ -66,7 +66,7 @@ public class MunicipioController {
     @GetMapping(value = "/clinicas", params = "nomeMunicipio")
     @Operation(summary = "Listar clínicas de um município específico", description = "Lista as clínicas presentes em um munícipio pelo nome dele")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Clínicas listadas com sucesso"),
+            @ApiResponse(responseCode = "200", description = "Clínicas listadas com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro ao listar as clínicas do município")
     })
     public List<ClinicaDTO> listaClinicasMunicipio(@NotBlank @RequestParam String nomeMunicipio){

@@ -95,6 +95,7 @@ public class AvaliacaoController {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'CLINICA')")
     @GetMapping("/clinicas/{clinicaId}/avaliacao")
     @Operation(summary = "Calcula a avaliação média de uma clínica", description = "Retorna a média de todas as avaliações para uma clínica específica")
     @ApiResponses(value = {

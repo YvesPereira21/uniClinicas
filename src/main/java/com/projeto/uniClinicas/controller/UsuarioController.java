@@ -12,6 +12,7 @@ import com.projeto.uniClinicas.security.SecurityConfigurations;
 import com.projeto.uniClinicas.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -38,20 +39,10 @@ public class UsuarioController {
         this.avaliacaoMapper = avaliacaoMapper;
     }
 
-    @PostMapping("/usuarios")
-    @Operation(summary = "Cadastra usuário", description = "Método para cadastrar dados do usuário")
-    @ApiResponse(responseCode = "201", description = "Usuário salvado com sucesso!")
-    @ApiResponse(responseCode = "400", description = "Erro ao tentar salvar o usuário.")
-    public UsuarioResponseDTO cadastraUsuario(@Valid @RequestBody UsuarioRequestDTO usuarioRequestDTO){
-        Usuario usuario = usuarioMapper.convertToEntity(usuarioRequestDTO);
-        Usuario novoUsuario = usuarioService.adicionaUsuario(usuario);
-        return usuarioMapper.convertToDTO(novoUsuario);
-    }
-
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/usuarios/{usuarioId}")
     @Operation(summary = "Atualiza dados do usuário", description = "Método para atualizar dados do usuário")
-    @ApiResponse(responseCode = "201", description = "Usuário atualizado com sucesso!")
+    @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso!")
     @ApiResponse(responseCode = "400", description = "Erro ao tentar atualizar o usuário.")
     public UsuarioResponseDTO atualizaUsuario(@Min(1) @PathVariable Long usuarioId, @Valid @RequestBody UsuarioRequestDTO usuarioRequestDTO){
         Usuario usuario = usuarioMapper.convertToEntity(usuarioRequestDTO);
@@ -61,6 +52,11 @@ public class UsuarioController {
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @DeleteMapping("/usuarios/{usuarioId}")
+    @Operation(summary = "Deleta um usuário", description = "Remove um usuário do sistema pelo ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
     public void deletaUsuario(@Min(1) @PathVariable Long usuarioId){
         usuarioService.deletaUsuario(usuarioId);
     }

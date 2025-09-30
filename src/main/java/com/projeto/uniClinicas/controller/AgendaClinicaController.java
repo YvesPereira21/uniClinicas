@@ -39,7 +39,7 @@ public class AgendaClinicaController {
     @PostMapping(path = "/medicos/{medicoId}/clinicas/{clinicaId}/agendas")
     @Operation(summary = "Adiciona uma nova agenda", description = "Cria uma nova agenda para um médico, e seus horários de atendimento, em uma clínica")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Agendamento criado com sucesso"),
+            @ApiResponse(responseCode = "201", description = "Agendamento criado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida")
     })
     public List<AgendaClinicaDTO> adicionarAgenda(@Min(1) @PathVariable  Long medicoId, @PathVariable @Min(1) Long clinicaId, @Valid @RequestBody List<HorarioDTO> horarios) {
@@ -60,6 +60,11 @@ public class AgendaClinicaController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/agendas")
+    @Operation(summary = "Lista a agenda de uma clínica", description = "Retorna a agenda de uma clínica específica")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Agenda encontrada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Clínica não encontrada ou não possui agenda")
+    })
     public List<AgendaClinicaDTO> listaAgendaDaClinica(@Min(1) @RequestParam Long clinicaId) {
         return agendaClinicaService.agendaDaClinica(clinicaId).stream()
                 .map(agendaClinicaMapper::convertToDTO)

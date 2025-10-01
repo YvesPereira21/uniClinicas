@@ -1,19 +1,23 @@
+Claro! Analisei as suas controllers e anotações de segurança para criar a versão mais recente do `README.md`. Aqui está a atualização com as rotas e permissões corrigidas:
+
 # UniClinicas
 
 Este projeto é uma API REST para gerenciamento de clínicas, médicos, usuários e agendamentos.
 
-## 🗂️ Estrutura de Pastas
+## Estrutura de Pastas
+
+O projeto segue a estrutura padrão do Spring Boot:
 
 -   `src/main/java`: Contém todo o código-fonte da aplicação.
     -   `com/projeto/uniClinicas`: Pacote raiz do projeto.
         -   `authentication`: Contém DTOs para autenticação.
         -   `controller`: Responsável por expor a API REST, recebendo as requisições HTTP.
-        -   `dto`: Utilizados para transferir dados entre as camadas da aplicação e contém outros DTOs em uma pasta dentro para auxiliar na criação de objetos.
+        -   `dto`: Data Transfer Objects, utilizados para transferir dados entre as camadas da aplicação.
         -   `enums`: Contém as enumerações, como `UserRole`.
         -   `exception`: Classes de exceções customizadas.
-        -   `mapper`: Classes de mapeamento de DTOs para entidades e vice-versa.
+        -   `mapper`: Classes responsáveis por mapear DTOs para entidades e vice-versa.
         -   `model`: Classes de entidade que representam as tabelas do banco de dados.
-        -   `repository`: Interfaces para operações de acesso a dados.
+        -   `repository`: Interfaces que definem as operações de acesso a dados, utilizando Spring Data JPA.
         -   `security`: Configurações de segurança da aplicação, incluindo filtros e serviços de token.
         -   `seeds`: Classe para popular o banco de dados com dados iniciais.
         -   `service`: Contém a lógica de negócio da aplicação.
@@ -53,50 +57,51 @@ Ao iniciar a aplicação, os seguintes usuários são criados no banco de dados 
 
 ## Rotas da API
 
-A seguir estão listadas as rotas da API, organizadas por método HTTP e com as permissões de acesso para cada `role`.
+A seguir estão listadas as rotas da API, organizadas por método HTTP e com as permissões de acesso para cada `role` atualizadas.
 
 ### POST
 
-| Rota                                           | Descrição                                         | Roles Permitidas |
-| ---------------------------------------------- | ------------------------------------------------- | ---------------- |
-| `/auth/login`                                  | Realiza o login do usuário.                       | `permitAll`      |
-| `/auth/register`                               | Registra um novo usuário (USER).                  | `permitAll`      |
-| `/api/clinicas`                                | Adiciona uma nova clínica.                        | `ADMIN`          |
-| `/api/medicos`                                 | Adiciona um novo médico.                          | `CLINICA`        |
-| `/api/clinicas/{clinicaId}/agendas`            | Adiciona uma nova agenda para uma clínica.        | `CLINICA`        |
-| `/api/clinicas/{clinicaId}/avaliacoes`         | Cria uma avaliação para uma clínica.              | `USER`           |
-| `/api/enderecos`                               | Encontra uma clínica pelo endereço.               | `ADMIN`, `USER`  |
+| Rota | Descrição | Roles Permitidas |
+| --- | --- | --- |
+| `/auth/login` | Realiza o login do usuário. | `permitAll` |
+| `/auth/register` | Registra um novo usuário (USER). | `permitAll` |
+| `/auth/change-password` | Permite que um usuário altere sua senha. | `permitAll` |
+| `/api/clinicas` | Adiciona uma nova clínica. | `CLINICA` |
+| `/api/medicos` | Adiciona um novo médico. | `CLINICA` |
+| `/api/clinicas/{clinicaId}/agendas` | Adiciona uma nova agenda para uma clínica. | `CLINICA` |
+| `/api/clinicas/{clinicaId}/avaliacoes` | Cria uma avaliação para uma clínica. | `USER` |
+| `/api/enderecos` | Encontra uma clínica pelo endereço. | `ADMIN`, `USER` |
 
 ### PUT
 
-| Rota                                 | Descrição                                 | Roles Permitidas |
-| ------------------------------------ | ----------------------------------------- | ---------------- |
-| `/api/clinicas/{clinicaId}`          | Atualiza uma clínica existente.           | `ADMIN`          |
-| `/api/clinicas/{clinicaId}/enderecos` | Atualiza o endereço de uma clínica.       | `CLINICA`        |
-| `/api/medicos/{medicoId}`            | Atualiza um médico existente.             | `CLINICA`        |
-| `/api/usuarios/{usuarioId}`          | Atualiza os dados de um usuário.          | `USER`           |
-| `/api/clinicas/{clinicaId}/agendas`  | Atualiza a agenda de uma clínica.         | `CLINICA`        |
+| Rota | Descrição | Roles Permitidas |
+| --- | --- | --- |
+| `/api/clinicas/{clinicaId}` | Atualiza uma clínica existente. | `ADMIN` |
+| `/api/clinicas/{clinicaId}/enderecos` | Atualiza o endereço de uma clínica. | `CLINICA` |
+| `/api/medicos/{medicoId}` | Atualiza um médico existente. | `CLINICA` |
+| `/api/usuarios/{usuarioId}` | Atualiza os dados de um usuário. | `USER` |
+| `/api/clinicas/{clinicaId}/agendas` | Atualiza a agenda de uma clínica. | `CLINICA` |
 
 ### GET
 
-| Rota                                                           | Descrição                                          | Roles Permitidas        |
-| -------------------------------------------------------------- | -------------------------------------------------- | ----------------------- |
-| `/api/clinicas/{clinicaId}`                                    | Retorna uma clínica específica.                    | `ADMIN`, `CLINICA`, `USER` |
-| `/api/clinicas`                                                | Lista clínicas por nome.                           | `ADMIN`, `USER`         |
-| `/api/enderecos/{nomeMunicipio}/clinicas`                      | Lista as clínicas de um município.                 | `ADMIN`, `USER`         |
-| `/api/medicos/{medicoId}`                                      | Busca um médico específico.                        | `CLINICA`, `USER`       |
-| `/api/agendas`                                                 | Lista a agenda de uma clínica.                     | `USER`                  |
-| `/api/medicos/{medicoId}/clinicas/{clinicaId}/agendas`         | Lista a agenda de um médico em uma clínica.        | `ADMIN`, `USER`         |
-| `/api/usuarios/{usuarioId}/avaliacoes`                         | Lista todas as avaliações de um usuário.           | `ADMIN`                 |
-| `/api/clinicas/{clinicaId}/avaliacoes`                         | Lista todas as avaliações de uma clínica.          | `USER`                  |
-| `/api/clinicas/{clinicaId}/avaliacoes-media`                   | Calcula a avaliação média de uma clínica.          | `USER`, `CLINICA`       |
+| Rota | Descrição | Roles Permitidas |
+| --- | --- | --- |
+| `/api/clinicas/{clinicaId}` | Retorna uma clínica específica. | `ADMIN`, `CLINICA`, `USER` |
+| `/api/clinicas` | Lista clínicas por nome. | `ADMIN`, `USER` |
+| `/api/enderecos/{nomeMunicipio}/clinicas` | Lista as clínicas de um município. | `ADMIN`, `USER` |
+| `/api/medicos/{medicoId}` | Busca um médico específico. | `CLINICA`, `USER` |
+| `/api/agendas` | Lista a agenda de uma clínica. | `USER` |
+| `/api/medicos/{medicoId}/clinicas/{clinicaId}/agendas` | Lista a agenda de um médico em uma clínica. | `ADMIN`, `USER` |
+| `/api/usuarios/{usuarioId}/avaliacoes` | Lista todas as avaliações de um usuário. | `ADMIN` |
+| `/api/clinicas/{clinicaId}/avaliacoes` | Lista todas as avaliações de uma clínica. | `USER` |
+| `/api/clinicas/{clinicaId}/avaliacoes-media` | Calcula a avaliação média de uma clínica. | `USER`, `CLINICA` |
 
 ### DELETE
 
-| Rota                           | Descrição                    | Roles Permitidas |
-| ------------------------------ | ---------------------------- | ---------------- |
-| `/api/clinicas/{clinicaId}`    | Remove uma clínica.          | `ADMIN`          |
-| `/api/medicos/{medicoId}`      | Deleta um médico.            | `CLINICA`        |
-| `/api/agendas/{agendaId}`      | Remove uma agenda clínica.   | `CLINICA`        |
-| `/api/avaliacoes/{avaliacaoId}` | Deleta uma avaliação.        | `USER`, `ADMIN`  |
-| `/api/usuarios/{usuarioId}`    | Deleta um usuário.           | `ADMIN`  |
+| Rota | Descrição | Roles Permitidas |
+| --- | --- | --- |
+| `/api/clinicas/{clinicaId}` | Remove uma clínica. | `ADMIN` |
+| `/api/medicos/{medicoId}` | Deleta um médico. | `CLINICA` |
+| `/api/agendas/{agendaId}` | Remove uma agenda clínica. | `CLINICA` |
+| `/api/avaliacoes/{avaliacaoId}` | Deleta uma avaliação. | `USER`, `ADMIN` |
+| `/api/usuarios/{usuarioId}` | Deleta um usuário. | `ADMIN` |

@@ -33,6 +33,7 @@ O sistema possui três tipos de `roles` (perfis de usuário) com diferentes nív
 -   **CLINICA**: Perfil destinado a clínicas, com permissões para gerenciar seus próprios dados, médicos e agendamentos.
 -   **USER**: Usuário padrão, com permissões para consultar informações, fazer avaliações e interagir com as clínicas.
 
+
 ## Seeds
 
 Ao iniciar a aplicação, os seguintes usuários são criados no banco de dados para fins de teste e demonstração:

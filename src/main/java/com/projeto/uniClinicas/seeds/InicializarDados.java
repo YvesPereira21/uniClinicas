@@ -23,11 +23,10 @@ public class InicializarDados implements CommandLineRunner {
         if (usuarioRepository.findByUsername("admin").isEmpty()) {
             Usuario admin = new Usuario(
                     "admin",
-                    passwordEncoder.encode("admin123"), // Senha para o admin
+                    passwordEncoder.encode("admin123"),
                     UserRole.ADMIN
             );
             usuarioRepository.save(admin);
-            System.out.println(">>> Usuário ADMIN criado com sucesso!");
         }
 
         if (usuarioRepository.findByUsername("clinica_unip").isEmpty()) {
@@ -37,7 +36,6 @@ public class InicializarDados implements CommandLineRunner {
                     UserRole.CLINICA
             );
             usuarioRepository.save(clinicaUser);
-            System.out.println(">>> Usuário para CLÍNICA criado com sucesso!");
         }
 
         if (usuarioRepository.findByUsername("SouDoto").isEmpty()) {
@@ -47,7 +45,6 @@ public class InicializarDados implements CommandLineRunner {
                     UserRole.CLINICA
             );
             usuarioRepository.save(clinicaUser);
-            System.out.println(">>> Usuário para CLÍNICA criado com sucesso!");
         }
     }
 }

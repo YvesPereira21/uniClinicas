@@ -65,6 +65,7 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findByUsername(username)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Usuário ou senha inválidos!"));
         usuario.setPassword(bCryptPasswordEncoder.encode(newPassword));
+        usuarioRepository.save(usuario);
     }
 
     public Avaliacao criaAvaliacaoDoUsuarioAClinica(Usuario usuario, Avaliacao avaliacao, Long clinicaId) {

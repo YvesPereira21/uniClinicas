@@ -112,7 +112,7 @@ Siga os passos abaixo para clonar e executar a aplicação em seu ambiente local
 
 ### 1. Clonar o Repositório
 
-Abra seu terminal e utilize o comando abaixo para clonar o projeto:
+Utilize o comando abaixo no terminal para clonar o projeto:
 
 git clone <URL_DO_SEU_REPOSITÓRIO>
 cd uniClinicas
@@ -121,7 +121,7 @@ cd uniClinicas
 ### 2. Iniciar o servidor pela IDE
 
 
-## 3. Acessar os Recursos
+### 3. Acessar os Recursos
 
 Uma vez que o servidor estiver em execução na porta padrão (`8080`), você pode acessar a documentação e o banco de dados conforme a tabela abaixo:
 

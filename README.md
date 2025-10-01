@@ -1,5 +1,3 @@
-Claro! Analisei as suas controllers e anotações de segurança para criar a versão mais recente do `README.md`. Aqui está a atualização com as rotas e permissões corrigidas:
-
 # UniClinicas
 
 Este projeto é uma API REST para gerenciamento de clínicas, médicos, usuários e agendamentos.

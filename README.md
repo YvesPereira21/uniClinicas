@@ -104,3 +104,28 @@ A seguir estão listadas as rotas da API, organizadas por método HTTP e com as 
 | `/api/agendas/{agendaId}` | Remove uma agenda clínica. | `CLINICA` |
 | `/api/avaliacoes/{avaliacaoId}` | Deleta uma avaliação. | `USER`, `ADMIN` |
 | `/api/usuarios/{usuarioId}` | Deleta um usuário. | `ADMIN` |
+
+
+## 🚀 Como Executar o Projeto
+
+Siga os passos abaixo para clonar e executar a aplicação em seu ambiente local.
+
+### 1. Clonar o Repositório
+
+Abra seu terminal e utilize o comando abaixo para clonar o projeto:
+
+git clone <URL_DO_SEU_REPOSITÓRIO>
+cd uniClinicas
+
+
+### 2. Iniciar o servidor pela IDE
+
+
+## 3. Acessar os Recursos
+
+Uma vez que o servidor estiver em execução na porta padrão (`8080`), você pode acessar a documentação e o banco de dados conforme a tabela abaixo:
+
+| Recurso | URL | Observação |
+| :--- | :--- | :--- |
+| **Documentação da API (Swagger UI)** | `http://localhost:8080/swagger-ui/index.html#/` | Use esta interface para explorar e testar todas as rotas da API, além de gerar tokens de autenticação. |
+| **Console do Banco de Dados H2** | `http://localhost:8080/h2-ui` | Este é um banco de dados **em memória**. Os dados são perdidos ao reiniciar o servidor por estar configurado como "ddl-auto:create-drop". Use as credenciais padrão para login: **Username: `sa`** e **Password: (vazio)**. |

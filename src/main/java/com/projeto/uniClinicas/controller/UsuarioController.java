@@ -52,7 +52,7 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioMapper.convertToDTO(novoUsuario));
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/usuarios/{usuarioId}")
     @Operation(summary = "Deleta um usuário", description = "Remove um usuário do sistema pelo ID")
     @ApiResponses(value = {

@@ -1,6 +1,6 @@
 # UniClinicas
 
-Este projeto é uma API REST para gerenciamento de clínicas, médicos, usuários e agendamentos.
+Este projeto é uma API REST para gerenciamento de clínicas, médicos, usuários e agendamentos. No começo são os detalhamentos da estrutura das rotas e pápeis, além das seeds com alguns pápeis. No final, é mostrado como executar o projeto.
 
 ## 🗂️ Estrutura de Pastas
 
@@ -10,7 +10,7 @@ O projeto segue a estrutura padrão do Spring Boot:
     -   `com/projeto/uniClinicas`: Pacote raiz do projeto.
         -   `authentication`: Contém DTOs para autenticação.
         -   `controller`: Responsável por expor a API REST, recebendo as requisições HTTP.
-        -   `dto`: Utilizados para transferir dados entre as camadas da aplicação, além de possui outra pasta dentro com DTOs para facilitação de criação de objetos.
+        -   `dto`: Utilizados para transferir dados entre as camadas da aplicação, além de possuir outra pasta dentro com DTOs para facilitação de criação de objetos.
         -   `enums`: Contém as enumerações, como `UserRole`.
         -   `exception`: Classes de exceções customizadas.
         -   `mapper`: Classes para mapear DTOs para entidades e vice-versa.
@@ -106,9 +106,7 @@ A seguir estão listadas as rotas da API, organizadas por método HTTP e com as 
 | `/api/usuarios/{usuarioId}` | Deleta um usuário. | `ADMIN` |
 
 
-## 🚀 Como Executar o Projeto
-
-Siga os passos abaixo para clonar e executar a aplicação em seu ambiente local.
+## Siga os passos abaixo para clonar e executar a aplicação.
 
 ### 1. Clonar o Repositório
 

@@ -24,9 +24,10 @@ public class ClinicaService {
     }
 
     public Clinica adicionaClinica(Clinica clinica) {
-        //if (clinica.getEndereco() != null) {
-        //    clinica.getEndereco().setClinica(clinica);
-        //}
+        boolean clinicaDuplicada = clinicaRepository.existsByCpnjClinica(clinica.getCpnjClinica());
+        if (clinicaDuplicada) {
+            throw new ObjetoJaAdicionado("Já existe uma clínica com esse cnpj!");
+        }
         return clinicaRepository.save(clinica);
     }
 

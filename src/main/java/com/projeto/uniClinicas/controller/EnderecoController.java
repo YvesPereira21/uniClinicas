@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,9 +43,10 @@ public class EnderecoController {
             @ApiResponse(responseCode = "200", description = "Clínicas listadas com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro ao listar as clínicas do município")
     })
-    public List<ClinicaDTO> listaClinicasMunicipio(@NotBlank @PathVariable String nomeMunicipio){
-        return enderecoService.clinicasCidade(nomeMunicipio).stream()
+    public ResponseEntity<List<ClinicaDTO>> listaClinicasMunicipio(@NotBlank @PathVariable String nomeMunicipio){
+        List<ClinicaDTO> clinicas = enderecoService.clinicasCidade(nomeMunicipio).stream()
                 .map(clinicaMapper::convertToDTO)
                 .collect(Collectors.toList());
+        return ResponseEntity.ok(clinicas);
     }
 }

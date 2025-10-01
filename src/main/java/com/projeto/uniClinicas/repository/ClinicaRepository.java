@@ -13,4 +13,5 @@ import java.util.List;
 public interface ClinicaRepository extends JpaRepository<Clinica, Long> {
     List<Clinica> findByNomeClinicaContaining(@Param("nome") String nome);
     Clinica findClinicaByEndereco(@Param("endereco") Endereco endereco);
+    boolean existsByCpnjClinica(Long cpnjClinica);
 }

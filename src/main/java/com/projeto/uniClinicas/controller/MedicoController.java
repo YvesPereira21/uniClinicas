@@ -12,8 +12,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,10 +41,10 @@ public class MedicoController {
             @ApiResponse(responseCode = "201", description = "Médico criado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida")
     })
-    public MedicoDTO adicionaMedico(@Valid @RequestBody MedicoDTO medicoDTO) {
+    public ResponseEntity<MedicoDTO> adicionaMedico(@Valid @RequestBody MedicoDTO medicoDTO) {
         Medico medico = medicoMapper.convertToEntity(medicoDTO);
         Medico novoMedico = medicoService.adicionaMedico(medico);
-        return medicoMapper.convertToDTO(novoMedico);
+        return ResponseEntity.status(HttpStatus.CREATED).body(medicoMapper.convertToDTO(novoMedico));
     }
 
     @PreAuthorize("hasRole('CLINICA')")
@@ -53,10 +54,10 @@ public class MedicoController {
             @ApiResponse(responseCode = "200", description = "Médico atualizado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Médico não encontrado")
     })
-    public MedicoDTO atualizaMedico(@Valid @RequestBody MedicoDTO medicoDTO, @Min(1) @PathVariable Long medicoId) {
+    public ResponseEntity<MedicoDTO> atualizaMedico(@Valid @RequestBody MedicoDTO medicoDTO, @Min(1) @PathVariable Long medicoId) {
         Medico medico = medicoMapper.convertToEntity(medicoDTO);
         Medico atualizaMedico =  medicoService.atualizaMedico(medico, medicoId);
-        return medicoMapper.convertToDTO(atualizaMedico);
+        return ResponseEntity.ok(medicoMapper.convertToDTO(atualizaMedico));
     }
 
     @PreAuthorize("hasRole('CLINICA')")
@@ -66,8 +67,9 @@ public class MedicoController {
             @ApiResponse(responseCode = "204", description = "Médico deletado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Médico não encontrado")
     })
-    public void deletaMedico(@Min(1) @PathVariable Long medicoId){
+    public ResponseEntity<Void> deletaMedico(@Min(1) @PathVariable Long medicoId){
         medicoService.deletaMedico(medicoId);
+        return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasAnyRole('CLINICA', 'USER')")
@@ -77,8 +79,8 @@ public class MedicoController {
             @ApiResponse(responseCode = "200", description = "Médico encontrado"),
             @ApiResponse(responseCode = "404", description = "Médico não encontrado")
     })
-    public MedicoDTO retornaMedicoUnico(@Min(1) @PathVariable Long medicoId){
+    public ResponseEntity<MedicoDTO> retornaMedicoUnico(@Min(1) @PathVariable Long medicoId){
         Medico pegaMedico = medicoService.medicoUnico(medicoId);
-        return medicoMapper.convertToDTO(pegaMedico);
+        return ResponseEntity.ok(medicoMapper.convertToDTO(pegaMedico));
     }
 }

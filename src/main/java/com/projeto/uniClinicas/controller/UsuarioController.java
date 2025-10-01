@@ -17,6 +17,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
@@ -44,10 +46,10 @@ public class UsuarioController {
     @Operation(summary = "Atualiza dados do usuário", description = "Método para atualizar dados do usuário")
     @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso!")
     @ApiResponse(responseCode = "400", description = "Erro ao tentar atualizar o usuário.")
-    public UsuarioResponseDTO atualizaUsuario(@Min(1) @PathVariable Long usuarioId, @Valid @RequestBody UsuarioRequestDTO usuarioRequestDTO){
+    public ResponseEntity<UsuarioResponseDTO> atualizaUsuario(@Min(1) @PathVariable Long usuarioId, @Valid @RequestBody UsuarioRequestDTO usuarioRequestDTO){
         Usuario usuario = usuarioMapper.convertToEntity(usuarioRequestDTO);
         Usuario novoUsuario = usuarioService.atualizaUsuario(usuarioId, usuario);
-        return usuarioMapper.convertToDTO(novoUsuario);
+        return ResponseEntity.ok(usuarioMapper.convertToDTO(novoUsuario));
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
@@ -57,8 +59,9 @@ public class UsuarioController {
             @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     })
-    public void deletaUsuario(@Min(1) @PathVariable Long usuarioId){
+    public ResponseEntity<Void> deletaUsuario(@Min(1) @PathVariable Long usuarioId){
         usuarioService.deletaUsuario(usuarioId);
+        return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasRole('USER')")
@@ -66,11 +69,10 @@ public class UsuarioController {
     @Operation(summary = "Usuário cria avaliação", description = "Método que permite um usuário criar uma avaliação")
     @ApiResponse(responseCode = "201", description = "Usuário criou avaliação com sucesso!")
     @ApiResponse(responseCode = "400", description = "Erro ao tentar criar avaliação.")
-    public AvaliacaoResponseDTO criaAvaliacao(Authentication autentication, @Valid @RequestBody AvaliacaoRequestDTO avaliacaoRequestDTO, @Min(1) @PathVariable("clinicaId") Long clinicaId){
+    public ResponseEntity<AvaliacaoResponseDTO> criaAvaliacao(Authentication autentication, @Valid @RequestBody AvaliacaoRequestDTO avaliacaoRequestDTO, @Min(1) @PathVariable("clinicaId") Long clinicaId){
         Usuario usuarioAutenticado = (Usuario) autentication.getPrincipal();
         Avaliacao avaliacao = avaliacaoMapper.convertToEntity(avaliacaoRequestDTO);
         Avaliacao novaAvaliacao = usuarioService.criaAvaliacaoDoUsuarioAClinica(usuarioAutenticado, avaliacao, clinicaId);
-        return avaliacaoMapper.convertToDTO(novaAvaliacao);
+        return ResponseEntity.status(HttpStatus.CREATED).body(avaliacaoMapper.convertToDTO(novaAvaliacao));
     }
-
 }

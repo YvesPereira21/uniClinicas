@@ -2,22 +2,26 @@
 
 Este projeto é uma API REST para gerenciamento de clínicas, médicos, usuários e agendamentos.
 
-## Estrutura de Pastas
+## 🗂️ Estrutura de Pastas
 
-    -   `authentication`: Contém DTOs para autenticação.
-    -   `controller`
-    -   `dto`: Além da presença de outra pasta que foi feita para DTOs de suportecriação de outros objetos.
-    -   `enums`: Contém as enumerações, como `UserRole`.
-    -   `exception`: Classes de exceções customizadas.
-    -   `mapper`: Classes responsáveis por mapear DTOs para entidades e vice-versa.
-    -   `model`: Classes de entidade que representam as tabelas do banco de dados.
-    -   `repository`: Interfaces que definem as operações de acesso a dados, utilizando Spring Data JPA.
-    -   `security`: Configurações de segurança da aplicação, incluindo filtros e serviços de token.
-    -   `seeds`: Classe para popular o banco de dados com dados iniciais.
-    -   `service`: Contém a lógica de negócio da aplicação.
-    -   `validation`: Classes para validações customizadas.
+-   `src/main/java`: Contém todo o código-fonte da aplicação.
+    -   `com/projeto/uniClinicas`: Pacote raiz do projeto.
+        -   `authentication`: Contém DTOs para autenticação.
+        -   `controller`: Responsável por expor a API REST, recebendo as requisições HTTP.
+        -   `dto`: Utilizados para transferir dados entre as camadas da aplicação e contém outros DTOs em uma pasta dentro para auxiliar na criação de objetos.
+        -   `enums`: Contém as enumerações, como `UserRole`.
+        -   `exception`: Classes de exceções customizadas.
+        -   `mapper`: Classes de mapeamento de DTOs para entidades e vice-versa.
+        -   `model`: Classes de entidade que representam as tabelas do banco de dados.
+        -   `repository`: Interfaces para operações de acesso a dados.
+        -   `security`: Configurações de segurança da aplicação, incluindo filtros e serviços de token.
+        -   `seeds`: Classe para popular o banco de dados com dados iniciais.
+        -   `service`: Contém a lógica de negócio da aplicação.
+        -   `validation`: Classes para validações customizadas.
+-   `src/main/resources`: Arquivos de configuração e recursos.
     -   `application.properties`: Arquivo de configuração principal do Spring Boot.
-    -   `pom.xml`: Arquivo de configuração do Maven, com as dependências e configurações do projeto.
+-   `src/test/java`: Contém os testes da aplicação.
+-   `pom.xml`: Arquivo de configuração do Maven, com as dependências e configurações do projeto.
 
 ## Roles
 
@@ -47,7 +51,9 @@ Ao iniciar a aplicação, os seguintes usuários são criados no banco de dados 
 -   **password**: `soudoto123`
 -   **role**: `CLINICA`
 
-## Rotas da API e as rotas de acesso de cada role
+## Rotas da API
+
+A seguir estão listadas as rotas da API, organizadas por método HTTP e com as permissões de acesso para cada `role`.
 
 ### POST
 

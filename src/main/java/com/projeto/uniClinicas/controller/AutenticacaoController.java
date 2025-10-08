@@ -2,8 +2,8 @@ package com.projeto.uniClinicas.controller;
 
 import com.projeto.uniClinicas.authentication.AutenticacaoDTO;
 import com.projeto.uniClinicas.authentication.LoginResponseDTO;
-import com.projeto.uniClinicas.dto.UsuarioComumRequestDTO;
-import com.projeto.uniClinicas.dto.UsuarioComumResponseDTO;
+import com.projeto.uniClinicas.dto.requests.UsuarioComumRequestDTO;
+import com.projeto.uniClinicas.dto.responses.UsuarioComumResponseDTO;
 import com.projeto.uniClinicas.mapper.ClinicaMapper;
 import com.projeto.uniClinicas.mapper.UsuarioComumMapper;
 import com.projeto.uniClinicas.model.Usuario;

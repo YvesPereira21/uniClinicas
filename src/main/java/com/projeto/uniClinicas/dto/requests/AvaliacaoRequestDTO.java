@@ -1,4 +1,4 @@
-package com.projeto.uniClinicas.dto;
+package com.projeto.uniClinicas.dto.requests;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

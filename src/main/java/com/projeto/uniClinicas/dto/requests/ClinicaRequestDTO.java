@@ -1,25 +1,52 @@
-package com.projeto.uniClinicas.dto;
+package com.projeto.uniClinicas.dto.requests;
+
+import com.projeto.uniClinicas.dto.EnderecoDTO;
+import com.projeto.uniClinicas.dto.UsuarioDTO;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.br.CNPJ;
 
 import java.time.LocalTime;
 
-public class ClinicaResponseDTO {
+public class ClinicaRequestDTO {
 
+    @NotBlank
+    @CNPJ
     private String cpnjClinica;
+    @NotBlank
     private String nomeClinica;
+    @NotNull
     private int telefone;
+    @NotNull
     private LocalTime horarioFuncionamento;
+    @NotNull
     private LocalTime horarioFechamento;
+    @NotNull
+    @Valid
+    private UsuarioDTO usuario;
+    @NotNull
+    @Valid
     private EnderecoDTO endereco;
 
-    public ClinicaResponseDTO() {
+    public ClinicaRequestDTO() {
+    }
+
+    public ClinicaRequestDTO(String cpnjClinica, String nomeClinica, int telefone, LocalTime horarioFuncionamento, LocalTime horarioFechamento, EnderecoDTO endereco) {
+        this.cpnjClinica = cpnjClinica;
+        this.nomeClinica = nomeClinica;
+        this.telefone = telefone;
+        this.horarioFuncionamento = horarioFuncionamento;
+        this.horarioFechamento = horarioFechamento;
+        this.endereco = endereco;
     }
 
     public String getCpnjClinica() {
         return cpnjClinica;
     }
 
-    public void setCpnjClinica(String cpnjClinica) {
-        this.cpnjClinica = cpnjClinica;
+    public void setCpnjClinica(String cpnj_clinica) {
+        this.cpnjClinica = cpnj_clinica;
     }
 
     public String getNomeClinica() {
@@ -54,6 +81,14 @@ public class ClinicaResponseDTO {
         this.horarioFechamento = horarioFechamento;
     }
 
+    public UsuarioDTO getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(UsuarioDTO usuario) {
+        this.usuario = usuario;
+    }
+
     public EnderecoDTO getEndereco() {
         return this.endereco;
     }
@@ -62,3 +97,4 @@ public class ClinicaResponseDTO {
         this.endereco = endereco;
     }
 }
+

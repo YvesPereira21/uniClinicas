@@ -1,7 +1,7 @@
 package com.projeto.uniClinicas.controller;
 
-import com.projeto.uniClinicas.dto.ClinicaRequestDTO;
-import com.projeto.uniClinicas.dto.ClinicaResponseDTO;
+import com.projeto.uniClinicas.dto.requests.ClinicaRequestDTO;
+import com.projeto.uniClinicas.dto.responses.ClinicaResponseDTO;
 import com.projeto.uniClinicas.dto.MedicoDTO;
 import com.projeto.uniClinicas.mapper.ClinicaMapper;
 import com.projeto.uniClinicas.mapper.EnderecoMapper;
@@ -25,9 +25,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")

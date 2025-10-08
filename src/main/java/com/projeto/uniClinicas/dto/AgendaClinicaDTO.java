@@ -1,5 +1,6 @@
 package com.projeto.uniClinicas.dto;
 
+import com.projeto.uniClinicas.dto.requests.ClinicaRequestDTO;
 import com.projeto.uniClinicas.validation.DiaSemana;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

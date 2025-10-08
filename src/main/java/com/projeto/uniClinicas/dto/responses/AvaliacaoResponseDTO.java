@@ -1,9 +1,6 @@
-package com.projeto.uniClinicas.dto;
+package com.projeto.uniClinicas.dto.responses;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 

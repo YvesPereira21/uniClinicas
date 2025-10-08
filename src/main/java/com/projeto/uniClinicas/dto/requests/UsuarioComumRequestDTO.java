@@ -1,16 +1,35 @@
-package com.projeto.uniClinicas.dto;
+package com.projeto.uniClinicas.dto.requests;
 
+import com.projeto.uniClinicas.dto.EnderecoDTO;
+import com.projeto.uniClinicas.dto.UsuarioDTO;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.br.CPF;
 
-public class UsuarioComumResponseDTO {
+public class UsuarioComumRequestDTO {
 
+    @NotBlank
     private String nome;
+    @NotBlank
+    @CPF
     private String cpf;
+    @NotNull
     private int idadeUsuario;
+    @NotBlank
     private String sexo;
+    @NotBlank
+    @Email
     private String email;
+    @NotNull
+    @Valid
+    private UsuarioDTO usuario;
+    @NotNull
+    @Valid
     private EnderecoDTO endereco;
 
-    public UsuarioComumResponseDTO() {
+    public UsuarioComumRequestDTO() {
     }
 
     public String getNome() {
@@ -53,6 +72,14 @@ public class UsuarioComumResponseDTO {
         this.email = email;
     }
 
+    public UsuarioDTO getUsuario() {
+        return this.usuario;
+    }
+
+    public void setUsuario(UsuarioDTO usuario) {
+        this.usuario = usuario;
+    }
+
     public EnderecoDTO getEndereco() {
         return this.endereco;
     }
@@ -61,3 +88,4 @@ public class UsuarioComumResponseDTO {
         this.endereco = endereco;
     }
 }
+

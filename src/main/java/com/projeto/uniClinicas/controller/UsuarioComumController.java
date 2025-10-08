@@ -1,9 +1,9 @@
 package com.projeto.uniClinicas.controller;
 
-import com.projeto.uniClinicas.dto.AvaliacaoRequestDTO;
-import com.projeto.uniClinicas.dto.AvaliacaoResponseDTO;
-import com.projeto.uniClinicas.dto.UsuarioComumRequestDTO;
-import com.projeto.uniClinicas.dto.UsuarioComumResponseDTO;
+import com.projeto.uniClinicas.dto.requests.AvaliacaoRequestDTO;
+import com.projeto.uniClinicas.dto.responses.AvaliacaoResponseDTO;
+import com.projeto.uniClinicas.dto.requests.UsuarioComumRequestDTO;
+import com.projeto.uniClinicas.dto.responses.UsuarioComumResponseDTO;
 import com.projeto.uniClinicas.mapper.AvaliacaoMapper;
 import com.projeto.uniClinicas.mapper.UsuarioComumMapper;
 import com.projeto.uniClinicas.model.Avaliacao;

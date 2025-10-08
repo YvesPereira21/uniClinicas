@@ -1,6 +1,6 @@
 package com.projeto.uniClinicas.controller;
 
-import com.projeto.uniClinicas.dto.ClinicaResponseDTO;
+import com.projeto.uniClinicas.dto.responses.ClinicaResponseDTO;
 import com.projeto.uniClinicas.dto.MunicipioDTO;
 import com.projeto.uniClinicas.mapper.ClinicaMapper;
 import com.projeto.uniClinicas.mapper.MunicipioMapper;

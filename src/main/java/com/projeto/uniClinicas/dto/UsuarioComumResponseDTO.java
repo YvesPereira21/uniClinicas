@@ -1,32 +1,24 @@
 package com.projeto.uniClinicas.dto;
 
-public class UsuarioResponseDTO {
 
-    private String nomeUsuario;
+public class UsuarioComumResponseDTO {
+
+    private String nome;
     private String cpf;
     private int idadeUsuario;
     private String sexo;
     private String email;
     private EnderecoDTO endereco;
 
-    public UsuarioResponseDTO() {
+    public UsuarioComumResponseDTO() {
     }
 
-    public UsuarioResponseDTO(String nomeUsuario, String cpf, int idadeUsuario, String sexo, EnderecoDTO endereco, String email) {
-        this.nomeUsuario = nomeUsuario;
-        this.cpf = cpf;
-        this.idadeUsuario = idadeUsuario;
-        this.sexo = sexo;
-        this.endereco = endereco;
-        this.email = email;
+    public String getNome() {
+        return nome;
     }
 
-    public String getNomeUsuario() {
-        return nomeUsuario;
-    }
-
-    public void setNomeUsuario(String nomeUsuario) {
-        this.nomeUsuario = nomeUsuario;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getCpf() {

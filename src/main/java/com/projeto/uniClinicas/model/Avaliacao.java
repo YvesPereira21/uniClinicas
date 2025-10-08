@@ -25,8 +25,8 @@ public class Avaliacao {
     @Column(name = "horario_comentario")
     private LocalDateTime horarioComentario;
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
+    @JoinColumn(name = "usuariocomum_id")
+    private UsuarioComum usuarioComum;
     @ManyToOne
     @JoinColumn(name = "clinica_id")
     private Clinica clinica;
@@ -63,12 +63,12 @@ public class Avaliacao {
         this.horarioComentario = horarioComentario;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public UsuarioComum getUsuarioComum() {
+        return usuarioComum;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setUsuarioComum(UsuarioComum usuarioComum) {
+        this.usuarioComum = usuarioComum;
     }
 
     public Clinica getClinica() {

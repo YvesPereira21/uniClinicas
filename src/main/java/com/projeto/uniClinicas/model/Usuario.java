@@ -2,8 +2,6 @@ package com.projeto.uniClinicas.model;
 
 import com.projeto.uniClinicas.enums.UserRole;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,35 +11,22 @@ import java.util.List;
 
 @Entity
 @Table(name = "tb_usuario")
-@ToString
-@EqualsAndHashCode
 public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "usuario_id")
     private Long usuarioId;
-    @Column(name = "nome_usuario")
-    private String nomeusuario;
-    @Column(name = "cpf_usuario", unique = true)
-    private String cpf;
-    @Column(name = "idade_usuario")
-    private int idadeUsuario;
-    @Column(name = "sexo_usuario")
-    private String sexo;
-    @Column(name = "email")
-    private String email;
-    @Column(name = "user_name", unique = true)
+    @Column(name = "username", unique = true)
     private String username;
     @Column(name = "password")
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole role;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "endereco_id")
-    private Endereco endereco;
-    @OneToMany(mappedBy = "usuario")
-    private List<Avaliacao> avaliacoesUsuario;
+    @OneToOne(mappedBy = "usuario")
+    private Clinica clinica;
+    @OneToOne(mappedBy = "usuario")
+    private UsuarioComum usuarioComum;
 
     public Usuario() {}
 
@@ -51,50 +36,11 @@ public class Usuario implements UserDetails {
         this.role = role;
     }
 
-    public Long getusuarioId() {
+    public Long getUsuarioId() {
         return usuarioId;
     }
 
-    public String getNomeusuario() {
-        return nomeusuario;
-    }
-
-    public void setNomeusuario(String nomeusuario) {
-        this.nomeusuario = nomeusuario;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public int getIdadeUsuario() {
-        return idadeUsuario;
-    }
-
-    public void setIdadeUsuario(int idadeUsuario) {
-        this.idadeUsuario = idadeUsuario;
-    }
-
-    public String getSexo() {
-        return sexo;
-    }
-
-    public void setSexo(String sexo) {
-        this.sexo = sexo;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
+    @Override
     public String getUsername() {
         return username;
     }
@@ -103,6 +49,7 @@ public class Usuario implements UserDetails {
         this.username = username;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
@@ -119,40 +66,24 @@ public class Usuario implements UserDetails {
         this.role = role;
     }
 
-    public Endereco getEndereco() {
-        return this.endereco;
-    }
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-    }
-
-    public List<Avaliacao> getAvaliacoesUsuario() {
-        return avaliacoesUsuario;
-    }
-
-    public void setAvaliacoesUsuario(List<Avaliacao> avaliacoesUsuario) {
-        this.avaliacoesUsuario = avaliacoesUsuario;
-    }
-
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return true;
     }
 
     @Override
@@ -163,6 +94,4 @@ public class Usuario implements UserDetails {
             default -> List.of(new SimpleGrantedAuthority("ROLE_USER"));
         };
     }
-
 }
-

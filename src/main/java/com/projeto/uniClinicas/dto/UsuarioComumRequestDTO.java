@@ -1,54 +1,41 @@
 package com.projeto.uniClinicas.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.br.CPF;
 
-public class UsuarioRequestDTO {
+public class UsuarioComumRequestDTO {
 
     @NotBlank
-    private String nomeUsuario;
+    private String nome;
     @NotBlank
     @CPF
     private String cpf;
-    @Max(125)
+    @NotNull
     private int idadeUsuario;
     @NotBlank
     private String sexo;
     @NotBlank
     @Email
     private String email;
-    @NotBlank
-    private String username;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotBlank
-    private String password;
+    @NotNull
+    @Valid
+    private UsuarioDTO usuario;
     @NotNull
     @Valid
     private EnderecoDTO endereco;
 
-    public UsuarioRequestDTO() {
+    public UsuarioComumRequestDTO() {
     }
 
-    public UsuarioRequestDTO(String nomeUsuario, String cpf, int idadeUsuario, String sexo, String email, EnderecoDTO endereco) {
-        this.nomeUsuario = nomeUsuario;
-        this.cpf = cpf;
-        this.idadeUsuario = idadeUsuario;
-        this.sexo = sexo;
-        this.email = email;
-        this.endereco = endereco;
+    public String getNome() {
+        return nome;
     }
 
-    public String getNomeUsuario() {
-        return nomeUsuario;
-    }
-
-    public void setNomeUsuario(String nomeUsuario) {
-        this.nomeUsuario = nomeUsuario;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getCpf() {
@@ -83,24 +70,16 @@ public class UsuarioRequestDTO {
         this.email = email;
     }
 
-    public String getUsername() {
-        return username;
+    public UsuarioDTO getUsuario() {
+        return this.usuario;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUsuario(UsuarioDTO usuario) {
+        this.usuario = usuario;
     }
 
     public EnderecoDTO getEndereco() {
-        return endereco;
+        return this.endereco;
     }
 
     public void setEndereco(EnderecoDTO endereco) {

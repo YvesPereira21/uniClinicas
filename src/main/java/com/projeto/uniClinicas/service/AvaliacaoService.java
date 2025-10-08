@@ -1,13 +1,12 @@
 package com.projeto.uniClinicas.service;
 
-import com.projeto.uniClinicas.exception.AvaliacoesInexistentesException;
+import com.projeto.uniClinicas.exception.*;
 import com.projeto.uniClinicas.model.Avaliacao;
 import com.projeto.uniClinicas.model.Clinica;
-import com.projeto.uniClinicas.model.Usuario;
+import com.projeto.uniClinicas.model.UsuarioComum;
 import com.projeto.uniClinicas.repository.AvaliacaoRepository;
 import com.projeto.uniClinicas.repository.ClinicaRepository;
-import com.projeto.uniClinicas.repository.UsuarioRepository;
-import com.projeto.uniClinicas.exception.ObjetoNaoEncontradoException;
+import com.projeto.uniClinicas.repository.UsuarioComumRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,25 +15,38 @@ import java.util.List;
 public class AvaliacaoService {
 
     private final AvaliacaoRepository avaliacaoRepository;
-    private final UsuarioRepository usuarioRepository;
+    private final UsuarioComumRepository usuarioComumRepository;
     private final ClinicaRepository clinicaRepository;
 
-    public AvaliacaoService(AvaliacaoRepository avaliacaoRepository, UsuarioRepository usuarioRepository, ClinicaRepository clinicaRepository) {
+    public AvaliacaoService(AvaliacaoRepository avaliacaoRepository, UsuarioComumRepository usuarioComumRepository, ClinicaRepository clinicaRepository) {
         this.avaliacaoRepository = avaliacaoRepository;
-        this.usuarioRepository = usuarioRepository;
+        this.usuarioComumRepository = usuarioComumRepository;
         this.clinicaRepository = clinicaRepository;
+    }
+
+    public Avaliacao adicionaAvaliacao(Avaliacao avaliacao) {
+        return avaliacaoRepository.save(avaliacao);
+    }
+
+    public Avaliacao pegaAvaliacaoUnica(Long avaliacaoId) {
+        return avaliacaoRepository.findById(avaliacaoId)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Essa avaliação não existe!"));
     }
 
     public void deletaAvaliacao(Long avaliacaoId) {
         Avaliacao avaliacao = avaliacaoRepository.findById(avaliacaoId)
-                .orElseThrow(() -> new ObjetoNaoEncontradoException("Essa avaliação não existe"));
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Essa avaliação não existe!"));
         avaliacaoRepository.delete(avaliacao);
     }
 
+    public List<Avaliacao> todasAvaliacoes(){
+        return avaliacaoRepository.findAll();
+    }
+
     public List<Avaliacao> avaliacoesUsuario(Long usuarioId){
-        Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new ObjetoNaoEncontradoException("Esse usuário não foi encontrado"));
-        return avaliacaoRepository.findAllAvaliacaoByUsuarioId(usuario.getusuarioId());
+        UsuarioComum usuario = usuarioComumRepository.findById(usuarioId)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Esse usuário não existe!"));
+        return avaliacaoRepository.findAllAvaliacaoByUsuarioId(usuarioId);
     }
 
     public List<Avaliacao> avaliacoesClinica(Long clinicaId){
@@ -45,12 +57,9 @@ public class AvaliacaoService {
 
     public double calculaAvaliacaoMedia(Long clinicaId){
         List<Avaliacao> avaliacoes = avaliacaoRepository.findAllAvaliacaoByClinicaId(clinicaId);
-        if (avaliacoes.isEmpty()){
-            throw new AvaliacoesInexistentesException("Não há avaliações para essa clínica");
-        }
         double soma = avaliacoes.stream()
                 .map(Avaliacao::getNota)
                 .reduce(0.0, Double::sum);
-        return soma /avaliacoes.size();
+        return soma/avaliacoes.size();
     }
 }

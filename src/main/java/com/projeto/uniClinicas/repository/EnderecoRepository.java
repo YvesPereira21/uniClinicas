@@ -9,8 +9,4 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface EnderecoRepository extends JpaRepository<Endereco,Long> {
-    Endereco findEnderecoByNomeMunicipio(String nomeMunicipio);
-    @Query("SELECT c FROM Clinica c JOIN c.endereco e " +
-            "WHERE e.nomeMunicipio = :nomeMunicipio")
-    List<Clinica> todasClinicasCidade(@Param("nomeMunicipio") String nomeMunicipio);
 }

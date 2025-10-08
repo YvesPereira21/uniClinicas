@@ -22,7 +22,7 @@ public class Medico {
     private String nomeMedico;
     @Column(name = "especialidade")
     private String especialidade;
-    @OneToMany(mappedBy = "medico")
+    @OneToMany(mappedBy = "medico", orphanRemoval = true)
     private List<AgendaClinica> agendaClinicas;
 
     public Medico() {}
@@ -53,14 +53,6 @@ public class Medico {
 
     public void setEspecialidade(String especialidade) {
         this.especialidade = especialidade;
-    }
-
-    public List<AgendaClinica> getAgendaClinicas() {
-        return agendaClinicas;
-    }
-
-    public void setAgendaClinicas(List<AgendaClinica> agendaClinicas) {
-        this.agendaClinicas = agendaClinicas;
     }
 }
 

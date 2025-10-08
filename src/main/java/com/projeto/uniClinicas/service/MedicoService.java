@@ -1,48 +1,55 @@
 package com.projeto.uniClinicas.service;
 
-import com.projeto.uniClinicas.exception.ObjetoJaAdicionado;
+import com.projeto.uniClinicas.enums.UserRole;
+import com.projeto.uniClinicas.exception.*;
+import com.projeto.uniClinicas.model.Clinica;
 import com.projeto.uniClinicas.model.Medico;
+import com.projeto.uniClinicas.model.Usuario;
+import com.projeto.uniClinicas.repository.AgendaClinicaRepository;
+import com.projeto.uniClinicas.repository.ClinicaRepository;
 import com.projeto.uniClinicas.repository.MedicoRepository;
-import com.projeto.uniClinicas.exception.ObjetoNaoEncontradoException;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MedicoService {
 
-    private final MedicoRepository medicoRepository;
+    private MedicoRepository medicoRepository;
+    private ClinicaRepository clinicaRepository;
+    private AgendaClinicaRepository agendaClinicaRepository;
 
-    public MedicoService(MedicoRepository medicoRepository) {
+    public MedicoService(MedicoRepository medicoRepository, ClinicaRepository clinicaRepository, AgendaClinicaRepository agendaClinicaRepository) {
         this.medicoRepository = medicoRepository;
+        this.clinicaRepository = clinicaRepository;
+        this.agendaClinicaRepository = agendaClinicaRepository;
     }
 
-    public Medico adicionaMedico(Medico medico){
-        boolean medicoExistente = medicoRepository.existsMedicoByCrmMedico(medico.getCrmMedico());
-        if(medicoExistente){
-            throw new ObjetoJaAdicionado("Esse médico já foi adicionado!");
+    public Medico atualizaMedico(Medico medico){
+        Medico medico1 = medicoRepository.findByCrmMedico(medico.getCrmMedico());
+        if (medico1 == null){
+            throw new ObjetoNaoEncontradoException("Médico não encontrado!");
         }
-        return medicoRepository.save(medico);
+        medico1.setNomeMedico(medico.getNomeMedico());
+        medico1.setEspecialidade(medico.getEspecialidade());
+        return medicoRepository.save(medico1);
     }
 
-    public Medico atualizaMedico(Medico dadosAtualizados, Long medicoId){
-        Medico medicoExistente = medicoRepository.findById(medicoId)
-                .orElseThrow(() -> new ObjetoNaoEncontradoException("Médico não encontrado!"));
-
-        medicoExistente.setNomeMedico(dadosAtualizados.getNomeMedico());
-        medicoExistente.setEspecialidade(dadosAtualizados.getEspecialidade());
-
-        return medicoRepository.save(medicoExistente);
-    }
-
-    public void deletaMedico(Long medicoId){
+    public Medico medicoUnico(Long medicoId, Usuario usuarioLogado) {
         Medico medico = medicoRepository.findById(medicoId)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Médico não encontrado!"));
-        medicoRepository.deleteById(medicoId);
+
+        if (usuarioLogado.getRole() == UserRole.CLINICA) {
+            Medico verifica = verificaExistenciaMedico(usuarioLogado, medicoId);
+            if (verifica == null) {
+                throw new ObjetoNaoEncontradoException("Não há um médico cadastrado nessa clínica com essa informação!");
+            }
+            return verifica;
+        }
+        return medico;
     }
 
-    public Medico medicoUnico(Long medicoId){
-        return medicoRepository.findById(medicoId).
-                orElseThrow(() -> new ObjetoNaoEncontradoException("Médico não encontrado!"));
+    public Medico verificaExistenciaMedico(Usuario usuarioLogado, Long medicoId){
+        Clinica clinicaLogada = clinicaRepository.findByUsuario(usuarioLogado);
+        return clinicaRepository.findMedicoInClinicaByMedicoId(medicoId, clinicaLogada.getClinicaId());
     }
-
 }
 

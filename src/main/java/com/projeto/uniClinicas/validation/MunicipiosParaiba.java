@@ -7,9 +7,9 @@ import java.lang.annotation.*;
 
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = CidadeParaibaValidator.class)
+@Constraint(validatedBy = MunicipioParaibaValidator.class)
 @Documented
-public @interface CidadeParaiba {
+public @interface MunicipiosParaiba {
 
     String message() default "Essa não é uma cidade válida";
 

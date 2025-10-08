@@ -1,43 +1,50 @@
 package com.projeto.uniClinicas.service;
 
 import com.projeto.uniClinicas.enums.UserRole;
-import com.projeto.uniClinicas.exception.ObjetoJaAdicionado;
-import com.projeto.uniClinicas.mapper.ClinicaMapper;
-import com.projeto.uniClinicas.model.Clinica;
-import com.projeto.uniClinicas.model.Endereco;
-import com.projeto.uniClinicas.model.Usuario;
+import com.projeto.uniClinicas.exception.*;
+import com.projeto.uniClinicas.model.*;
 import com.projeto.uniClinicas.repository.ClinicaRepository;
-import com.projeto.uniClinicas.exception.ObjetoNaoEncontradoException;
+import com.projeto.uniClinicas.repository.MunicipioRepository;
 import com.projeto.uniClinicas.repository.UsuarioRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
 public class ClinicaService {
 
     private final ClinicaRepository clinicaRepository;
+    private final UsuarioRepository  usuarioRepository;
+    private final MunicipioRepository municipioRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public ClinicaService(ClinicaRepository clinicaRepository) {
+    public ClinicaService(ClinicaRepository clinicaRepository, UsuarioRepository usuarioRepository, MunicipioRepository municipioRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.clinicaRepository = clinicaRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.municipioRepository = municipioRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     public Clinica adicionaClinica(Clinica clinica) {
-        boolean clinicaDuplicada = clinicaRepository.existsByCpnjClinica(clinica.getCpnjClinica());
-        if (clinicaDuplicada) {
-            throw new ObjetoJaAdicionado("Já existe uma clínica com esse cnpj!");
+        Usuario usuario = clinica.getUsuario();
+        Endereco endereco = clinica.getEndereco();
+        String nomeMunicipio = endereco.getMunicipio().getNomeMunicipio();
+        Municipio municipio = municipioRepository.findMunicipioByNomeMunicipio(nomeMunicipio)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Esse não é um município existente!"));
+        boolean verifica = verificaExistencia(clinica);
+        if (verifica) {
+            throw new ObjetoJaAdicionadoException("Essa conta já foi cadastrada!");
         }
+        endereco.setMunicipio(municipio);
+        clinica.setEndereco(endereco);
+        String encryptedPassword = bCryptPasswordEncoder.encode(usuario.getPassword());
+        usuario.setPassword(encryptedPassword);
+        usuario.setRole(UserRole.CLINICA);
+        clinica.setUsuario(usuario);
+
         return clinicaRepository.save(clinica);
-    }
-
-    public void deletaClinica(Long clinicaId){
-        clinicaRepository.deleteById(clinicaId);
-    }
-
-    public Clinica pegaClinica(Long clinicaId) {
-        return clinicaRepository.findById(clinicaId)
-                .orElseThrow(() -> new ObjetoNaoEncontradoException("Clínica não encontrada"));
     }
 
     public Clinica atualizaClinica(Clinica clinicaAtualizar, Long clinicaId) {
@@ -54,18 +61,31 @@ public class ClinicaService {
         return clinicaRepository.save(clinicaNova);
     }
 
-    public Clinica atualizaEndereco(Long clinicaId, Endereco endereco) {
+    public Clinica pegaClinica(Long clinicaId) {
+        return clinicaRepository.findById(clinicaId)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Clínica não encontrada!"));
+    }
+
+    public void deletaClinica(Long clinicaId) {
         Clinica clinica = clinicaRepository.findById(clinicaId)
-                .orElseThrow(() -> new ObjetoNaoEncontradoException("Clínica não encontrada"));
-        clinica.setEndereco(endereco);
-        return clinicaRepository.save(clinica);
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Clínica não encontrada!"));
+        clinicaRepository.deleteById(clinicaId);
     }
 
     public List<Clinica> mostraClinicasComCertoNome(String nome) {
         return clinicaRepository.findByNomeClinicaContaining(nome);
     }
 
-    public Clinica encontraClinicaPeloEndereco(Endereco endereco) {
-        return clinicaRepository.findClinicaByEndereco(endereco);
+    public List<Medico> todosMedicosClinica(Long clinicaId) {
+        Clinica clinica = clinicaRepository.findById(clinicaId)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException("Clínica não encontrada!"));
+        return clinicaRepository.findMedicosByClinicaId(clinicaId);
+    }
+
+    private boolean verificaExistencia(Clinica clinica){
+        Usuario usuario = clinica.getUsuario();
+        boolean clinicaJaExistente = clinicaRepository.existsByCpnjClinica(clinica.getCpnjClinica());
+        boolean telefoneExistente = clinicaRepository.existsByTelefone(clinica.getTelefone());
+        return usuarioRepository.findByUsername(usuario.getUsername()).isPresent() || clinicaJaExistente || telefoneExistente;
     }
 }

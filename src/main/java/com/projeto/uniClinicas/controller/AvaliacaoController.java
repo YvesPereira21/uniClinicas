@@ -2,6 +2,7 @@ package com.projeto.uniClinicas.controller;
 
 import com.projeto.uniClinicas.dto.AvaliacaoResponseDTO;
 import com.projeto.uniClinicas.mapper.AvaliacaoMapper;
+import com.projeto.uniClinicas.model.Avaliacao;
 import com.projeto.uniClinicas.security.SecurityConfigurations;
 import com.projeto.uniClinicas.service.AvaliacaoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +23,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(path = "/api")
 @Validated
-@Tag(name = "avaliacao", description = "Controller para gerenciamento de avaliações")
+@Tag(name = "Avaliação", description = "Controller para gerenciamento de avaliações")
 @SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class AvaliacaoController {
 
@@ -33,7 +35,19 @@ public class AvaliacaoController {
         this.avaliacaoMapper = avaliacaoMapper;
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/avaliacoes/{avaliacaoId}")
+    @Operation(summary = "Retorna uma avaliação única", description = "Busca e retorna uma avaliação específica pelo ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Avaliação encontrada"),
+            @ApiResponse(responseCode = "404", description = "Avaliação não encontrada")
+    })
+    public ResponseEntity<AvaliacaoResponseDTO> retornaAvaliacaoUnica(@Min(1) @PathVariable Long avaliacaoId) {
+        Avaliacao a = avaliacaoService.pegaAvaliacaoUnica(avaliacaoId);
+        return new ResponseEntity<>(avaliacaoMapper.convertToDTO(a), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/avaliacoes/{avaliacaoId}")
     @Operation(summary = "Deleta uma avaliação", description = "Remove uma avaliação existente pelo ID")
     @ApiResponses(value = {
@@ -42,46 +56,52 @@ public class AvaliacaoController {
     })
     public ResponseEntity<Void> deletaAvaliacao(@Min(1) @PathVariable Long avaliacaoId) {
         avaliacaoService.deletaAvaliacao(avaliacaoId);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/usuarios/{usuarioId}/avaliacoes")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @GetMapping("/avaliacoes")
+    @Operation(summary = "Lista todas as avaliações", description = "Retorna uma lista com todas as avaliações cadastradas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operação bem-sucedida")
+    })
+    public ResponseEntity<List<AvaliacaoResponseDTO>> pegaTodasAvaliacoes(){
+        List<AvaliacaoResponseDTO> avaliacaoResponseDTOS = avaliacaoService.todasAvaliacoes().stream()
+                .map(avaliacaoMapper::convertToDTO)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(avaliacaoResponseDTOS, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("usuarios/{usuarioId}/avaliacoes")
     @Operation(summary = "Lista todas as avaliações de um usuário", description = "Retorna todas as avaliações feitas por um usuário específico")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Avaliações encontradas"),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     })
     public ResponseEntity<List<AvaliacaoResponseDTO>> pegaTodasAvaliacoesDoUsuario(@Min(1) @PathVariable Long usuarioId){
-        List<AvaliacaoResponseDTO> avaliacoes = avaliacaoService.avaliacoesUsuario(usuarioId).stream()
+        List<AvaliacaoResponseDTO> avaliacaoResponseDTOS = avaliacaoService.avaliacoesUsuario(usuarioId).stream()
                 .map(avaliacaoMapper::convertToDTO)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(avaliacoes);
+        return new ResponseEntity<>(avaliacaoResponseDTOS, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/clinicas/{clinicaId}/avaliacoes")
-    @Operation(summary = "Lista avaliações para uma clínica", description = "Lista todas as avaliações feitas para uma clínica")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista carregado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Não há avaliações para essa clínica")
-    })
-    public ResponseEntity<List<AvaliacaoResponseDTO>> pegaTodasAvaliacoesDaClinica(@Min(1) @PathVariable Long clinicaId){
-        List<AvaliacaoResponseDTO> avaliacoes = avaliacaoService.avaliacoesClinica(clinicaId).stream()
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'CLINICA')")
+    @GetMapping("clinicas/{clinicaId}/avaliacoes")
+    public ResponseEntity<List<AvaliacaoResponseDTO>> pegaTodasAvaliacoesDaClinica(@PathVariable Long clinicaId) {
+        List<AvaliacaoResponseDTO> avaliacaoResponseDTOS = avaliacaoService.avaliacoesClinica(clinicaId).stream()
                 .map(avaliacaoMapper::convertToDTO)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(avaliacoes);
+        return new ResponseEntity<>(avaliacaoResponseDTOS, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'CLINICA')")
-    @GetMapping("/clinicas/{clinicaId}/avaliacoes-media")
+    @GetMapping("/clinicas/{clinicaId}/avaliacao-media")
     @Operation(summary = "Calcula a avaliação média de uma clínica", description = "Retorna a média de todas as avaliações para uma clínica específica")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Média calculada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Clínica não encontrada")
     })
     public ResponseEntity<Double> avaliacaoMediaClinica(@Min(1) @PathVariable Long clinicaId){
-        Double media = avaliacaoService.calculaAvaliacaoMedia(clinicaId);
-        return ResponseEntity.ok(media);
+        return new ResponseEntity<>(avaliacaoService.calculaAvaliacaoMedia(clinicaId), HttpStatus.OK);
     }
 }

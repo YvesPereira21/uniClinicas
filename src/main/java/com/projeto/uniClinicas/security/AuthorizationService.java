@@ -1,6 +1,7 @@
 package com.projeto.uniClinicas.security;
 
 import com.projeto.uniClinicas.repository.UsuarioRepository;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

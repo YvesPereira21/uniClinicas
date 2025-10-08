@@ -1,11 +1,12 @@
 package com.projeto.uniClinicas.controller;
 
-import com.projeto.uniClinicas.dto.ClinicaDTO;
-import com.projeto.uniClinicas.dto.EnderecoDTO;
+import com.projeto.uniClinicas.dto.ClinicaRequestDTO;
+import com.projeto.uniClinicas.dto.ClinicaResponseDTO;
+import com.projeto.uniClinicas.dto.MedicoDTO;
 import com.projeto.uniClinicas.mapper.ClinicaMapper;
 import com.projeto.uniClinicas.mapper.EnderecoMapper;
+import com.projeto.uniClinicas.mapper.MedicoMapper;
 import com.projeto.uniClinicas.model.Clinica;
-import com.projeto.uniClinicas.model.Endereco;
 import com.projeto.uniClinicas.security.SecurityConfigurations;
 import com.projeto.uniClinicas.service.ClinicaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,80 +29,70 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 @Validated
-@Tag(name = "clinica", description = "Controller para gerenciamento de clínicas")
+@Tag(name = "Clínica", description = "Controller para gerenciamento de clínicas")
 @SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class ClinicaController {
 
     private final ClinicaService clinicaService;
     private final ClinicaMapper clinicaMapper;
+    private final MedicoMapper medicoMapper;
     private final EnderecoMapper enderecoMapper;
 
-    public ClinicaController(ClinicaService clinicaService, ClinicaMapper clinicaMapper, EnderecoMapper enderecoMapper) {
+    public ClinicaController(ClinicaService clinicaService, ClinicaMapper clinicaMapper, MedicoMapper medicoMapper, EnderecoMapper enderecoMapper) {
         this.clinicaService = clinicaService;
         this.clinicaMapper = clinicaMapper;
+        this.medicoMapper = medicoMapper;
         this.enderecoMapper = enderecoMapper;
     }
 
-    @PreAuthorize("hasRole('CLINICA')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/clinicas")
     @Operation(summary = "Adiciona uma nova clínica", description = "Cria uma nova clínica no sistema")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Clínica criada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida")
     })
-    public ResponseEntity<ClinicaDTO> adicionaClinica(@Valid @RequestBody ClinicaDTO clinicaDTO) {
-        Clinica clinica = clinicaMapper.convertToEntity(clinicaDTO);
+    public ResponseEntity<ClinicaResponseDTO> adicionaClinica(@Valid @RequestBody ClinicaRequestDTO clinicaRequestDTO) {
+        Clinica clinica = clinicaMapper.convertToEntity(clinicaRequestDTO);
         Clinica novaClinica = clinicaService.adicionaClinica(clinica);
-        return ResponseEntity.status(HttpStatus.CREATED).body(clinicaMapper.convertToDTO(novaClinica));
+        return new ResponseEntity<>(clinicaMapper.convertToDTO(novaClinica), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/clinicas/{clinicaId}")
-    @Operation(summary = "Atualiza uma clínica existente", description = "Atualiza os dados de uma clínica pelo ID")
+    @Operation(summary = "Atualiza uma clínica existente", description = "Atualiza os dados de uma clínica pelo seu id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Clínica atualizada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Clínica não encontrada")
     })
-    public ResponseEntity<ClinicaDTO> atualizaClinica(@Valid @RequestBody ClinicaDTO clinicaDTO, @Min(1) @PathVariable Long clinicaId) {
-        Clinica clinica = clinicaMapper.convertToEntity(clinicaDTO);
+    public ResponseEntity<ClinicaResponseDTO> atualizaClinica(@Valid @RequestBody ClinicaRequestDTO clinicaRequestDTO, @Min(1) @PathVariable Long clinicaId) {
+        Clinica clinica = clinicaMapper.convertToEntity(clinicaRequestDTO);
         Clinica clinicaAtualizada =  clinicaService.atualizaClinica(clinica, clinicaId);
-        return ResponseEntity.ok(clinicaMapper.convertToDTO(clinicaAtualizada));
+        return new ResponseEntity<>(clinicaMapper.convertToDTO(clinicaAtualizada), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'CLINICA', 'USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/clinicas/{clinicaId}")
     @Operation(summary = "Retorna uma clínica", description = "Busca e retorna os dados de uma clínica pelo ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Clínica encontrada"),
             @ApiResponse(responseCode = "404", description = "Clínica não encontrada")
     })
-    public ResponseEntity<ClinicaDTO> retornaClinica(@Min(1) @PathVariable Long clinicaId) {
+    public ResponseEntity<ClinicaResponseDTO> retornaClinica(@Min(1) @PathVariable Long clinicaId) {
         Clinica clinica = clinicaService.pegaClinica(clinicaId);
-        return ResponseEntity.ok(clinicaMapper.convertToDTO(clinica));
+        return new ResponseEntity<>(clinicaMapper.convertToDTO(clinica), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/clinicas/{clinicaId}")
-    @Operation(summary = "Remove uma clínica", description = "Deleta uma clínica do sistema pelo ID")
+    @Operation(summary = "Remove uma clínica", description = "Deleta uma clínica do sistema pelo seu id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Clínica removida com sucesso"),
             @ApiResponse(responseCode = "404", description = "Clínica não encontrada")
     })
     public ResponseEntity<Void> removeClinica(@Min(1) @PathVariable Long clinicaId) {
         clinicaService.deletaClinica(clinicaId);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PreAuthorize("hasRole('CLINICA')")
-    @PutMapping("/clinicas/{clinicaId}/enderecos")
-    @Operation(summary = "Atualiza endereço da clínica", description = "Atualiza apenas o endereço da clínica")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Operação bem-sucedida")
-    })
-    public ResponseEntity<ClinicaDTO> atualizarEndereco(@Min(1) @PathVariable Long clinicaId, @Valid @RequestBody EnderecoDTO endereco) {
-        Endereco endereco1 = enderecoMapper.convertToEntity(endereco);
-        Clinica enderecoAtualizado = clinicaService.atualizaEndereco(clinicaId, endereco1);
-        return ResponseEntity.ok(clinicaMapper.convertToDTO(enderecoAtualizado));
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
@@ -110,23 +101,25 @@ public class ClinicaController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operação bem-sucedida")
     })
-    public ResponseEntity<List<ClinicaDTO>> listaClinicasComCertoNome(@NotBlank @RequestParam  String nomeClinica) {
-        List<ClinicaDTO> clinicas = clinicaService.mostraClinicasComCertoNome(nomeClinica).stream()
+    public ResponseEntity<List<ClinicaResponseDTO>> listaClinicasComCertoNome(@NotBlank @RequestParam String nomeClinica) {
+        List<ClinicaResponseDTO> clinicaResponseDTOS = clinicaService.mostraClinicasComCertoNome(nomeClinica).stream()
                 .map(clinicaMapper::convertToDTO)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(clinicas);
+        return new ResponseEntity<>(clinicaResponseDTOS, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @PostMapping("/enderecos")
-    @Operation(summary = "Encontra clínica pelo endereço", description = "Busca uma clínica com base nos dados de endereço fornecidos")
+    @GetMapping("/clinica/{clinicaId}/medicos")
+    @Operation(summary = "Lista os médicos de uma clínica", description = "Retorna todos os médicos associados a uma clínica específica")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Clínica encontrada"),
+            @ApiResponse(responseCode = "200", description = "Médicos encontrados"),
             @ApiResponse(responseCode = "404", description = "Clínica não encontrada")
     })
-    public ResponseEntity<ClinicaDTO> encontraClinicaPeloEndereco(@Valid @RequestBody EnderecoDTO endereco) {
-        Endereco end = enderecoMapper.convertToEntity(endereco);
-        Clinica clinica = clinicaService.encontraClinicaPeloEndereco(end);
-        return ResponseEntity.ok(clinicaMapper.convertToDTO(clinica));
+    public ResponseEntity<List<MedicoDTO>> medicosDaClinica(@Min(1) @PathVariable Long clinicaId) {
+        List<MedicoDTO> medicoDTOS = clinicaService.todosMedicosClinica(clinicaId).stream()
+                .map(medicoMapper::convertToDTO)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(medicoDTOS, HttpStatus.OK);
     }
+
 }

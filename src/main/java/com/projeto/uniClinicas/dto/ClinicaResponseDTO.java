@@ -1,44 +1,24 @@
 package com.projeto.uniClinicas.dto;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
 import java.time.LocalTime;
 
-public class ClinicaDTO {
+public class ClinicaResponseDTO {
 
-    @NotNull
-    private Long cpnjClinica;
-    @NotBlank
+    private String cpnjClinica;
     private String nomeClinica;
-    @NotNull
     private int telefone;
-    @NotNull
     private LocalTime horarioFuncionamento;
-    @NotNull
     private LocalTime horarioFechamento;
-    @NotNull
-    @Valid
     private EnderecoDTO endereco;
 
-    public ClinicaDTO() {
+    public ClinicaResponseDTO() {
     }
 
-    public ClinicaDTO(Long cpnjClinica, String nomeClinica, int telefone, LocalTime horarioFuncionamento, LocalTime horarioFechamento, EnderecoDTO endereco) {
-        this.cpnjClinica = cpnjClinica;
-        this.nomeClinica = nomeClinica;
-        this.telefone = telefone;
-        this.horarioFuncionamento = horarioFuncionamento;
-        this.horarioFechamento = horarioFechamento;
-        this.endereco = endereco;
-    }
-
-    public Long getCpnjClinica() {
+    public String getCpnjClinica() {
         return cpnjClinica;
     }
 
-    public void setCpnjClinica(Long cpnjClinica) {
+    public void setCpnjClinica(String cpnjClinica) {
         this.cpnjClinica = cpnjClinica;
     }
 
@@ -82,4 +62,3 @@ public class ClinicaDTO {
         this.endereco = endereco;
     }
 }
-

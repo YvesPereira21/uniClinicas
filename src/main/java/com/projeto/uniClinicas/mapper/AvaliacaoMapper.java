@@ -18,8 +18,8 @@ public class AvaliacaoMapper {
     public AvaliacaoResponseDTO convertToDTO(Avaliacao avaliacao) {
         AvaliacaoResponseDTO dto = modelMapper.map(avaliacao, AvaliacaoResponseDTO.class);
 
-        if (avaliacao.getUsuario() != null) {
-            dto.setNomeUsuario(avaliacao.getUsuario().getNomeusuario());
+        if (avaliacao.getUsuarioComum() != null) {
+            dto.setNomeUsuario(avaliacao.getUsuarioComum().getNome());
         }
 
         return dto;

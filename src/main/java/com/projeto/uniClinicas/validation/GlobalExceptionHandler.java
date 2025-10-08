@@ -86,7 +86,10 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({CPFDuplicadoException.class, ObjetoJaAdicionado.class, MedicoJaRemovido.class})
+    @ExceptionHandler({CPFDuplicadoException.class, ObjetoJaAdicionadoException.class,
+            AvaliacaoExistenteException.class, MedicoJaRemovidoException.class,
+            MedicoJaSubstituidoException.class, SobreposicaoHorarioException.class,
+            HorarioAtendimentoException.class})
     @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseEntity<ApiError> handleResourceConflictException(RuntimeException ex) {
         ApiError error = ApiError.builder()

@@ -5,9 +5,9 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import java.util.List;
 
-public class CidadeParaibaValidator implements ConstraintValidator<CidadeParaiba, String > {
+public class MunicipioParaibaValidator implements ConstraintValidator<MunicipiosParaiba, String > {
 
-    private final List<String> cidadesValidas = List.of(
+    private final List<String> municipiosValidos = List.of(
             "Mamanguape", "Piancó", "Sapé", "Jacaraú", "Cabedelo",
             "Rio Tinto", "Bananeiras", "Patos", "Alagoa Grande",
             "Mato Grosso", "São Bento"
@@ -15,6 +15,6 @@ public class CidadeParaibaValidator implements ConstraintValidator<CidadeParaiba
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
-        return cidadesValidas.contains(s);
+        return municipiosValidos.contains(s);
     }
 }

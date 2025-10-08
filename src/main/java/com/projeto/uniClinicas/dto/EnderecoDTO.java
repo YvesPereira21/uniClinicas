@@ -1,8 +1,8 @@
 package com.projeto.uniClinicas.dto;
 
-import com.projeto.uniClinicas.validation.CidadeParaiba;
-import com.projeto.uniClinicas.validation.Estado;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class EnderecoDTO {
 
@@ -14,14 +14,18 @@ public class EnderecoDTO {
     private String complemento;
     @NotBlank
     private String bairro;
-    @NotBlank
-    @CidadeParaiba
-    private String nomeMunicipio;
-    @NotBlank
-    @Estado
-    private String estado;
+    @NotNull
+    @Valid
+    private MunicipioDTO municipio;
 
     public EnderecoDTO() {
+    }
+
+    public EnderecoDTO(String logradouro, String numero, String complemento, String bairro) {
+        this.logradouro = logradouro;
+        this.numero = numero;
+        this.complemento = complemento;
+        this.bairro = bairro;
     }
 
     public String getLogradouro() {
@@ -56,20 +60,12 @@ public class EnderecoDTO {
         this.bairro = bairro;
     }
 
-    public String getNomeMunicipio() {
-        return nomeMunicipio;
+    public MunicipioDTO getMunicipio() {
+        return municipio;
     }
 
-    public void setNomeMunicipio(String nomeMunicipio) {
-        this.nomeMunicipio = nomeMunicipio;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setMunicipio(MunicipioDTO municipio) {
+        this.municipio = municipio;
     }
 }
 

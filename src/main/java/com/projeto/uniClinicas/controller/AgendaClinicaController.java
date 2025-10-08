@@ -1,10 +1,14 @@
 package com.projeto.uniClinicas.controller;
 
 import com.projeto.uniClinicas.dto.AgendaClinicaDTO;
-import com.projeto.uniClinicas.dto.auxiliares.AgendaCriacaoDTO;
-import com.projeto.uniClinicas.dto.auxiliares.AtualizacaoAgendaDTO;
+import com.projeto.uniClinicas.dto.auxiliares.HorarioDTO;
+import com.projeto.uniClinicas.dto.auxiliares.AtualizaAgendaClinicaDTO;
+import com.projeto.uniClinicas.dto.auxiliares.CriacaoAgendaDTO;
 import com.projeto.uniClinicas.mapper.AgendaClinicaMapper;
+import com.projeto.uniClinicas.mapper.MedicoMapper;
 import com.projeto.uniClinicas.model.AgendaClinica;
+import com.projeto.uniClinicas.model.Medico;
+import com.projeto.uniClinicas.model.Usuario;
 import com.projeto.uniClinicas.security.SecurityConfigurations;
 import com.projeto.uniClinicas.service.AgendaClinicaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,6 +21,7 @@ import jakarta.validation.constraints.Min;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,79 +31,99 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 @Validated
-@Tag(name = "agenda clínica", description = "Controller para gerenciamento de agendas")
+@Tag(name = "Agenda clínica", description = "Controller para gerenciamento de agenda clínica")
 @SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class AgendaClinicaController {
 
     private final AgendaClinicaService agendaClinicaService;
     private final AgendaClinicaMapper agendaClinicaMapper;
+    private final MedicoMapper medicoMapper;
 
-    public AgendaClinicaController(AgendaClinicaService agendaClinicaService, AgendaClinicaMapper agendaClinicaMapper) {
+    public AgendaClinicaController(AgendaClinicaService agendaClinicaService, AgendaClinicaMapper agendaClinicaMapper, MedicoMapper medicoMapper) {
         this.agendaClinicaService = agendaClinicaService;
         this.agendaClinicaMapper = agendaClinicaMapper;
+        this.medicoMapper = medicoMapper;
     }
 
     @PreAuthorize("hasRole('CLINICA')")
-    @PostMapping(path = "/clinicas/{clinicaId}/agendas")
-    @Operation(summary = "Adiciona uma nova agenda", description = "Cria uma nova agenda para um médico, e seus horários de atendimento, em uma clínica")
+    @PostMapping(path = "/agendas")
+    @Operation(summary = "Adiciona um novo agendamento", description = "Cria um novo agendamento para um médico em uma clínica")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Agendamento criado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida")
     })
-    public ResponseEntity<List<AgendaClinicaDTO>> adicionarAgenda(@Min(1) @PathVariable Long clinicaId, @Valid @RequestBody AgendaCriacaoDTO criacao) {
-        List<AgendaClinica> agendaClinica = agendaClinicaService.adicionaAgenda(clinicaId, criacao.getMedicoId(), criacao.getHorarios());
+    public ResponseEntity<List<AgendaClinicaDTO>> adicionarAgendamento(@Valid @RequestBody CriacaoAgendaDTO criacaoAgendaDTO, Authentication authentication) {
+        Usuario usuario = (Usuario) authentication.getPrincipal();
+        Medico medico = medicoMapper.convertToEntity(criacaoAgendaDTO.getMedico());
+        List<AgendaClinica> agendaClinica = agendaClinicaService.adicionaAgenda(medico, usuario, criacaoAgendaDTO.getHorarios());
         List<AgendaClinicaDTO> agendaClinicaDTO = agendaClinica.stream().map(agendaClinicaMapper::convertToDTO).collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.CREATED).body(agendaClinicaDTO);
+        return new ResponseEntity<>(agendaClinicaDTO, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('CLINICA')")
-    @DeleteMapping(path = "/agendas/{agendaId}")
-    @Operation(summary = "Remove uma agenda clínica", description = "Deleta um agendamento existente pelo ID")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Agendamento removido com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Agendamento não encontrado")
-    })
-    public ResponseEntity<Void> removerAgenda(@Min(1) @PathVariable Long agendaId){
-        agendaClinicaService.removeAgenda(agendaId);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/agendas")
-    @Operation(summary = "Lista a agenda de uma clínica", description = "Retorna a agenda de uma clínica específica")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Agenda encontrada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Clínica não encontrada ou não possui agenda")
-    })
-    public ResponseEntity<List<AgendaClinicaDTO>> listaAgendaDaClinica(@Min(1) @RequestParam Long clinicaId) {
-        List<AgendaClinicaDTO> agendaClinicaDTO = agendaClinicaService.agendaDaClinica(clinicaId).stream()
-                .map(agendaClinicaMapper::convertToDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(agendaClinicaDTO);
-    }
-
-    @PreAuthorize("hasRole('CLINICA')")
-    @PutMapping(path = "/clinicas/{clinicaId}/agendas")
-    @Operation(summary = "Atualiza o médico de uma clínica", description = "Substitui um médico antigo por um novo em uma clínica, atualizando os agendamentos")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Médico atualizado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida")
-    })
-    public ResponseEntity<Void> atualizaAgendaClinica(@Min(1) @PathVariable Long clinicaId, @Valid @RequestBody AtualizacaoAgendaDTO atualizaMedico) {
-        agendaClinicaService.atualizaAgendaClinica(clinicaId, atualizaMedico);
-        return ResponseEntity.ok().build();
-    }
-
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @GetMapping(path = "/medicos/{medicoId}/clinicas/{clinicaId}/agendas")
-    @Operation(summary = "Lista a agenda de um médico em uma clínica", description = "Retorna uma lista de agenda para um médico específico em uma clínica")
+    @PreAuthorize("hasAnyRole('CLINICA', 'ADMIN', 'USER')")
+    @GetMapping(path = "/medico/{medicoId}/clinica/{clinicaId}/agendas")
+    @Operation(summary = "Lista os agendamentos de um médico em uma clínica", description = "Retorna uma lista de agendamentos para um médico específico em uma clínica")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Agendamentos encontrados"),
             @ApiResponse(responseCode = "404", description = "Agendamentos não encontrados")
     })
     public ResponseEntity<List<AgendaClinicaDTO>> medicosTrabalhoClinica(@Min(1) @PathVariable Long medicoId, @Min(1) @PathVariable Long clinicaId) {
         List<AgendaClinica> agendaClinicas = agendaClinicaService.medicoTrabalhoClinica(medicoId, clinicaId);
-        List<AgendaClinicaDTO> agendaClinicaDTO = agendaClinicas.stream().map(agendaClinicaMapper::convertToDTO).collect(Collectors.toList());
-        return ResponseEntity.ok(agendaClinicaDTO);
+        List<AgendaClinicaDTO> agendaClinicaDTOs = agendaClinicas.stream().map(agendaClinicaMapper::convertToDTO).collect(Collectors.toList());
+        return new ResponseEntity<>(agendaClinicaDTOs, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('CLINICA')")
+    @DeleteMapping(path = "/agendas/{agendaId}")
+    @Operation(summary = "Remove uma agenda", description = "Deleta uma agenda existente pelo ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Agendamento removido com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Agendamento não encontrado")
+    })
+    public ResponseEntity<Void> removerAgendamento(@Min(1) @PathVariable Long agendaId){
+        agendaClinicaService.removeAgenda(agendaId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PreAuthorize("hasRole('CLINICA')")
+    @PutMapping(path = "/agendas")
+    @Operation(summary = "Atualiza o médico de uma clínica", description = "Substitui um médico antigo por um novo em uma clínica, colocando sua própria agenda")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Médico atualizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida")
+    })
+    public ResponseEntity<Void> atualizaAgendaClinica(Authentication authentication, @Valid @RequestBody AtualizaAgendaClinicaDTO atualizaAgendaClinicaDTO){
+        Usuario usuario = (Usuario) authentication.getPrincipal();
+        Medico medico = medicoMapper.convertToEntity(atualizaAgendaClinicaDTO.getMedicoContratado());
+        agendaClinicaService.atualizaAgendaClinica(usuario, atualizaAgendaClinicaDTO.getCrmMedicoAntigo(),
+                medico, atualizaAgendaClinicaDTO.getHorarios());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('CLINICA')")
+    @PutMapping("/medicos/{crmMedico}/agendas")
+    @Operation(summary = "Atualiza a agenda de uma clínica", description = "Redefine a agenda de um médico já existente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Médico atualizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida")
+    })
+    public ResponseEntity<Void> redefineAgendaMedica(Authentication authentication, @PathVariable String crmMedico, @Valid @RequestBody List<HorarioDTO> novoHorario){
+        Usuario usuario = (Usuario) authentication.getPrincipal();
+        agendaClinicaService.redefinirAgendaMedicoExistente(crmMedico, usuario, novoHorario);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @GetMapping("/clinicas/{clinicaId}/agendas")
+    @Operation(summary = "Lista agenda de uma clínica", description = "Listar toda a agenda de uma clínica")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Agenda da clínica exibida com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida")
+    })
+    public ResponseEntity<List<AgendaClinicaDTO>> listaAgendaClinica(@PathVariable Long clinicaId) {
+        List<AgendaClinicaDTO> agendaClinicaDTOS = agendaClinicaService.listaAgendaClinica(clinicaId).stream()
+                .map(agendaClinicaMapper::convertToDTO)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(agendaClinicaDTOS, HttpStatus.OK);
     }
 }

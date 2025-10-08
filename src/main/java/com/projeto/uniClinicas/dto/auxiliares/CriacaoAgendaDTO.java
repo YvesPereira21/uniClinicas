@@ -1,29 +1,29 @@
 package com.projeto.uniClinicas.dto.auxiliares;
 
+import com.projeto.uniClinicas.dto.MedicoDTO;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public class AgendaCriacaoDTO {
+public class CriacaoAgendaDTO {
+
     @NotNull
-    private Long medicoId;
-    @NotEmpty
+    @Valid
+    private MedicoDTO medico;
+    @NotNull
     @Valid
     private List<HorarioDTO> horarios;
 
-    public AgendaCriacaoDTO(Long medicoId, List<HorarioDTO> horarios) {
-        this.medicoId = medicoId;
-        this.horarios = horarios;
+    public CriacaoAgendaDTO() {
     }
 
-    public Long getMedicoId() {
-        return medicoId;
+    public MedicoDTO getMedico() {
+        return medico;
     }
 
-    public void setMedicoId(Long medicoId) {
-        this.medicoId = medicoId;
+    public void setMedico(MedicoDTO medico) {
+        this.medico = medico;
     }
 
     public List<HorarioDTO> getHorarios() {

@@ -1,7 +1,6 @@
 package com.projeto.uniClinicas.dto;
 
 import com.projeto.uniClinicas.validation.DiaSemana;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalTime;
@@ -11,23 +10,14 @@ public class AgendaClinicaDTO {
     @NotBlank
     @DiaSemana
     private String diaSemana;
-    @NotNull
     private LocalTime horarioAtendimentoMedico;
-    @NotNull
     private LocalTime horarioSaida;
     @NotNull
-    @Valid
     private MedicoDTO medico;
     @NotNull
-    @Valid
-    private ClinicaDTO clinica;
+    private ClinicaRequestDTO clinica;
 
     public AgendaClinicaDTO() {
-    }
-
-    public AgendaClinicaDTO(MedicoDTO medico, ClinicaDTO clinica) {
-        this.medico = medico;
-        this.clinica = clinica;
     }
 
     public String getDiaSemana() {
@@ -62,11 +52,11 @@ public class AgendaClinicaDTO {
         this.medico = medico;
     }
 
-    public ClinicaDTO getClinica() {
+    public ClinicaRequestDTO getClinica() {
         return clinica;
     }
 
-    public void setClinica(ClinicaDTO clinica) {
+    public void setClinica(ClinicaRequestDTO clinica) {
         this.clinica = clinica;
     }
 }

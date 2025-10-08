@@ -25,7 +25,7 @@ public class AgendaClinica {
     @Column(name = "horario_saida")
     private LocalTime horarioSaida;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "medico_id")
     private Medico medico;
 

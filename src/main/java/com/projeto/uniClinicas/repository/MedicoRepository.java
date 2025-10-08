@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface MedicoRepository extends JpaRepository<Medico,Long> {
-    boolean existsMedicoByCrmMedico(String crmMedico);
+    boolean existsByCrmMedico(String crmMedico);
+    Medico findByCrmMedico(String crmMedico);
 }

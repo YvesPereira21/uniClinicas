@@ -18,7 +18,7 @@ public class Clinica {
     @Column(name = "clinica_id")
     private Long clinicaId;
     @Column(name = "cnpj_clinica", unique = true)
-    private Long cpnjClinica;
+    private String cpnjClinica;
     @Column(name = "nome_clinica")
     private String nomeClinica;
     @Column(name = "telefone", length = 12)
@@ -30,9 +30,12 @@ public class Clinica {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
-    @OneToMany(mappedBy = "clinica")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+    @OneToMany(mappedBy = "clinica", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Avaliacao> avaliacoesDaClinica;
-    @OneToMany(mappedBy = "clinica")
+    @OneToMany(mappedBy = "clinica", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AgendaClinica> agendaClinicas;
 
 
@@ -43,11 +46,11 @@ public class Clinica {
         return this.clinicaId;
     }
 
-    public Long getCpnjClinica() {
+    public String getCpnjClinica() {
         return cpnjClinica;
     }
 
-    public void setCpnjClinica(Long cpnjClinica) {
+    public void setCpnjClinica(String cpnjClinica) {
         this.cpnjClinica = cpnjClinica;
     }
 
@@ -91,20 +94,13 @@ public class Clinica {
         this.endereco = endereco;
     }
 
-    public List<Avaliacao> getAvaliacoesDaClinica() {
-        return avaliacoesDaClinica;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setAvaliacoesDaClinica(List<Avaliacao> avaliacoesDaClinica) {
-        this.avaliacoesDaClinica = avaliacoesDaClinica;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
-    public List<AgendaClinica> getDiasAtendimentoMedicos() {
-        return this.agendaClinicas;
-    }
-
-    public void setDiasAtendimentoMedicos(List<AgendaClinica> agendaClinicas) {
-        this.agendaClinicas = agendaClinicas;
-    }
 }
 

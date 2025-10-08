@@ -11,7 +11,7 @@ O projeto segue a estrutura padrão do Spring Boot:
         -   `authentication`: Contém DTOs para autenticação.
         -   `config`: Classes de configuração, como a estratégia do Flyway.
         -   `controller`: Responsável por expor a API REST, recebendo as requisições HTTP.
-        -   `dto`: Utilizados para transferir dados entre as camadas da aplicação, além de possuir outra pasta dentro com DTOs para facilitação de criação de objetos.
+        -   `dto`: Utilizados para transferir dados entre as camadas da aplicação, além de possuir outras pastas dentro com DTOs para facilitação da criação de objetos e de requisição e resposta ao cliente.
         -   `enums`: Contém as enumerações, como `UserRole`.
         -   `exception`: Classes de exceções customizadas.
         -   `mapper`: Classes para mapear DTOs para entidades e vice-versa.

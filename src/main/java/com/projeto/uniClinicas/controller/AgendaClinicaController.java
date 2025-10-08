@@ -18,6 +18,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -67,9 +70,9 @@ public class AgendaClinicaController {
             @ApiResponse(responseCode = "200", description = "Agendamentos encontrados"),
             @ApiResponse(responseCode = "404", description = "Agendamentos não encontrados")
     })
-    public ResponseEntity<List<AgendaClinicaDTO>> medicosTrabalhoClinica(@Min(1) @PathVariable Long medicoId, @Min(1) @PathVariable Long clinicaId) {
-        List<AgendaClinica> agendaClinicas = agendaClinicaService.medicoTrabalhoClinica(medicoId, clinicaId);
-        List<AgendaClinicaDTO> agendaClinicaDTOs = agendaClinicas.stream().map(agendaClinicaMapper::convertToDTO).collect(Collectors.toList());
+    public ResponseEntity<Page<AgendaClinicaDTO>> medicosTrabalhoClinica(@Min(1) @PathVariable Long medicoId, @Min(1) @PathVariable Long clinicaId, @PageableDefault(size = 10) Pageable pageable) {
+        Page<AgendaClinica> agendaClinicas = agendaClinicaService.medicoTrabalhoClinica(medicoId, clinicaId, pageable);
+        Page<AgendaClinicaDTO> agendaClinicaDTOs = agendaClinicas.map(agendaClinicaMapper::convertToDTO);
         return new ResponseEntity<>(agendaClinicaDTOs, HttpStatus.OK);
     }
 
@@ -120,10 +123,9 @@ public class AgendaClinicaController {
             @ApiResponse(responseCode = "200", description = "Agenda da clínica exibida com sucesso"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida")
     })
-    public ResponseEntity<List<AgendaClinicaDTO>> listaAgendaClinica(@PathVariable Long clinicaId) {
-        List<AgendaClinicaDTO> agendaClinicaDTOS = agendaClinicaService.listaAgendaClinica(clinicaId).stream()
-                .map(agendaClinicaMapper::convertToDTO)
-                .collect(Collectors.toList());
+    public ResponseEntity<Page<AgendaClinicaDTO>> listaAgendaClinica(@PathVariable Long clinicaId, @PageableDefault(size = 10, sort = "agendaId") Pageable pageable) {
+        Page<AgendaClinicaDTO> agendaClinicaDTOS = agendaClinicaService.listaAgendaClinica(clinicaId, pageable)
+                .map(agendaClinicaMapper::convertToDTO);
         return new ResponseEntity<>(agendaClinicaDTOS, HttpStatus.OK);
     }
 }

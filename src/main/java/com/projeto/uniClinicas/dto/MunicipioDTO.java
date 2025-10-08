@@ -6,12 +6,10 @@ import jakarta.validation.constraints.NotBlank;
 
 public class MunicipioDTO {
 
-    @NotBlank
     private String cep;
     @NotBlank
     @MunicipiosParaiba
     private String nomeMunicipio;
-    @NotBlank
     @Estado
     private String estado;
 

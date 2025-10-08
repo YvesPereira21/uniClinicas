@@ -17,6 +17,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -101,10 +104,9 @@ public class ClinicaController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operação bem-sucedida")
     })
-    public ResponseEntity<List<ClinicaResponseDTO>> listaClinicasComCertoNome(@NotBlank @RequestParam String nomeClinica) {
-        List<ClinicaResponseDTO> clinicaResponseDTOS = clinicaService.mostraClinicasComCertoNome(nomeClinica).stream()
-                .map(clinicaMapper::convertToDTO)
-                .collect(Collectors.toList());
+    public ResponseEntity<Page<ClinicaResponseDTO>> listaClinicasComCertoNome(@NotBlank @RequestParam String nomeClinica, @PageableDefault(size = 10, sort = "nomeClinica") Pageable pageable) {
+        Page<ClinicaResponseDTO> clinicaResponseDTOS = clinicaService.mostraClinicasComCertoNome(nomeClinica, pageable)
+                .map(clinicaMapper::convertToDTO);
         return new ResponseEntity<>(clinicaResponseDTOS, HttpStatus.OK);
     }
 
@@ -115,10 +117,9 @@ public class ClinicaController {
             @ApiResponse(responseCode = "200", description = "Médicos encontrados"),
             @ApiResponse(responseCode = "404", description = "Clínica não encontrada")
     })
-    public ResponseEntity<List<MedicoDTO>> medicosDaClinica(@Min(1) @PathVariable Long clinicaId) {
-        List<MedicoDTO> medicoDTOS = clinicaService.todosMedicosClinica(clinicaId).stream()
-                .map(medicoMapper::convertToDTO)
-                .collect(Collectors.toList());
+    public ResponseEntity<Page<MedicoDTO>> medicosDaClinica(@Min(1) @PathVariable Long clinicaId, @PageableDefault(size = 10, sort = "nomeMedico") Pageable pageable) {
+        Page<MedicoDTO> medicoDTOS = clinicaService.todosMedicosClinica(clinicaId, pageable)
+                .map(medicoMapper::convertToDTO);
         return new ResponseEntity<>(medicoDTOS, HttpStatus.OK);
     }
 

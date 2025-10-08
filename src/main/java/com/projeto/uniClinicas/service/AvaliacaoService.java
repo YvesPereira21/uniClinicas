@@ -7,6 +7,8 @@ import com.projeto.uniClinicas.model.UsuarioComum;
 import com.projeto.uniClinicas.repository.AvaliacaoRepository;
 import com.projeto.uniClinicas.repository.ClinicaRepository;
 import com.projeto.uniClinicas.repository.UsuarioComumRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,10 +26,6 @@ public class AvaliacaoService {
         this.clinicaRepository = clinicaRepository;
     }
 
-    public Avaliacao adicionaAvaliacao(Avaliacao avaliacao) {
-        return avaliacaoRepository.save(avaliacao);
-    }
-
     public Avaliacao pegaAvaliacaoUnica(Long avaliacaoId) {
         return avaliacaoRepository.findById(avaliacaoId)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Essa avaliação não existe!"));
@@ -39,20 +37,20 @@ public class AvaliacaoService {
         avaliacaoRepository.delete(avaliacao);
     }
 
-    public List<Avaliacao> todasAvaliacoes(){
-        return avaliacaoRepository.findAll();
+    public Page<Avaliacao> todasAvaliacoes(Pageable pageable){
+        return avaliacaoRepository.findAll(pageable);
     }
 
-    public List<Avaliacao> avaliacoesUsuario(Long usuarioId){
+    public Page<Avaliacao> avaliacoesUsuario(Long usuarioId, Pageable pageable){
         UsuarioComum usuario = usuarioComumRepository.findById(usuarioId)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Esse usuário não existe!"));
-        return avaliacaoRepository.findAllAvaliacaoByUsuarioId(usuarioId);
+        return avaliacaoRepository.findAllAvaliacaoByUsuarioId(usuarioId, pageable);
     }
 
-    public List<Avaliacao> avaliacoesClinica(Long clinicaId){
+    public Page<Avaliacao> avaliacoesClinica(Long clinicaId, Pageable pageable){
         Clinica clinica = clinicaRepository.findById(clinicaId)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Clínica não encontrada"));
-        return avaliacaoRepository.findAllAvaliacaoByClinicaId(clinicaId);
+        return avaliacaoRepository.findAllAvaliacaoByClinicaId(clinicaId, pageable);
     }
 
     public double calculaAvaliacaoMedia(Long clinicaId){

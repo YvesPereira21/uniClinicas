@@ -6,6 +6,8 @@ import com.projeto.uniClinicas.model.*;
 import com.projeto.uniClinicas.repository.ClinicaRepository;
 import com.projeto.uniClinicas.repository.MunicipioRepository;
 import com.projeto.uniClinicas.repository.UsuarioRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -72,14 +74,14 @@ public class ClinicaService {
         clinicaRepository.deleteById(clinicaId);
     }
 
-    public List<Clinica> mostraClinicasComCertoNome(String nome) {
-        return clinicaRepository.findByNomeClinicaContaining(nome);
+    public Page<Clinica> mostraClinicasComCertoNome(String nome, Pageable pageable) {
+        return clinicaRepository.findByNomeClinicaContaining(nome, pageable);
     }
 
-    public List<Medico> todosMedicosClinica(Long clinicaId) {
+    public Page<Medico> todosMedicosClinica(Long clinicaId, Pageable pageable) {
         Clinica clinica = clinicaRepository.findById(clinicaId)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Clínica não encontrada!"));
-        return clinicaRepository.findMedicosByClinicaId(clinicaId);
+        return clinicaRepository.findMedicosByClinicaId(clinicaId, pageable);
     }
 
     private boolean verificaExistencia(Clinica clinica){

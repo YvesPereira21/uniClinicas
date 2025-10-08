@@ -11,7 +11,7 @@ public class AvaliacaoResponseDTO {
 
     private String comentario;
     private Integer nota;
-    @JsonFormat(pattern="dd-MM HH:mm")
+    @JsonFormat(pattern="dd-MM-yyyy HH:mm")
     private LocalDateTime horarioComentario;
     private String nomeUsuario;
 

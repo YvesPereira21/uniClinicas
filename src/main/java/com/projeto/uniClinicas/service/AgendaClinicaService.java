@@ -9,6 +9,8 @@ import com.projeto.uniClinicas.model.Usuario;
 import com.projeto.uniClinicas.repository.AgendaClinicaRepository;
 import com.projeto.uniClinicas.repository.ClinicaRepository;
 import com.projeto.uniClinicas.repository.MedicoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +41,7 @@ public class AgendaClinicaService {
         Medico medicoParaAgendar;
         Medico medicoExistente = medicoRepository.findByCrmMedico(medicoNovo.getCrmMedico());
         if (medicoExistente != null) {
-            // verifica se há um médico com este CRM e nome.
+            // verifica se há um médico com este mesmo CRM e nome.
             if (!medicoExistente.getNomeMedico().equalsIgnoreCase(medicoNovo.getNomeMedico())
                     || !medicoExistente.getEspecialidade().equalsIgnoreCase(medicoNovo.getEspecialidade())) {
                 // O CRM é o mesmo, mas o nome é diferente. Lançamos um erro.
@@ -57,12 +59,12 @@ public class AgendaClinicaService {
         return agendaClinicaRepository.saveAll(novaAgenda);
     }
 
-    public List<AgendaClinica> medicoTrabalhoClinica(Long medicoId, Long clinicaId) {
+    public Page<AgendaClinica> medicoTrabalhoClinica(Long medicoId, Long clinicaId, Pageable pageable) {
         Clinica clinica = clinicaRepository.findById(clinicaId)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Essa clínica não existe!"));
         Medico medico = medicoRepository.findById(medicoId)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Esse médico não existe!"));
-        return agendaClinicaRepository.findAgendaClinicaByMedicoIdAndClinicaId(medicoId, clinicaId);
+        return agendaClinicaRepository.findAgendaClinicaByMedicoIdAndClinicaId(medicoId, clinicaId, pageable);
     }
 
     public void removeAgenda(Long agendaId){
@@ -125,10 +127,10 @@ public class AgendaClinicaService {
         agendaClinicaRepository.saveAll(novaAgenda);
     }
 
-    public List<AgendaClinica> listaAgendaClinica(Long clinicaId){
+    public Page<AgendaClinica> listaAgendaClinica(Long clinicaId, Pageable pageable){
         Clinica clinica = clinicaRepository.findById(clinicaId)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Clínica não encontrada!"));
-        return agendaClinicaRepository.findAllAgendaClinicaByClinicaId(clinicaId);
+        return agendaClinicaRepository.findAllAgendaClinicaByClinicaId(clinicaId, pageable);
     }
 
     private List<AgendaClinica> adicionaNaLista(Medico medico, Clinica clinica, List<HorarioDTO> horarios) {

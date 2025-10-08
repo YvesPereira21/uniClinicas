@@ -4,6 +4,7 @@ import com.projeto.uniClinicas.dto.ClinicaResponseDTO;
 import com.projeto.uniClinicas.dto.MunicipioDTO;
 import com.projeto.uniClinicas.mapper.ClinicaMapper;
 import com.projeto.uniClinicas.mapper.MunicipioMapper;
+import com.projeto.uniClinicas.model.Clinica;
 import com.projeto.uniClinicas.model.Municipio;
 import com.projeto.uniClinicas.security.SecurityConfigurations;
 import com.projeto.uniClinicas.service.MunicipioService;
@@ -14,14 +15,14 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/api")
@@ -60,10 +61,12 @@ public class MunicipioController {
             @ApiResponse(responseCode = "200", description = "Clínicas listadas com sucesso!"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida!")
     })
-    public ResponseEntity<List<ClinicaResponseDTO>> listaTodasClinicasDaCidade(@NotBlank @RequestParam String nomeMunicipio){
-        List<ClinicaResponseDTO> clinicaResponseDTOS = municipioService.mostraTodasClinicasDaCidade(nomeMunicipio).stream()
-                .map(clinicaMapper::convertToDTO)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(clinicaResponseDTOS, HttpStatus.OK);
+    public ResponseEntity<Page<ClinicaResponseDTO>> listaTodasClinicasDaCidade(
+            @NotBlank @RequestParam String nomeMunicipio,
+            @PageableDefault(size = 10, sort = "nomeClinica") Pageable pageable) {
+        Page<Clinica> clinicasPage = municipioService.mostraTodasClinicasDaCidade(nomeMunicipio, pageable);
+        Page<ClinicaResponseDTO> clinicasDtoPage = clinicasPage.map(clinicaMapper::convertToDTO);
+
+        return new ResponseEntity<>(clinicasDtoPage, HttpStatus.OK);
     }
 }

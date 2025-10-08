@@ -11,6 +11,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -65,33 +68,30 @@ public class AvaliacaoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operação bem-sucedida")
     })
-    public ResponseEntity<List<AvaliacaoResponseDTO>> pegaTodasAvaliacoes(){
-        List<AvaliacaoResponseDTO> avaliacaoResponseDTOS = avaliacaoService.todasAvaliacoes().stream()
-                .map(avaliacaoMapper::convertToDTO)
-                .collect(Collectors.toList());
+    public ResponseEntity<Page<AvaliacaoResponseDTO>> pegaTodasAvaliacoes(@PageableDefault(size = 10, sort = "horarioComentario") Pageable pageable){
+        Page<AvaliacaoResponseDTO> avaliacaoResponseDTOS = avaliacaoService.todasAvaliacoes(pageable)
+                .map(avaliacaoMapper::convertToDTO);
         return new ResponseEntity<>(avaliacaoResponseDTOS, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("usuarios/{usuarioId}/avaliacoes")
     @Operation(summary = "Lista todas as avaliações de um usuário", description = "Retorna todas as avaliações feitas por um usuário específico")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Avaliações encontradas"),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     })
-    public ResponseEntity<List<AvaliacaoResponseDTO>> pegaTodasAvaliacoesDoUsuario(@Min(1) @PathVariable Long usuarioId){
-        List<AvaliacaoResponseDTO> avaliacaoResponseDTOS = avaliacaoService.avaliacoesUsuario(usuarioId).stream()
-                .map(avaliacaoMapper::convertToDTO)
-                .collect(Collectors.toList());
+    public ResponseEntity<Page<AvaliacaoResponseDTO>> pegaTodasAvaliacoesDoUsuario(@Min(1) @PathVariable Long usuarioId, @PageableDefault(size = 5, sort = "horarioComentario") Pageable pageable){
+        Page<AvaliacaoResponseDTO> avaliacaoResponseDTOS = avaliacaoService.avaliacoesUsuario(usuarioId, pageable)
+                .map(avaliacaoMapper::convertToDTO);
         return new ResponseEntity<>(avaliacaoResponseDTOS, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'CLINICA')")
     @GetMapping("clinicas/{clinicaId}/avaliacoes")
-    public ResponseEntity<List<AvaliacaoResponseDTO>> pegaTodasAvaliacoesDaClinica(@PathVariable Long clinicaId) {
-        List<AvaliacaoResponseDTO> avaliacaoResponseDTOS = avaliacaoService.avaliacoesClinica(clinicaId).stream()
-                .map(avaliacaoMapper::convertToDTO)
-                .collect(Collectors.toList());
+    public ResponseEntity<Page<AvaliacaoResponseDTO>> pegaTodasAvaliacoesDaClinica(@PathVariable Long clinicaId, @PageableDefault(size = 5, sort = "horarioComentario") Pageable pageable) {
+        Page<AvaliacaoResponseDTO> avaliacaoResponseDTOS = avaliacaoService.avaliacoesClinica(clinicaId, pageable)
+                .map(avaliacaoMapper::convertToDTO);
         return new ResponseEntity<>(avaliacaoResponseDTOS, HttpStatus.OK);
     }
 

@@ -1,10 +1,10 @@
-package com.projeto.uniClinicas.controller;
+package projetos.uniClinicas.controller;
 
-import com.projeto.uniClinicas.dto.responses.AvaliacaoResponseDTO;
-import com.projeto.uniClinicas.mapper.AvaliacaoMapper;
-import com.projeto.uniClinicas.model.Avaliacao;
-import com.projeto.uniClinicas.security.SecurityConfigurations;
-import com.projeto.uniClinicas.service.AvaliacaoService;
+import projetos.uniClinicas.dto.responses.AvaliacaoResponseDTO;
+import projetos.uniClinicas.mapper.AvaliacaoMapper;
+import projetos.uniClinicas.model.Avaliacao;
+import projetos.uniClinicas.security.SecurityConfigurations;
+import projetos.uniClinicas.service.AvaliacaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

@@ -1,4 +1,4 @@
-package com.projeto.uniClinicas.validation;
+package projetos.uniClinicas.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

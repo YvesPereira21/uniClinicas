@@ -1,4 +1,4 @@
-package com.projeto.uniClinicas.dto;
+package projetos.uniClinicas.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;

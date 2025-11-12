@@ -1,4 +1,4 @@
-package com.projeto.uniClinicas.model;
+package projetos.uniClinicas.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;

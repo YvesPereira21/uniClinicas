@@ -1,11 +1,11 @@
-package com.projeto.uniClinicas.service;
+package projetos.uniClinicas.service;
 
-import com.projeto.uniClinicas.enums.UserRole;
-import com.projeto.uniClinicas.exception.*;
-import com.projeto.uniClinicas.model.*;
-import com.projeto.uniClinicas.repository.ClinicaRepository;
-import com.projeto.uniClinicas.repository.MunicipioRepository;
-import com.projeto.uniClinicas.repository.UsuarioRepository;
+import projetos.uniClinicas.enums.UserRole;
+import projetos.uniClinicas.exception.*;
+import projetos.uniClinicas.model.*;
+import projetos.uniClinicas.repository.ClinicaRepository;
+import projetos.uniClinicas.repository.MunicipioRepository;
+import projetos.uniClinicas.repository.UsuarioRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

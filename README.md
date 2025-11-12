@@ -110,7 +110,7 @@ A seguir estão listadas as rotas da API, organizadas por perfil de usuário (`r
 | `/api/clinicas/{clinicaId}/avaliacoes-media` | `GET` | Calcula a avaliação média de uma clínica. | `AvaliacaoController` |
 | `/api/avaliacoes/{avaliacaoId}` | `DELETE` | Deleta uma avaliação. | `AvaliacaoController` |
 
-
+-----
 ## Siga os passos abaixo para clonar e executar a aplicação.
 
 ### 1\. Clonar o Repositório
@@ -122,28 +122,63 @@ git clone <URL_DO_SEU_REPOSITÓRIO>
 cd uniClinicas
 ```
 
-### 2\. Configurar o Banco de Dados (PostgreSQL)
+-----
 
-Antes de iniciar a aplicação, certifique-se de que você tem o PostgreSQL instalado e em execução.
+### 2\. Como Executar (Docker)
 
-1.  Crie um banco de dados no PostgreSQL com o nome `uniclinicas`.
-2.  Abra o arquivo `src/main/resources/application.properties`.
-3.  Modifique as seguintes linhas com suas credenciais do PostgreSQL:
-    ```properties
-    spring.datasource.username=seuusuariopostgresql
-    spring.datasource.password=senhausuario
-    ```
+O projeto está configurado para ser executado facilmente com Docker e Docker Compose, eliminando a necessidade de instalar o PostgreSQL manualmente.
 
-##### **Aviso:** No perfil de desenvolvimento (`development`), a configuração do Flyway está definida para limpar (`clean`) e recriar (`migrate`) o banco de dados a cada reinicialização da aplicação. Isso significa que **todos os dados inseridos serão perdidos** sempre que o servidor for reiniciado.
+**Pré-requisitos:**
 
-### 3\. Iniciar o servidor pela IDE
+* Docker e Docker Compose instalados.
+* Java 21 (ou superior) e Maven instalados (apenas para compilar o `.jar` localmente).
 
-Com o banco de dados configurado, você pode iniciar o servidor de aplicação diretamente pela sua IDE (IntelliJ, Eclipse, etc.).
+#### Passo 1: Configurar Variáveis de Ambiente
 
-### 4\. Acessar os Recursos
+Na raiz do projeto, crie um arquivo chamado `.env` para o Docker Compose usar este arquivo para configurar as senhas da aplicação e do banco de dados.
 
-Uma vez que o servidor estiver em execução na porta padrão (`8080`), você pode acessar a documentação da API:
+Crie o arquivo `.env` com o seguinte conteúdo:
+
+```ini
+# Credenciais para o banco de dados
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres 
+POSTGRES_DB=uniclinicas
+```
+
+*(Se desejar, pode alterar a senha `POSTGRES_PASSWORD` para qualquer outra de sua preferência).*
+
+#### Passo 2: Criar o .jar para compilação da aplicação
+
+O `Dockerfile` está configurado para copiar o ficheiro `.jar`. Antes de construir a imagem Docker, precisa de compilar o projeto com o Maven:
+
+```bash
+./mvnw clean package -DskipTests
+```
+
+*(Use o `-DskipTests` para pular os testes, que falhariam por não terem um banco de dados em execução durante o build).*
+
+#### Passo 3: Iniciar os Containers
+
+Com o arquivo `.env` criado e o `.jar` compilado na pasta `target/`, basta usar o Docker Compose para construir as imagens e iniciar os serviços:
+
+```bash
+docker-compose up --build
+```
+
+* O `--build` é necessário na primeira vez ou sempre que alterar o código Java.
+* O Docker irá:
+  - Iniciar um container Postgres (`uniclinicas_db`) na porta `5434` (para não conflitar com o seu Postgres local).
+  -  Construir a imagem da sua aplicação (`uniclinicas_app`).
+  - Iniciar a sua aplicação, que se ligará automaticamente ao container do banco de dados.
+
+##### **IMPORTANTE:** No perfil de desenvolvimento (`development`) em `application.properties`, a configuração do Flyway está definida para limpar (`clean`) e recriar (`migrate`) o banco de dados a cada reinicialização da aplicação. Isso significa que **todos os dados inseridos no container do banco serão perdidos** sempre que o servidor for reiniciado.
+
+### 3\. Acessar os Recursos
+
+Uma vez que os containers estiverem em execução, pode aceder à aplicação:
 
 | Recurso | URL |
 | :--- | :--- |
-| **Documentação da API (Swagger UI)** | `http://localhost:8080/swagger-ui/index.html#/` |
+| **Aplicação (Swagger UI)** | `http://localhost:8080/swagger-ui/index.html` |
+| **Banco de Dados (via PC)** | `localhost:5434` (Conecte-se com o user/password do seu `.env`) |

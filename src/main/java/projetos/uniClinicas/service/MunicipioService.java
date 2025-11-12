@@ -1,10 +1,10 @@
-package com.projeto.uniClinicas.service;
+package projetos.uniClinicas.service;
 
-import com.projeto.uniClinicas.exception.*;
-import com.projeto.uniClinicas.mapper.ClinicaMapper;
-import com.projeto.uniClinicas.model.Clinica;
-import com.projeto.uniClinicas.model.Municipio;
-import com.projeto.uniClinicas.repository.MunicipioRepository;
+import projetos.uniClinicas.exception.*;
+import projetos.uniClinicas.mapper.ClinicaMapper;
+import projetos.uniClinicas.model.Clinica;
+import projetos.uniClinicas.model.Municipio;
+import projetos.uniClinicas.repository.MunicipioRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

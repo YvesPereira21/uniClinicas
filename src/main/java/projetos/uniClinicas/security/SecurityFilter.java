@@ -1,6 +1,6 @@
-package com.projeto.uniClinicas.security;
+package projetos.uniClinicas.security;
 
-import com.projeto.uniClinicas.repository.UsuarioRepository;
+import projetos.uniClinicas.repository.UsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

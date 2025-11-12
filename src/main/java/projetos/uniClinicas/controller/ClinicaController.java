@@ -1,14 +1,14 @@
-package com.projeto.uniClinicas.controller;
+package projetos.uniClinicas.controller;
 
-import com.projeto.uniClinicas.dto.requests.ClinicaRequestDTO;
-import com.projeto.uniClinicas.dto.responses.ClinicaResponseDTO;
-import com.projeto.uniClinicas.dto.MedicoDTO;
-import com.projeto.uniClinicas.mapper.ClinicaMapper;
-import com.projeto.uniClinicas.mapper.EnderecoMapper;
-import com.projeto.uniClinicas.mapper.MedicoMapper;
-import com.projeto.uniClinicas.model.Clinica;
-import com.projeto.uniClinicas.security.SecurityConfigurations;
-import com.projeto.uniClinicas.service.ClinicaService;
+import projetos.uniClinicas.dto.requests.ClinicaRequestDTO;
+import projetos.uniClinicas.dto.responses.ClinicaResponseDTO;
+import projetos.uniClinicas.dto.MedicoDTO;
+import projetos.uniClinicas.mapper.ClinicaMapper;
+import projetos.uniClinicas.mapper.EnderecoMapper;
+import projetos.uniClinicas.mapper.MedicoMapper;
+import projetos.uniClinicas.model.Clinica;
+import projetos.uniClinicas.security.SecurityConfigurations;
+import projetos.uniClinicas.service.ClinicaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

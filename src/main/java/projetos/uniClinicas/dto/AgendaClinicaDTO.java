@@ -1,7 +1,7 @@
-package com.projeto.uniClinicas.dto;
+package projetos.uniClinicas.dto;
 
-import com.projeto.uniClinicas.dto.requests.ClinicaRequestDTO;
-import com.projeto.uniClinicas.validation.DiaSemana;
+import projetos.uniClinicas.dto.requests.ClinicaRequestDTO;
+import projetos.uniClinicas.validation.DiaSemana;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalTime;

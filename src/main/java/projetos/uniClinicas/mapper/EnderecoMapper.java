@@ -1,7 +1,7 @@
-package com.projeto.uniClinicas.mapper;
+package projetos.uniClinicas.mapper;
 
-import com.projeto.uniClinicas.dto.EnderecoDTO;
-import com.projeto.uniClinicas.model.Endereco;
+import projetos.uniClinicas.dto.EnderecoDTO;
+import projetos.uniClinicas.model.Endereco;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

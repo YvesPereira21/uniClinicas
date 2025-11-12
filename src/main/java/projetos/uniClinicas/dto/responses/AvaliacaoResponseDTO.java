@@ -1,4 +1,4 @@
-package com.projeto.uniClinicas.dto.responses;
+package projetos.uniClinicas.dto.responses;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

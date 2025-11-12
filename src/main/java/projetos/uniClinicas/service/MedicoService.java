@@ -1,13 +1,13 @@
-package com.projeto.uniClinicas.service;
+package projetos.uniClinicas.service;
 
-import com.projeto.uniClinicas.enums.UserRole;
-import com.projeto.uniClinicas.exception.*;
-import com.projeto.uniClinicas.model.Clinica;
-import com.projeto.uniClinicas.model.Medico;
-import com.projeto.uniClinicas.model.Usuario;
-import com.projeto.uniClinicas.repository.AgendaClinicaRepository;
-import com.projeto.uniClinicas.repository.ClinicaRepository;
-import com.projeto.uniClinicas.repository.MedicoRepository;
+import projetos.uniClinicas.enums.UserRole;
+import projetos.uniClinicas.exception.*;
+import projetos.uniClinicas.model.Clinica;
+import projetos.uniClinicas.model.Medico;
+import projetos.uniClinicas.model.Usuario;
+import projetos.uniClinicas.repository.AgendaClinicaRepository;
+import projetos.uniClinicas.repository.ClinicaRepository;
+import projetos.uniClinicas.repository.MedicoRepository;
 import org.springframework.stereotype.Service;
 
 @Service

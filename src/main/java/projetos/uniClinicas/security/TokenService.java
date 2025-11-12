@@ -1,10 +1,10 @@
-package com.projeto.uniClinicas.security;
+package projetos.uniClinicas.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.projeto.uniClinicas.model.Usuario;
+import projetos.uniClinicas.model.Usuario;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
-package com.projeto.uniClinicas.mapper;
+package projetos.uniClinicas.mapper;
 
-import com.projeto.uniClinicas.dto.MunicipioDTO;
-import com.projeto.uniClinicas.model.Municipio;
+import projetos.uniClinicas.dto.MunicipioDTO;
+import projetos.uniClinicas.model.Municipio;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

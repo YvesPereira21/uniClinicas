@@ -1,6 +1,6 @@
-package com.projeto.uniClinicas.dto.responses;
+package projetos.uniClinicas.dto.responses;
 
-import com.projeto.uniClinicas.dto.EnderecoDTO;
+import projetos.uniClinicas.dto.EnderecoDTO;
 
 import java.time.LocalTime;
 

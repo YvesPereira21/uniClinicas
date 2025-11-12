@@ -1,8 +1,8 @@
-package com.projeto.uniClinicas.mapper;
+package projetos.uniClinicas.mapper;
 
-import com.projeto.uniClinicas.dto.requests.AvaliacaoRequestDTO;
-import com.projeto.uniClinicas.dto.responses.AvaliacaoResponseDTO;
-import com.projeto.uniClinicas.model.Avaliacao;
+import projetos.uniClinicas.dto.requests.AvaliacaoRequestDTO;
+import projetos.uniClinicas.dto.responses.AvaliacaoResponseDTO;
+import projetos.uniClinicas.model.Avaliacao;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

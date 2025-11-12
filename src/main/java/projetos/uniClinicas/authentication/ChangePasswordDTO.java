@@ -1,4 +1,4 @@
-package com.projeto.uniClinicas.authentication;
+package projetos.uniClinicas.authentication;
 
 public class ChangePasswordDTO {
 

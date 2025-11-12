@@ -1,9 +1,9 @@
-package com.projeto.uniClinicas.service;
+package projetos.uniClinicas.service;
 
-import com.projeto.uniClinicas.enums.UserRole;
-import com.projeto.uniClinicas.exception.*;
-import com.projeto.uniClinicas.model.*;
-import com.projeto.uniClinicas.repository.*;
+import projetos.uniClinicas.enums.UserRole;
+import projetos.uniClinicas.exception.*;
+import projetos.uniClinicas.model.*;
+import projetos.uniClinicas.repository.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 

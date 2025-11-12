@@ -1,6 +1,6 @@
-package com.projeto.uniClinicas.dto.auxiliares;
+package projetos.uniClinicas.dto.auxiliares;
 
-import com.projeto.uniClinicas.validation.DiaSemana;
+import projetos.uniClinicas.validation.DiaSemana;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalTime;

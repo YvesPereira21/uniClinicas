@@ -1,4 +1,4 @@
-package com.projeto.uniClinicas.dto;
+package projetos.uniClinicas.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;

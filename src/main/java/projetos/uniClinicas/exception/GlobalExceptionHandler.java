@@ -1,6 +1,6 @@
-package com.projeto.uniClinicas.exception;
+package projetos.uniClinicas.exception;
 
-import com.projeto.uniClinicas.dto.ApiError;
+import projetos.uniClinicas.dto.ApiError;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

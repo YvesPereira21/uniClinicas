@@ -1,4 +1,4 @@
-package com.projeto.uniClinicas.config;
+package projetos.uniClinicas.config;
 
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
 import org.springframework.context.annotation.Bean;

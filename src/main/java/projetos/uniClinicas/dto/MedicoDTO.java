@@ -1,4 +1,4 @@
-package com.projeto.uniClinicas.dto;
+package projetos.uniClinicas.dto;
 
 import jakarta.validation.constraints.NotBlank;
 

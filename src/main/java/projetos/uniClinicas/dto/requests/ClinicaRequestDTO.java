@@ -1,7 +1,7 @@
-package com.projeto.uniClinicas.dto.requests;
+package projetos.uniClinicas.dto.requests;
 
-import com.projeto.uniClinicas.dto.EnderecoDTO;
-import com.projeto.uniClinicas.dto.UsuarioDTO;
+import projetos.uniClinicas.dto.EnderecoDTO;
+import projetos.uniClinicas.dto.UsuarioDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

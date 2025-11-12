@@ -1,6 +1,6 @@
-package com.projeto.uniClinicas.model;
+package projetos.uniClinicas.model;
 
-import com.projeto.uniClinicas.enums.UserRole;
+import projetos.uniClinicas.enums.UserRole;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

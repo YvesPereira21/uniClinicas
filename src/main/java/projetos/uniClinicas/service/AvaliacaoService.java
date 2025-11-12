@@ -1,12 +1,12 @@
-package com.projeto.uniClinicas.service;
+package projetos.uniClinicas.service;
 
-import com.projeto.uniClinicas.exception.*;
-import com.projeto.uniClinicas.model.Avaliacao;
-import com.projeto.uniClinicas.model.Clinica;
-import com.projeto.uniClinicas.model.UsuarioComum;
-import com.projeto.uniClinicas.repository.AvaliacaoRepository;
-import com.projeto.uniClinicas.repository.ClinicaRepository;
-import com.projeto.uniClinicas.repository.UsuarioComumRepository;
+import projetos.uniClinicas.exception.*;
+import projetos.uniClinicas.model.Avaliacao;
+import projetos.uniClinicas.model.Clinica;
+import projetos.uniClinicas.model.UsuarioComum;
+import projetos.uniClinicas.repository.AvaliacaoRepository;
+import projetos.uniClinicas.repository.ClinicaRepository;
+import projetos.uniClinicas.repository.UsuarioComumRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

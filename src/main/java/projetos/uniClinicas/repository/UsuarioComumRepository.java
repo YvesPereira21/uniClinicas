@@ -1,7 +1,7 @@
-package com.projeto.uniClinicas.repository;
+package projetos.uniClinicas.repository;
 
-import com.projeto.uniClinicas.model.Usuario;
-import com.projeto.uniClinicas.model.UsuarioComum;
+import projetos.uniClinicas.model.Usuario;
+import projetos.uniClinicas.model.UsuarioComum;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

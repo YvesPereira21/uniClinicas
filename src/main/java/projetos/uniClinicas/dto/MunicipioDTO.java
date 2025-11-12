@@ -1,7 +1,7 @@
-package com.projeto.uniClinicas.dto;
+package projetos.uniClinicas.dto;
 
-import com.projeto.uniClinicas.validation.Estado;
-import com.projeto.uniClinicas.validation.MunicipiosParaiba;
+import projetos.uniClinicas.validation.Estado;
+import projetos.uniClinicas.validation.MunicipiosParaiba;
 import jakarta.validation.constraints.NotBlank;
 
 public class MunicipioDTO {

@@ -1,7 +1,7 @@
-package com.projeto.uniClinicas.repository;
+package projetos.uniClinicas.repository;
 
-import com.projeto.uniClinicas.model.Avaliacao;
-import com.projeto.uniClinicas.model.UsuarioComum;
+import projetos.uniClinicas.model.Avaliacao;
+import projetos.uniClinicas.model.UsuarioComum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,6 +1,6 @@
-package com.projeto.uniClinicas.dto.auxiliares;
+package projetos.uniClinicas.dto.auxiliares;
 
-import com.projeto.uniClinicas.dto.MedicoDTO;
+import projetos.uniClinicas.dto.MedicoDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

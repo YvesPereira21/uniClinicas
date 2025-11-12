@@ -1,7 +1,7 @@
-package com.projeto.uniClinicas.mapper;
+package projetos.uniClinicas.mapper;
 
-import com.projeto.uniClinicas.dto.AgendaClinicaDTO;
-import com.projeto.uniClinicas.model.AgendaClinica;
+import projetos.uniClinicas.dto.AgendaClinicaDTO;
+import projetos.uniClinicas.model.AgendaClinica;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

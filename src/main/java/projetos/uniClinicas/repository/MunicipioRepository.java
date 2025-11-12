@@ -1,7 +1,7 @@
-package com.projeto.uniClinicas.repository;
+package projetos.uniClinicas.repository;
 
-import com.projeto.uniClinicas.model.Clinica;
-import com.projeto.uniClinicas.model.Municipio;
+import projetos.uniClinicas.model.Clinica;
+import projetos.uniClinicas.model.Municipio;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,6 +1,6 @@
-package com.projeto.uniClinicas.repository;
+package projetos.uniClinicas.repository;
 
-import com.projeto.uniClinicas.model.Medico;
+import projetos.uniClinicas.model.Medico;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

@@ -1,14 +1,14 @@
-package com.projeto.uniClinicas.service;
+package projetos.uniClinicas.service;
 
-import com.projeto.uniClinicas.dto.auxiliares.HorarioDTO;
-import com.projeto.uniClinicas.exception.*;
-import com.projeto.uniClinicas.model.AgendaClinica;
-import com.projeto.uniClinicas.model.Clinica;
-import com.projeto.uniClinicas.model.Medico;
-import com.projeto.uniClinicas.model.Usuario;
-import com.projeto.uniClinicas.repository.AgendaClinicaRepository;
-import com.projeto.uniClinicas.repository.ClinicaRepository;
-import com.projeto.uniClinicas.repository.MedicoRepository;
+import projetos.uniClinicas.dto.auxiliares.HorarioDTO;
+import projetos.uniClinicas.exception.*;
+import projetos.uniClinicas.model.AgendaClinica;
+import projetos.uniClinicas.model.Clinica;
+import projetos.uniClinicas.model.Medico;
+import projetos.uniClinicas.model.Usuario;
+import projetos.uniClinicas.repository.AgendaClinicaRepository;
+import projetos.uniClinicas.repository.ClinicaRepository;
+import projetos.uniClinicas.repository.MedicoRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.projeto.uniClinicas.enums;
+package projetos.uniClinicas.enums;
 
 public enum UserRole {
     ADMIN("admin"),

@@ -1,5 +1,7 @@
 package projetos.uniClinicas.service;
 
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import projetos.uniClinicas.exception.*;
 import projetos.uniClinicas.mapper.ClinicaMapper;
 import projetos.uniClinicas.model.Clinica;
@@ -16,11 +18,9 @@ import java.util.stream.Collectors;
 public class MunicipioService {
 
     private final MunicipioRepository municipioRepository;
-    private final ClinicaMapper clinicaMapper;
 
-    public MunicipioService(MunicipioRepository municipioRepository, ClinicaMapper clinicaMapper) {
+    public MunicipioService(MunicipioRepository municipioRepository) {
         this.municipioRepository = municipioRepository;
-        this.clinicaMapper = clinicaMapper;
     }
 
     public Municipio adicionaMunicipio(Municipio municipio) {
@@ -31,6 +31,7 @@ public class MunicipioService {
         return municipioRepository.save(municipio);
     }
 
+    @Cacheable(value = "lista_clinicas", key = "#nomeMunicipio + '-' + #pageable.pageNumber")
     public Page<Clinica> mostraTodasClinicasDaCidade(String nomeMunicipio, Pageable pageable) {
         return municipioRepository.findaAllClinicasByNomeMunicipio(nomeMunicipio, pageable);
     }

@@ -1,5 +1,7 @@
 package projetos.uniClinicas.service;
 
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import projetos.uniClinicas.enums.UserRole;
 import projetos.uniClinicas.exception.*;
 import projetos.uniClinicas.model.Clinica;
@@ -15,14 +17,13 @@ public class MedicoService {
 
     private MedicoRepository medicoRepository;
     private ClinicaRepository clinicaRepository;
-    private AgendaClinicaRepository agendaClinicaRepository;
 
-    public MedicoService(MedicoRepository medicoRepository, ClinicaRepository clinicaRepository, AgendaClinicaRepository agendaClinicaRepository) {
+    public MedicoService(MedicoRepository medicoRepository, ClinicaRepository clinicaRepository) {
         this.medicoRepository = medicoRepository;
         this.clinicaRepository = clinicaRepository;
-        this.agendaClinicaRepository = agendaClinicaRepository;
     }
 
+    @CachePut(value = "medico", key = "#medico.medicoId")
     public Medico atualizaMedico(Medico medico){
         Medico medico1 = medicoRepository.findByCrmMedico(medico.getCrmMedico());
         if (medico1 == null){
@@ -33,6 +34,7 @@ public class MedicoService {
         return medicoRepository.save(medico1);
     }
 
+    @Cacheable(value = "medico", key = "#medicoId")
     public Medico medicoUnico(Long medicoId, Usuario usuarioLogado) {
         Medico medico = medicoRepository.findById(medicoId)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Médico não encontrado!"));
@@ -52,4 +54,3 @@ public class MedicoService {
         return clinicaRepository.findMedicoInClinicaByMedicoId(medicoId, clinicaLogada.getClinicaId());
     }
 }
-

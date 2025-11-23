@@ -1,5 +1,8 @@
 package projetos.uniClinicas.service;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import projetos.uniClinicas.dto.auxiliares.HorarioDTO;
 import projetos.uniClinicas.exception.*;
 import projetos.uniClinicas.model.AgendaClinica;
@@ -32,6 +35,10 @@ public class AgendaClinicaService {
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "medico_clinica", allEntries = true),
+            @CacheEvict(value = "clinica_agenda", allEntries = true)
+    })
     public List<AgendaClinica> adicionaAgenda(Medico medicoNovo, Usuario usuario, List<HorarioDTO> horarios) {
         Clinica clinica = clinicaRepository.findByUsuario(usuario);
         if (clinica == null) {
@@ -59,6 +66,7 @@ public class AgendaClinicaService {
         return agendaClinicaRepository.saveAll(novaAgenda);
     }
 
+    @Cacheable(value = "medico_clinica", key = "#medicoId + '-' + #clinicaId + '-' + #pageable.pageNumber")
     public Page<AgendaClinica> medicoTrabalhoClinica(Long medicoId, Long clinicaId, Pageable pageable) {
         Clinica clinica = clinicaRepository.findById(clinicaId)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Essa clínica não existe!"));
@@ -67,6 +75,10 @@ public class AgendaClinicaService {
         return agendaClinicaRepository.findAgendaClinicaByMedicoIdAndClinicaId(medicoId, clinicaId, pageable);
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "medico_clinica", allEntries = true),
+            @CacheEvict(value = "clinica_agenda", allEntries = true)
+    })
     public void removeAgenda(Long agendaId){
         AgendaClinica agendaClinica = agendaClinicaRepository.findById(agendaId)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Agenda clínica não encontrada!"));
@@ -74,6 +86,10 @@ public class AgendaClinicaService {
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "medico_clinica", allEntries = true),
+            @CacheEvict(value = "clinica_agenda", allEntries = true)
+    })
     public void atualizaAgendaClinica(Usuario usuario, String crmMedicoAntigo, Medico medicoContratadoNovo, List<HorarioDTO> horarios) {
         Clinica clinica = clinicaRepository.findByUsuario(usuario);
         if (clinica == null) {
@@ -106,6 +122,10 @@ public class AgendaClinicaService {
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "medico_clinica", allEntries = true),
+            @CacheEvict(value = "clinica_agenda", allEntries = true)
+    })
     public void redefinirAgendaMedicoExistente(String crmMedico, Usuario usuario, List<HorarioDTO> novosHorarios) {
         Clinica clinica = clinicaRepository.findByUsuario(usuario);
         if (clinica == null) {
@@ -127,6 +147,7 @@ public class AgendaClinicaService {
         agendaClinicaRepository.saveAll(novaAgenda);
     }
 
+    @Cacheable(value = "clinica_agenda", key = "#clinicaId + '-' + #pageable.pageNumber")
     public Page<AgendaClinica> listaAgendaClinica(Long clinicaId, Pageable pageable){
         Clinica clinica = clinicaRepository.findById(clinicaId)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Clínica não encontrada!"));
@@ -151,6 +172,7 @@ public class AgendaClinicaService {
             novaAgenda.add(novoAtendimento);
         }
     }
+    
     //junta todos os erros abaixo em apenas uma classe
     private void verificaErro(Medico medico, Clinica clinica, HorarioDTO horario) {
         boolean verificadorHorarioMedico = verificaHorario(clinica, horario);
@@ -165,6 +187,7 @@ public class AgendaClinicaService {
         }
         verificaSobreposicaoGlobal(medico, horario);
     }
+
     //lógica para o horário de atendimento do médico não ser antes do horário de funcionamento
     // e nem depois do horário que fecha
     private boolean verificaHorario(Clinica clinica, HorarioDTO horario){
@@ -174,6 +197,7 @@ public class AgendaClinicaService {
 
         return erro1 || erro2 || erro3;
     }
+
     //lógica para não permitir a duplicação de uma agenda em uma clínica
     private boolean agendaExistente(Clinica clinica, Medico medico, HorarioDTO horario){
         return agendaClinicaRepository

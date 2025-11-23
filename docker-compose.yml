@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   uniclinicas_app:
     build: .
@@ -8,8 +7,11 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://uniclinicas_db:5432/${POSTGRES_DB}
       DB_USERNAME: ${POSTGRES_USER}
       DB_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_DATA_REDIS_HOST: uniclinicas_redis
+      SPRING_DATA_REDIS_PORT: 6379
     depends_on:
       - uniclinicas_db
+      - uniclinicas_redis
 
   uniclinicas_db:
     image: postgres:16
@@ -22,5 +24,13 @@ services:
       - "5434:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+
+  uniclinicas_redis:
+    image: redis:alpine
+    restart: always
+    ports:
+      - "6380:6379"
+
 volumes:
   postgres_data:
+  redis_data:

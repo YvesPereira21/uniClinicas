@@ -1,5 +1,8 @@
 package projetos.uniClinicas.service;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Caching;
 import projetos.uniClinicas.enums.UserRole;
 import projetos.uniClinicas.exception.*;
 import projetos.uniClinicas.model.*;
@@ -44,12 +47,14 @@ public class UsuarioComumService {
         return usuarioComumRepository.save(novoUsuario);
     }
 
+    @CacheEvict(value = "usuarios", key = "#usuarioId")
     public void deletaUsuario(Long usuarioId){
         UsuarioComum usuarioComum = usuarioComumRepository.findById(usuarioId)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Usuário não encontrado"));
         usuarioComumRepository.deleteById(usuarioId);
     }
 
+    @CachePut(value = "usuarios", key = "#novoUsuario.usuarioComumId")
     public UsuarioComum atualizaUsuario(UsuarioComum novoUsuario){
         return usuarioComumRepository.save(novoUsuario);
     }
@@ -61,6 +66,10 @@ public class UsuarioComumService {
         return usuarioComumRepository.save(usuario);
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "avaliacoes_clinica", allEntries = true),
+            @CacheEvict(value = "media_clinica", key = "#clinicaId")
+    })
     public Avaliacao criaAvaliacaoDoUsuarioAClinica(Usuario user, Avaliacao avaliacao, Long clinicaId) {
         UsuarioComum usuario = usuarioComumRepository.findByUsuario(user);
         Clinica clinica = clinicaRepository.findById(clinicaId)
@@ -88,4 +97,3 @@ public class UsuarioComumService {
         return avaliacaoRepository.existsByUsuarioComumAndClinica_ClinicaId(usuarioComum, clinicaId);
     }
 }
-
